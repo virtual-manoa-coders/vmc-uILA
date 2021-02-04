@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Image, Divider} from 'semantic-ui-react';
+import { Grid, Table, Divider} from 'semantic-ui-react';
 
 /** A simple static component to render some text for the landing page. */
 class Community extends React.Component {
@@ -20,7 +20,38 @@ class Community extends React.Component {
                         </Grid.Row>
                     </Grid.Column>
                     <Grid.Column width={13}>
-                        <Image src='/images/wireframe/centered-paragraph.png' />
+                        <Table basic definition>
+                            <Table.Header>
+                                <Table.Row>
+                                    <Table.HeaderCell />
+                                    <Table.HeaderCell>You</Table.HeaderCell>
+                                    <Table.HeaderCell>Average</Table.HeaderCell>
+                                </Table.Row>
+                            </Table.Header>
+
+                            <Table.Body>
+                                <Table.Row>
+                                    <Table.Cell>Today</Table.Cell>
+                                    <Table.Cell>#g</Table.Cell>
+                                    <Table.Cell>#g</Table.Cell>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell>Week</Table.Cell>
+                                    <Table.Cell>#g</Table.Cell>
+                                    <Table.Cell>#g</Table.Cell>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell>Month</Table.Cell>
+                                    <Table.Cell>#g</Table.Cell>
+                                    <Table.Cell>#g</Table.Cell>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell>Annual</Table.Cell>
+                                    <Table.Cell>#g</Table.Cell>
+                                    <Table.Cell>#g</Table.Cell>
+                                </Table.Row>
+                            </Table.Body>
+                        </Table>
                     </Grid.Column>
                 </Grid.Row>
 
