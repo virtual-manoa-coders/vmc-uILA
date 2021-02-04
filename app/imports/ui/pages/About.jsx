@@ -6,7 +6,7 @@ class About extends React.Component {
   render() {
     const aboutStyle = { marginTop: '10px' };
     return (
-        <div className='about-background'>
+        <div>
           <Grid verticalAlign='middle' container style={aboutStyle}>
             <Grid.Row textAlign='center'>
                 <Header textAlign='center' className='font-comfortaa' as='h4' inverted>
