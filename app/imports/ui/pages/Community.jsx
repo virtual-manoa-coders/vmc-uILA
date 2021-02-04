@@ -8,9 +8,11 @@ class Community extends React.Component {
         <Grid id='landing-page' verticalAlign='middle' textAlign='center' container>
 
             <Divider hidden/>
-            <Grid celled>
+            <Grid padded relaxed>
+                <Divider hidden/>
+                <Divider hidden/>
                 <Grid.Row>
-                    <Grid.Column width={3}>
+                    <Grid.Column width={3} verticalAlign='middle'>
                         <Grid.Row>
                             This is you vs. the average person in your city.
                         </Grid.Row>
@@ -20,7 +22,7 @@ class Community extends React.Component {
                         </Grid.Row>
                     </Grid.Column>
                     <Grid.Column width={13}>
-                        <Table basic definition>
+                        <Table padded basic definition id="community-table">
                             <Table.Header>
                                 <Table.Row>
                                     <Table.HeaderCell />
