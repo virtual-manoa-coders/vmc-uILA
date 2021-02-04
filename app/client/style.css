@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap');
 
-body, html {
+body, html, .menu {
   background-color: #5ac2e0!important;
   color: white!important;
   font-family: 'Comfortaa', cursive!important;
