@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Image } from 'semantic-ui-react';
+import { Grid, Image, Divider} from 'semantic-ui-react';
 
 /** A simple static component to render some text for the landing page. */
 class Community extends React.Component {
@@ -7,14 +7,26 @@ class Community extends React.Component {
     return (
         <Grid id='landing-page' verticalAlign='middle' textAlign='center' container>
 
-          <Grid.Column width={4}>
-            <Image size='small' circular src="/images/meteor-logo.png"/>
-          </Grid.Column>
+            <Divider hidden/>
+            <Grid celled>
+                <Grid.Row>
+                    <Grid.Column width={3}>
+                        <Grid.Row>
+                            This is you vs. the average person in your city.
+                        </Grid.Row>
+                        <Divider hidden/>
+                        <Grid.Row>
+                            You are doing x% better than the average person in your city.
+                        </Grid.Row>
+                    </Grid.Column>
+                    <Grid.Column width={13}>
+                        <Image src='/images/wireframe/centered-paragraph.png' />
+                    </Grid.Column>
+                </Grid.Row>
 
-          <Grid.Column width={8}>
-            <h1>Welcome to this template</h1>
-            <p>Now get to work and modify this app!</p>
-          </Grid.Column>
+            </Grid>
+
+            <Divider hidden/>
 
         </Grid>
     );
