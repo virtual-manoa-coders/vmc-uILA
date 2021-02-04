@@ -85,3 +85,8 @@ body, html, .menu, .table {
   text-align: center;
   font-size: 40px;
 }
+
+#community-table {
+  border: 5px solid #fff;
+  color: #fff!important;
+}
