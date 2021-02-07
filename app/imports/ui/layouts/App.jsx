@@ -15,6 +15,7 @@ import NotFound from '../pages/NotFound';
 import Signin from '../pages/Signin';
 import Signup from '../pages/Signup';
 import Signout from '../pages/Signout';
+import Login from '../pages/Login';
 
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 class App extends React.Component {
@@ -23,8 +24,9 @@ class App extends React.Component {
         <Router>
           <div>
             <NavBar/>
-            <Switch>
-              <Route exact path="/" component={Landing}/>
+            <Switch>\
+                <Route path="/login" component={Login}/>
+                <Route exact path="/" component={Landing}/>
               <Route path="/signin" component={Signin}/>
               <Route path="/signup" component={Signup}/>
               <Route path="/signout" component={Signout}/>

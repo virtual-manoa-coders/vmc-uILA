@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap');
+
+body, html {
+    background-color: #5ac2e0!important;
+    color: white!important;
+    font-family: 'Comfortaa', cursive!important;
+
+}
+
+.font-comfortaa {
+    font-family: 'Comfortaa', sans-serif;
+}
+
+.header {
+    padding-top: 400px;
+    padding-bottom: 400px;
+    font-family: 'Comfortaa', sans-serif;
+    text-color: 'white'
+}
+
+.login {
+    padding-top: 425px;
+    padding-bottom: 400px;
+}
+
+.h2 {
+    font-family: 'Comfortaa', sans-serif;
+
+}
