@@ -7,10 +7,9 @@ class Community extends React.Component {
     return (
         <Grid id='landing-page' verticalAlign='middle' textAlign='center' container>
 
-            <Divider hidden/>
-            <Grid padded relaxed>
-                <Divider hidden/>
-                <Divider hidden/>
+            <Grid padded relaxed verticalAlign='middle'>
+                <Grid.Row id='space-row'>
+                </Grid.Row>
                 <Grid.Row>
                     <Grid.Column width={3} verticalAlign='middle'>
                         <Grid.Row>

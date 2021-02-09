@@ -86,7 +86,21 @@ body, html, .menu, .table {
   font-size: 40px;
 }
 
+/** SOPHIA **/
+
 #community-table {
   border: 5px solid #fff;
+}
+
+#community-table th, #community-table td {
   color: #fff!important;
+  font-size: 25px;
+}
+
+#landing-page {
+  font-size: 20px;
+}
+
+#space-row {
+  padding-top:100px;
 }
