@@ -1,0 +1,94 @@
+.logoimg {
+    width: 30px; /* Adjusts logo size on top menu bar */
+}
+
+.topBar {
+    font-family: 'Comfortaa', sans-serif;
+    background-color:#41337A;
+    color: white;
+    box-shadow: none;
+    border: none;
+}
+
+.header {
+    font-weight: bold;
+    float: left;
+}
+
+#menuItem {
+    font-family: 'Comfortaa', sans-serif;
+    color: white;
+    font-size: medium;
+}
+
+.body {
+    background-color: #5ac2e0;
+    font-family: 'Comfortaa', sans-serif;
+    color: white;
+    font-size: 32px;
+    line-height: 28px;
+    margin-top: -15px;
+}
+
+.emissionStats {
+    text-align: center;
+}
+
+.cont1 {
+    border-width: 2px;
+    border-color: white;
+    padding-top: 25px;
+}
+
+.cont2 {
+    border-width: 2px;
+    border-color: white;
+    padding-top: 30px;
+    padding-bottom: 50px;
+}
+
+#number {
+    font-size: 200%;
+    font-weight: bold;
+}
+
+
+.footer {
+    background-color: #41337A;
+}
+
+/* Style for the Table in daily emissions */
+table {
+    width: 80%;
+    padding: 20px 100px 20px 100px;
+}
+
+#tableContent {
+    font-family: 'Comfortaa', sans-serif;
+    border-collapse: collapse;
+    color: white;
+    font-size: 18px;
+    margin-left:auto;
+    margin-right: auto;
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+
+#tableContent td, #ctableContent th {
+    border: 2px solid white;
+    padding: 2px;
+    background-color: #f28482;
+}
+
+#tableContent tr:hover {background-color: #2aaaeb;}
+
+#tableContent th {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    text-align: left;
+    background-color: #f28482;
+    border: 2px solid white;
+    color: white;
+    font-size: 20px;
+}
+/* End Style for Table */
