@@ -11,6 +11,7 @@ import About from '../pages/About';
 import ListStuff from '../pages/ListStuff';
 import ListStuffAdmin from '../pages/ListStuffAdmin';
 import TransportDataEntry from '../pages/TransportDataEntry';
+import CarComparator from '../pages/CarComparator';
 import EditStuff from '../pages/EditStuff';
 import NotFound from '../pages/NotFound';
 import Signin from '../pages/Signin';
@@ -34,6 +35,7 @@ class App extends React.Component {
               <ProtectedRoute path="/list" component={ListStuff}/>
                 <ProtectedRoute path="/community" component={Community}/>
               <ProtectedRoute path="/log" component={TransportDataEntry}/>
+              <ProtectedRoute path="/comparator" component={CarComparator}/>
               <ProtectedRoute path="/edit/:_id" component={EditStuff}/>
               <AdminProtectedRoute path="/admin" component={ListStuffAdmin}/>
               <Route component={NotFound}/>
