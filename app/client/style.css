@@ -106,3 +106,20 @@ body, html, .menu, .table {
 }
 
 
+
+.header {
+    padding-top: 400px;
+    padding-bottom: 400px;
+    font-family: 'Comfortaa', sans-serif;
+    text-color: 'white'
+}
+
+.login {
+    padding-top: 425px;
+    padding-bottom: 400px;
+}
+
+.h2 {
+    font-family: 'Comfortaa', sans-serif;
+
+}
