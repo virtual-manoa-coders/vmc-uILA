@@ -58,8 +58,8 @@ class TransportDataEntry extends React.Component {
             <Header style={{ fontFamily: 'Comfortaa' }} textAlign='center' as='h2' inverted>Log Your Commute</Header>
             <AutoForm ref={ref => { fRef = ref; }} schema={bridge} onSubmit={data => this.submit(data, fRef)} >
               <Segment>
-                <SelectField name='transport'/>
                 <DateField name='day'/>
+                <SelectField name='transport'/>
                 <NumField name='miles' decimal={false}/>
                 <SubmitField value='Submit'/>
                 <ErrorsField/>
