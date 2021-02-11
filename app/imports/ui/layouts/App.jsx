@@ -8,8 +8,6 @@ import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
 import Landing from '../pages/Landing';
 import About from '../pages/About';
-import ListStuff from '../pages/ListStuff';
-import ListStuffAdmin from '../pages/ListStuffAdmin';
 import TransportDataEntry from '../pages/TransportDataEntry';
 import CarComparator from '../pages/CarComparator';
 import EditStuff from '../pages/EditStuff';
@@ -35,13 +33,11 @@ class App extends React.Component {
               <Route path="/signup" component={Signup}/>
               <Route path="/signout" component={Signout}/>
               <ProtectedRoute path="/about" component={About}/>
-              <ProtectedRoute path="/list" component={ListStuff}/>
                 <ProtectedRoute path="/community" component={Community}/>
                 <ProtectedRoute path='/dashboard' component={Dashboard}/>
               <ProtectedRoute path="/log" component={TransportDataEntry}/>
               <ProtectedRoute path="/comparator" component={CarComparator}/>
               <ProtectedRoute path="/edit/:_id" component={EditStuff}/>
-              <AdminProtectedRoute path="/admin" component={ListStuffAdmin}/>
               <Route component={NotFound}/>
             </Switch>
             <Footer/>
