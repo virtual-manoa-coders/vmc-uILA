@@ -20,13 +20,13 @@ class Landing extends React.Component {
                                 <div>
                                     Already a Member?
                                 </div>
-                                <Button inverted>Login</Button>
+                                <Button inverted as={NavLink} exact to="/login" key='login'>Login</Button>
                             </Grid.Column>
                             <Grid.Column textAlign='center'>
                                 <div>
                                     Not a Member?
                                 </div>
-                                <Button inverted>Sign up</Button>
+                                <Button inverted as={NavLink} exact to="/login" key='signup'>Sign up</Button>
                             </Grid.Column>
                         </Grid>
                     </div>
@@ -104,15 +104,6 @@ class Landing extends React.Component {
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
-
-          <Grid.Column width={4}>
-            <Image size='small' circular src="/images/meteor-logo.png"/>
-          </Grid.Column>
-
-          <Grid.Column width={8}>
-              <Button as={NavLink} exact to="/login" key='login' >Click here to get started</Button>
-          </Grid.Column>
-
         </Grid>
     );
   }
