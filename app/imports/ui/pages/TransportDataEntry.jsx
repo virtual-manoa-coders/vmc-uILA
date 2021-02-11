@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid, Segment, Header } from 'semantic-ui-react';
-import { AutoForm, ErrorsField, NumField, SelectField, SubmitField, TextField } from 'uniforms-semantic';
+import { AutoForm, ErrorsField, NumField, SelectField, SubmitField, DateField } from 'uniforms-semantic';
 import swal from 'sweetalert';
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
@@ -32,14 +32,18 @@ class TransportDataEntry extends React.Component {
 
   /** On submit, insert the data. */
   submit(data, formRef) {
-    const { transport, day, miles } = data;
+    const { transport, miles } = data;
     const owner = Meteor.user().username;
-    UserTransportation.collection.insert({ transport, day, miles, owner },
+    const newDate = new Date();
+    const months = ['January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December',
+    ];
+    UserTransportation.collection.insert({ transport, month: months[newDate.getMonth()], day: newDate.getDate().toString(), year: newDate.getFullYear().toString(), miles, owner },
         (error) => {
           if (error) {
             swal('Error', error.message, 'error');
           } else {
-            swal('Success', 'Item added successfully', 'success');
+            swal('Success', 'Log entry added successfully', 'success');
             formRef.reset();
           }
         });
@@ -55,7 +59,7 @@ class TransportDataEntry extends React.Component {
             <AutoForm ref={ref => { fRef = ref; }} schema={bridge} onSubmit={data => this.submit(data, fRef)} >
               <Segment>
                 <SelectField name='transport'/>
-                <TextField name='day'/>
+                <DateField name='day'/>
                 <NumField name='miles' decimal={false}/>
                 <SubmitField value='Submit'/>
                 <ErrorsField/>
