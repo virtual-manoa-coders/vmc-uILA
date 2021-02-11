@@ -1,11 +1,11 @@
 import React from 'react';
-import { Grid, Segment, Header } from 'semantic-ui-react';
+import { Grid, Segment, Header, Form } from 'semantic-ui-react';
 import { AutoForm, ErrorsField, NumField, SelectField, SubmitField, DateField } from 'uniforms-semantic';
 import swal from 'sweetalert';
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
-import { UserTransportation} from '../../api/userTransportation/UserTransportation';
+import { UserTransportation } from '../../api/userTransportation/UserTransportation';
 
 /*
 TODO:
@@ -38,7 +38,14 @@ class TransportDataEntry extends React.Component {
     const months = ['January', 'February', 'March', 'April', 'May', 'June',
       'July', 'August', 'September', 'October', 'November', 'December',
     ];
-    UserTransportation.collection.insert({ transport, month: months[newDate.getMonth()], day: newDate.getDate().toString(), year: newDate.getFullYear().toString(), miles, owner },
+    UserTransportation.collection.insert({
+          transport,
+          month: months[newDate.getMonth()],
+          day: newDate.getDate().toString(),
+          year: newDate.getFullYear().toString(),
+          miles,
+          owner
+        },
         (error) => {
           if (error) {
             swal('Error', error.message, 'error');
@@ -56,11 +63,15 @@ class TransportDataEntry extends React.Component {
         <Grid container centered>
           <Grid.Column>
             <Header style={{ fontFamily: 'Comfortaa' }} textAlign='center' as='h2' inverted>Log Your Commute</Header>
-            <AutoForm ref={ref => { fRef = ref; }} schema={bridge} onSubmit={data => this.submit(data, fRef)} >
+            <AutoForm ref={ref => {
+              fRef = ref;
+            }} schema={bridge} onSubmit={data => this.submit(data, fRef)}>
               <Segment>
-                <DateField name='day'/>
-                <SelectField name='transport'/>
-                <NumField name='miles' decimal={false}/>
+                <Form.Group>
+                  <DateField name='day'/>
+                  <SelectField name='transport'/>
+                  <NumField name='miles' decimal={false}/>
+                </Form.Group>
                 <SubmitField value='Submit'/>
                 <ErrorsField/>
               </Segment>
