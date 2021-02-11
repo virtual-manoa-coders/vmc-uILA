@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, Grid, Image } from 'semantic-ui-react';
+import { Header, Grid, Image, Item } from 'semantic-ui-react';
 
 /** A simple static component to render some text for the landing page. */
 class About extends React.Component {
@@ -9,13 +9,13 @@ class About extends React.Component {
         <div>
           <Grid verticalAlign='middle' container style={aboutStyle}>
             <Grid.Row textAlign='center'>
-                <Header textAlign='center' className='font-comfortaa' as='h4' inverted>
-                  <b className='about-header'>Welcome to uILA!</b>
-                  <br/>
-                  <p className='font-comfortaa'>
+              <Header textAlign='center' className='font-comfortaa' as='h4' inverted>
+                <b className='about-header' style={{ color: '#fbd589' }}>Welcome to uILA!</b>
+                <br/><br/>
+                <p className='font-comfortaa'>
                   uILA is designed by a team of computer science students at University of Hawaii – Manoa, with one goal
-                    in mind: to slow the rate of climate change, starting with our local community.</p>
-                </Header>
+                  in mind: to slow the rate of climate change, starting with our local community.</p>
+              </Header>
               <Image className='about-image' src='/images/about-background.png' centered/>
             </Grid.Row>
             <Grid.Row textAlign='center'>
@@ -40,6 +40,63 @@ class About extends React.Component {
                 beneficial collective data to all registered users of uILA. Your personal information and logs will not
                 be shared with the public.
               </p>
+            </Grid.Row>
+          </Grid>
+          <Grid verticalAlign='middle' style={aboutStyle} columns='equal' container>
+            <Grid.Row centered>
+              <Header style={{ fontFamily: 'Comfortaa', color: '#fbd589', marginTop: '20px' }} as='h3' inverted>Meet the Team!</Header>
+            </Grid.Row>
+            <Grid.Row>
+              <Grid.Column>
+                <Item className='font-comfortaa'>
+                  <Item.Image size='tiny' circular src='images/taylor.jpg' as='a' href='https://github.com/tgabatin'/>
+                  <span>Taylor</span>
+                </Item>
+              </Grid.Column>
+              <Grid.Column>
+                <Item className='font-comfortaa'>
+                  <Item.Image size='tiny' circular src='images/edwin.jpg' as='a' href='https://github.com/edwin-zheng'/>
+                  <span>Edwin</span>
+                </Item>
+              </Grid.Column>
+              <Grid.Column>
+                <Item className='font-comfortaa'>
+                  <Item.Image size='tiny' circular src='images/braden.jpg' as='a' href='https://github.com/bradenbetz'/>
+                  <span>Braden</span>
+                </Item>
+              </Grid.Column>
+              <Grid.Column>
+                <Item className='font-comfortaa'>
+                  <Item.Image size='tiny' circular src='images/christian.jpg' as='a'
+                              href='https://github.com/christianjensenv'/>
+                  <span>Christian</span>
+                </Item>
+              </Grid.Column>
+              <Grid.Column>
+                <Item className='font-comfortaa'>
+                  <Item.Image size='tiny' circular src='images/sophia.png' as='a' href='https://github.com/s-rathyen'/>
+                  <span>Sophia</span>
+                </Item>
+              </Grid.Column>
+              <Grid.Column>
+                <Item className='font-comfortaa'>
+                  <Item.Image size='tiny' circular src='images/patima.png' as='a'
+                              href='https://github.com/patimapoochai'/>
+                  <span>Patima</span>
+                </Item>
+              </Grid.Column>
+              <Grid.Column>
+                <Item className='font-comfortaa'>
+                  <Item.Image size='tiny' circular src='images/jiajun.png' as='a' href='https://github.com/JiajunK'/>
+                  <span>Jiajun</span>
+                </Item>
+              </Grid.Column>
+              <Grid.Column>
+                <Item className='font-comfortaa'>
+                  <Item.Image size='tiny' circular src='images/angela.jpg' as='a' href='https://github.com/angcylau'/>
+                  <span>Angela</span>
+                </Item>
+              </Grid.Column>
             </Grid.Row>
           </Grid>
         </div>

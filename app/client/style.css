@@ -15,6 +15,7 @@ body, html, .menu, .table {
 
 .font-comfortaa {
   font-family: 'Comfortaa', sans-serif;
+  text-align: center;
 }
 
 .about-font {
@@ -22,6 +23,12 @@ body, html, .menu, .table {
   font-size: 16px;
   color: white;
   text-align: center;
+}
+
+.team {
+  text-align: center;
+  font-family: 'Comfortaa', sans-serif;
+  color: white;
 }
 
 #landing-page {
