@@ -9,7 +9,7 @@ class About extends React.Component {
         <div>
           <Grid verticalAlign='middle' container style={aboutStyle}>
             <Grid.Row textAlign='center'>
-              <Header textAlign='center' className='font-comfortaa' as='h4' inverted>
+              <Header textAlign='center' as='h4' inverted>
                 <b className='about-header' style={{ color: '#fbd589' }}>Welcome to uILA!</b>
                 <br/><br/>
                 <p className='font-comfortaa'>
