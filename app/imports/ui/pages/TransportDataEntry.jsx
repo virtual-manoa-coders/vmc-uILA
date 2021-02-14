@@ -21,7 +21,7 @@ const formSchema = new SimpleSchema({
     allowedValues: ['Telecommute', 'Walk', 'Bike', 'Carpool', 'Bus', 'Car'],
     defaultValue: 'Telecommute',
   },
-  day: String,
+  date: Date,
   miles: Number,
 });
 
@@ -32,19 +32,13 @@ class TransportDataEntry extends React.Component {
 
   /** On submit, insert the data. */
   submit(data, formRef) {
-    const { transport, miles } = data;
-    const owner = Meteor.user().username;
-    const newDate = new Date();
-    const months = ['January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December',
-    ];
+    const { date, transport, miles } = data;
+    const ownerID = Meteor.user()._id;
     UserTransportation.collection.insert({
           transport,
-          month: months[newDate.getMonth()],
-          day: newDate.getDate().toString(),
-          year: newDate.getFullYear().toString(),
+          date,
           miles,
-          owner
+          ownerID,
         },
         (error) => {
           if (error) {
@@ -68,7 +62,10 @@ class TransportDataEntry extends React.Component {
             }} schema={bridge} onSubmit={data => this.submit(data, fRef)}>
               <Segment>
                 <Form.Group>
-                  <DateField name='day'/>
+                  <DateField name='date'
+                             max={new Date(2100, 1, 1)}
+                             min={new Date(2000, 1, 1)}
+                      />
                   <SelectField name='transport'/>
                   <NumField name='miles' decimal={false}/>
                 </Form.Group>
