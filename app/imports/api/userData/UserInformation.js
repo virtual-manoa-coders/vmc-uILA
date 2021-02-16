@@ -12,10 +12,11 @@ class UserInformationCollection {
     // Define the structure of each document in the collection.
     this.schema = new SimpleSchema({
       userID: String,
-      legalName: String,
-      carMake: String,
-      carModel: String,
-      savedMilesPerGallon: Number,
+      //legalName: String,
+      informationEntered: Boolean,
+      carMake: { type: String, optional: true },
+      carModel: { type: String, optional: true },
+      savedMilesPerGallon: { type: Number, optional: true },
     }, { tracker: Tracker });
     // Attach the schema to the collection, so all attempts to insert a document are checked against schema.
     this.collection.attachSchema(this.schema);
@@ -25,4 +26,4 @@ class UserInformationCollection {
   }
 }
 
-export const UserTransportation = new UserInformationCollection();
+export const UserInformation = new UserInformationCollection();
