@@ -5,12 +5,11 @@ import swal from 'sweetalert';
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
-import { UserTransportation } from '../../api/userTransportation/UserTransportation';
+import { UserTransportation } from '../../api/userData/UserTransportation';
 
 /*
 TODO:
 - Add a milage input through map feature
-- Add a calendar feature
 - After you're done, take you back to dasboard or community
  */
 
@@ -33,12 +32,12 @@ class TransportDataEntry extends React.Component {
   /** On submit, insert the data. */
   submit(data, formRef) {
     const { date, transport, miles } = data;
-    const ownerID = Meteor.user()._id;
+    const userID = Meteor.user()._id;
     UserTransportation.collection.insert({
           transport,
           date,
           miles,
-          ownerID,
+          userID,
         },
         (error) => {
           if (error) {

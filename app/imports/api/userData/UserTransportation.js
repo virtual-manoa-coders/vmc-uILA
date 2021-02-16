@@ -2,7 +2,7 @@ import { Mongo } from 'meteor/mongo';
 import SimpleSchema from 'simpl-schema';
 import { Tracker } from 'meteor/tracker';
 
-/** Encapsulates state and variable values for this collection. */
+/** This collection contains the user's transportation usage */
 class UserTransportationCollection {
   constructor() {
     // The name of this collection.
@@ -17,7 +17,7 @@ class UserTransportationCollection {
       },
       date: Date,
       miles: Number,
-      ownerID: String,
+      userID: String,
     }, { tracker: Tracker });
     // Attach the schema to the collection, so all attempts to insert a document are checked against schema.
     this.collection.attachSchema(this.schema);

@@ -19,6 +19,13 @@ class Signup extends React.Component {
     this.setState({ [name]: value });
   }
 
+  /*
+  TODO:
+  - Create the  UserData Database
+  - Add code that creates new user data every time a new user sign up
+  - Add code that checks if a user is already created
+   */
+
   /** Handle Signup submission. Create user account and a profile entry, then redirect to the home page. */
   submit = () => {
     const { email, password } = this.state;
@@ -27,6 +34,7 @@ class Signup extends React.Component {
         this.setState({ error: err.reason });
       } else {
         this.setState({ error: '', redirectToReferer: true });
+        // add the UserDatabase code here
       }
     });
   }
