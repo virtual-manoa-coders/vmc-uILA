@@ -27,8 +27,17 @@ Meteor.publish(Stuffs.adminPublicationName, function () {
 // If logged in, then publish documents owned by this user. Otherwise publish nothing.
 Meteor.publish(UserTransportation.userPublicationName, function () {
   if (this.userId) {
-    const username = Meteor.users.findOne(this.userId).username;
-    return UserTransportation.collection.find({ owner: username });
+    return UserTransportation.collection.find({ userID: this.userId });
+  }
+  return this.ready();
+});
+
+// community-level publication.
+// If logged in, then publish documents with user id redacted. Otherwise publish nothing.
+// TODO: Only publish Dates, Miles, and MPG, nothing else
+Meteor.publish(UserTransportation.communityPublicationName, function () {
+  if (this.userId) {
+    return UserTransportation.collection.find();
   }
   return this.ready();
 });
