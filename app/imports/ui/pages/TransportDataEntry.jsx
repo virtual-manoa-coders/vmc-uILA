@@ -25,6 +25,7 @@ const formSchema = new SimpleSchema({
   },
   date: Date,
   miles: Number,
+  milesPerGallon: Number,
 });
 
 const bridge = new SimpleSchema2Bridge(formSchema);
@@ -34,12 +35,13 @@ class TransportDataEntry extends React.Component {
 
   /** On log your commute submit, insert the data into UserTransportation. */
   submit(data, formRef) {
-    const { date, transport, miles } = data;
+    const { date, transport, miles, milesPerGallon } = data;
     const userID = Meteor.user()._id;
     UserTransportation.collection.insert({
           transport,
           date,
           miles,
+          milesPerGallon,
           userID,
         },
         (error) => {
@@ -64,11 +66,12 @@ class TransportDataEntry extends React.Component {
               <Segment>
                 <Form.Group>
                   <DateField name='date'
-                             max={new Date(2100, 1, 1)}
+                             max={new Date()}
                              min={new Date(2000, 1, 1)}
                   />
                   <SelectField name='transport'/>
                   <NumField name='miles' decimal={false}/>
+                  <NumField name='milesPerGallon' decimal={false}/>
                 </Form.Group>
                 <SubmitField value='Submit'/>
                 <ErrorsField/>
