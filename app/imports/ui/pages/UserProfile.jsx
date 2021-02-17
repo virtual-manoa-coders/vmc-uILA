@@ -59,12 +59,11 @@ class UserProfile extends React.Component {
                   </Card.Meta>
                   <Header as='h5'>Car: {profile.carMake} {profile.carModel} </Header>
                   <Header as='h5'>
-                    Miles per gallon: {profile.mpg} </Header>
-                  <Divider hidden/>
-                  <Header as='h5'>GHG reduced: {profile.ghgReduced}</Header>
+                    Miles per gallon: {profile.mpg} miles</Header>
+                  <Header as='h5'>GHG reduced: {profile.ghgReduced} pounds</Header>
                   <Header as='h5'>Vehicle miles traveled
-                    reduced: {profile.vmtReduced}</Header>
-                  <Header as='h5'>Fuel saved: {profile.fuelSaved}</Header>
+                    reduced: {profile.vmtReduced} miles</Header>
+                  <Header as='h5'>Fuel saved: {profile.fuelSaved} gallons</Header>
                 </Card.Content>
               </Card>
             </Grid.Column>
