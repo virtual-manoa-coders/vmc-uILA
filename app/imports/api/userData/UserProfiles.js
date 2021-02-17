@@ -12,7 +12,7 @@ class UserProfilesCollection {
     // Define the structure of each document in the collection.
     this.schema = new SimpleSchema({
       name: { type: String, optional: true },
-      email: { type: String, index: true, unique: true },
+      email: { type: String, index: true },
       image: { type: String, optional: true },
       carMake: { type: String, optional: true },
       carModel: { type: String, optional: true },
