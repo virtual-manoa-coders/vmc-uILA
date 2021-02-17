@@ -14,7 +14,7 @@ class Landing extends React.Component {
                 <Grid container stackable centered columns={2}>
 
                     <Grid.Column textAlign='left center'>
-                        <h1 className='header' inverted>Sign Up to begin tracking your emissions or Log In if you're a returning user </h1>
+                        <h1 className='header' inverted>Sign Up to begin tracking your emissions or Log In if you&apos;re a returning user </h1>
                     </Grid.Column>
                     <Grid.Column textAlign='right center'>
                         <Button.Group className ='login'>

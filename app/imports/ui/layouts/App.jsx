@@ -8,6 +8,7 @@ import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
 import Landing from '../pages/Landing';
 import About from '../pages/About';
+import UserProfile from '../pages/UserProfile';
 import TransportDataEntry from '../pages/TransportDataEntry';
 import CarComparator from '../pages/CarComparator';
 import EditStuff from '../pages/EditStuff';
@@ -32,6 +33,7 @@ class App extends React.Component {
               <Route path="/signin" component={Signin}/>
               <Route path="/signup" component={Signup}/>
               <Route path="/signout" component={Signout}/>
+              <ProtectedRoute path="/user-profile" component={UserProfile}/>
               <ProtectedRoute path="/about" component={About}/>
                 <ProtectedRoute path="/community" component={Community}/>
                 <ProtectedRoute path='/dashboard' component={Dashboard}/>

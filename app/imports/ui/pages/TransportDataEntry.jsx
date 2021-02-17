@@ -67,10 +67,12 @@ class TransportDataEntry extends React.Component {
                 <Form.Group>
                   <DateField name='date'
                              max={new Date()}
-                             min={new Date(2000, 1, 1)}
+                             min={new Date(2017, 1, 1)}
                   />
                   <SelectField name='transport'/>
                   <NumField name='miles' decimal={false}/>
+                </Form.Group>
+                <Form.Group>
                   <NumField name='milesPerGallon' decimal={false}/>
                 </Form.Group>
                 <SubmitField value='Submit'/>
