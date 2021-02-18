@@ -1,10 +1,11 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { Grid, Table, Divider, Loader, Header } from 'semantic-ui-react';
+import { Grid, Table, Divider, Loader, Header, Segment } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { withTracker } from 'meteor/react-meteor-data';
 import moment from 'moment';
 import { UserTransportation } from '../../api/userData/UserTransportation';
+import TransportationMethodPieChart from '../components/TransportMethodPieChart';
 
 const GHGperGallon = 19.6; // pounds per gallon
 
@@ -15,8 +16,8 @@ class Community extends React.Component {
   }
 
   /**
-  timespan is a Date object; i.e. timespan = moment().subtract(1, 'y')
-  data is the fetched userTransport collection; i.e. data = this.props.userTransportation
+   timespan is a Date object; i.e. timespan = moment().subtract(1, 'y')
+   data is the fetched userTransport collection; i.e. data = this.props.userTransportation
    This assumes that the data is from one user, so its not averaged by person
   */
   userCO2Aggregate(data, timeSpan) {
@@ -85,6 +86,23 @@ class Community extends React.Component {
                     </Table.Row>
                   </Table.Body>
                 </Table>
+              </Grid.Column>
+            </Grid.Row>
+
+            <Grid.Row id='space-row'>
+            </Grid.Row>
+            <Grid.Row columns={2} stretched>
+              <Grid.Column verticalAlign='middle'>
+                <Segment>
+                  <Header style={{ fontFamily: 'Comfortaa' }} textAlign='center' as='h2'>Your Modes of Transportation This Month</Header>
+                  <TransportationMethodPieChart userTransportation={ this.props.userTransportation } timeSpan={moment().subtract(1, 'years')}/>
+                </Segment>
+              </Grid.Column>
+              <Grid.Column verticalAlign='middle'>
+                <Segment>
+                  <Header style={{ fontFamily: 'Comfortaa' }} textAlign='center' as='h2'>Cummulative Modes of Transportation This Month</Header>
+                  <TransportationMethodPieChart userTransportation={ this.props.userTransportation } timeSpan={moment().subtract(1, 'years')}/>
+                </Segment>
               </Grid.Column>
             </Grid.Row>
 
