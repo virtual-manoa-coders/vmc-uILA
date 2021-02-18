@@ -4,7 +4,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { Container, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
 import { Accounts } from 'meteor/accounts-base';
 import { UserInformation } from '../../api/userData/UserInformation';
-import { UserProfiles } from '../../api/userData/UserProfiles';
+import { UserInfo } from '../../api/userData/UserInfo';
 
 /**
  * Signup component is similar to signin component, but we create a new user instead.
@@ -45,7 +45,7 @@ class Signup extends React.Component {
         //   userID,
         //   informationEntered,
         // }));
-        UserProfiles.collection.insert({ email });
+        UserInfo.collection.insert({ email });
       }
     });
   }

@@ -3,9 +3,9 @@ import { Roles } from 'meteor/alanning:roles';
 import { Stuffs } from '../../api/stuff/Stuff';
 import { UserTransportation } from '../../api/userData/UserTransportation';
 import { UserInformation } from '../../api/userData/UserInformation';
-import { UserProfiles } from '../../api/userData/UserProfiles';
+import { UserInfo } from '../../api/userData/UserInfo';
 
-Meteor.publish(UserProfiles.userPublicationName, () => UserProfiles.collection.find());
+Meteor.publish(UserInfo.userPublicationName, () => UserInfo.collection.find());
 
 // User-level publication.
 // If logged in, then publish documents owned by this user. Otherwise publish nothing.
@@ -35,13 +35,6 @@ Meteor.publish(UserTransportation.userPublicationName, function () {
   return this.ready();
 });
 
-// Meteor.publish(UserProfiles.userPublicationName, function () {
-//   if (this.userId) {
-//     return UserProfiles.collection.find({ userID: this.userId });
-//   }
-//   return this.ready();
-// });
-
 // community-level publication.
 // If logged in, then publish documents with user id redacted. Otherwise publish nothing.
 // TODO: Only publish Dates, Miles, and MPG, nothing else
@@ -61,9 +54,9 @@ Meteor.publish(UserTransportation.adminPublicationName, function () {
   return this.ready();
 });
 
-Meteor.publish(UserProfiles.adminPublicationName, function () {
+Meteor.publish(UserInfo.adminPublicationName, function () {
   if (this.userId && Roles.userIsInRole(this.userId, 'admin')) {
-    return UserProfiles.collection.find();
+    return UserInfo.collection.find();
   }
   return this.ready();
 });

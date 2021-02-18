@@ -3,10 +3,10 @@ import SimpleSchema from 'simpl-schema';
 import { Tracker } from 'meteor/tracker';
 
 /** This collection contains the user's vehicle data */
-class UserProfilesCollection {
+class UserInfoCollection {
   constructor() {
     // The name of this collection.
-    this.name = 'UserProfilesCollection';
+    this.name = 'UserInfoCollection';
     // Define the Mongo collection.
     this.collection = new Mongo.Collection(this.name);
     // Define the structure of each document in the collection.
@@ -30,4 +30,4 @@ class UserProfilesCollection {
   }
 }
 
-export const UserProfiles = new UserProfilesCollection();
+export const UserInfo = new UserInfoCollection();

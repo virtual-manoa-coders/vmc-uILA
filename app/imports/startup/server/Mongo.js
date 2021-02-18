@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
-import { _ } from 'meteor/underscore';
+// import { _ } from 'meteor/underscore';
 import { Stuffs } from '../../api/stuff/Stuff.js';
-import { UserProfiles } from '../../api/userData/UserProfiles';
+import { UserInfo } from '../../api/userData/UserInfo';
 
 /* eslint-disable no-console */
 
@@ -13,7 +13,7 @@ function addData(data) {
 
 function addProfile({ name, email, image, carMake, carModel, mpg, ghgReduced, vmtReduced, fuelSaved }) {
   console.log(` Defining profile: ${email}`);
-  UserProfiles.collection.insert({ name, email, image, carMake, carModel, mpg, ghgReduced, vmtReduced, fuelSaved });
+  UserInfo.collection.insert({ name, email, image, carMake, carModel, mpg, ghgReduced, vmtReduced, fuelSaved });
 }
 
 /** Initialize the collection if empty. */
@@ -25,7 +25,7 @@ if (Stuffs.collection.find().count() === 0) {
 }
 
 /** Initialize the collection if empty. */
-if (UserProfiles.collection.find().count() === 0) {
+if (UserInfo.collection.find().count() === 0) {
   if (Meteor.settings.defaultProfiles) {
     console.log('Creating default Profiles.');
     Meteor.settings.defaultProfiles.map(data => addProfile(data));

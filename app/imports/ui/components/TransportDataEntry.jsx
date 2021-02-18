@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Segment, Header, Form, Loader } from 'semantic-ui-react';
+import { Grid, Header, Loader } from 'semantic-ui-react';
 import { AutoForm, ErrorsField, NumField, SelectField, SubmitField, DateField } from 'uniforms-semantic';
 import swal from 'sweetalert';
 import { Meteor } from 'meteor/meteor';
@@ -34,13 +34,12 @@ class TransportDataEntry extends React.Component {
 
   /** On log your commute submit, insert the data into UserTransportation. */
   submit(data, formRef) {
-    const { date, transport, miles, milesPerGallon } = data;
+    const { date, transport, miles } = data;
     const userID = Meteor.user()._id;
     UserTransportation.collection.insert({
           transport,
           date,
           miles,
-          milesPerGallon,
           userID,
         },
         (error) => {
@@ -56,24 +55,20 @@ class TransportDataEntry extends React.Component {
   transportationLog() {
     let fRef = null;
     return (
-        <Grid container centered>
+        <Grid centered>
           <Grid.Column>
-            <Header style={{ fontFamily: 'Comfortaa' }} textAlign='center' as='h2' inverted>Log Your Commute</Header>
             <AutoForm ref={ref => {
               fRef = ref;
             }} schema={bridge} onSubmit={data => this.submit(data, fRef)}>
-              <Segment>
-                <Form.Group>
-                  <DateField name='date'
-                             max={new Date()}
-                             min={new Date(2017, 1, 1)}
-                  />
-                  <SelectField name='transport'/>
-                  <NumField name='miles' decimal={false}/>
-                </Form.Group>
+              <Header style={{ fontFamily: 'Comfortaa' }} textAlign='center' as='h4' inverted>Log Your Commute</Header>
+                <DateField name='date'
+                           max={new Date()}
+                           min={new Date(2017, 1, 1)}
+                />
+                <SelectField name='transport'/>
+                <NumField name='miles' decimal={false}/>
                 <SubmitField value='Submit'/>
                 <ErrorsField/>
-              </Segment>
             </AutoForm>
           </Grid.Column>
         </Grid>

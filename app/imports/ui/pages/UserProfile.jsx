@@ -7,8 +7,9 @@ import SimpleSchema from 'simpl-schema';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
-import { _ } from 'meteor/underscore';
-import { UserProfiles } from '../../api/userData/UserProfiles';
+import { UserInfo } from '../../api/userData/UserInfo';
+import { UserTransportation } from '../../api/userData/UserTransportation';
+import TransportDataEntry from '../components/TransportDataEntry';
 
 /** Create a schema to specify the structure of the data to appear in the form. */
 const formSchema = new SimpleSchema({
@@ -16,7 +17,7 @@ const formSchema = new SimpleSchema({
   image: { type: String, label: 'Profile picture', optional: true },
   carMake: { type: String, label: 'Car make', optional: true },
   carModel: { type: String, label: 'Car model', optional: true },
-  mpg: { type: Number, label: 'Miles per gallon', optional: true },
+  mpg: { type: Number, label: 'Average miles per gallon', optional: true },
 });
 
 /** Renders the Profile page */
@@ -25,7 +26,7 @@ class UserProfile extends React.Component {
   /** On submit, insert the data. */
   submit(data) {
     const { _id, name, image, carMake, carModel, mpg } = data;
-    UserProfiles.collection.update(_id, { $set: { name, image, carMake, carModel, mpg } }, (error) => {
+    UserInfo.collection.update(_id, { $set: { name, image, carMake, carModel, mpg } }, (error) => {
       if (error) {
         swal('Error', error.message, 'error');
       } else {
@@ -43,13 +44,13 @@ class UserProfile extends React.Component {
   renderPage() {
     const email = Meteor.user().username;
     const bridge = new SimpleSchema2Bridge(formSchema);
-    const profile = UserProfiles.collection.findOne({ email });
+    const profile = UserInfo.collection.findOne({ email });
     return (
-        <Grid container centered verticalAlign='middle' divided>
-          <Header as="h2" textAlign="center" inverted>Aloha, {profile.name} </Header>
-          <Grid.Row>
-            <Grid.Column verticalAlign='middle' width={7}>
-              <Card centered fluid>
+        <Grid container stackable centered verticalAlign='middle'>
+          <Header style={{ fontFamily: 'Comfortaa' }} as="h2" textAlign="center" inverted>Aloha, {profile.name} </Header>
+          <Grid.Row columns={2} height='equal' width='equal'>
+            <Grid.Column verticalAlign='middle'>
+              <Card fluid>
                 <Card.Content>
                   <Image src={profile.image}
                          size='small'/>
@@ -63,7 +64,7 @@ class UserProfile extends React.Component {
                     <br/>
                     GHG reduced: {profile.ghgReduced} pounds
                     <br/>
-                    Vehicle miles traveled
+                    VMT
                     reduced: {profile.vmtReduced} miles
                     <br/>
                     Fuel saved: {profile.fuelSaved} gallons
@@ -71,9 +72,13 @@ class UserProfile extends React.Component {
                 </Card.Content>
               </Card>
             </Grid.Column>
+            <Grid.Column verticalAlign='middle'>
+              <TransportDataEntry userTransportation={this.props.userTransportation}/>
+            </Grid.Column>
           </Grid.Row>
           <Grid.Row>
             <Grid.Column centered>
+              <Header style={{ fontFamily: 'Comfortaa' }} textAlign='center' as='h4' inverted>Edit Your Information</Header>
               <AutoForm model={profile} schema={bridge} onSubmit={data => this.submit(data)}>
                 <Segment>
                   <Form.Group widths='equal'>
@@ -84,7 +89,7 @@ class UserProfile extends React.Component {
                     <TextField id='carMake' name='carMake' showInlineError={true} placeholder={'Car make'}/>
                     <TextField id='carModel' name='carModel' showInlineError={true} placeholder={'Car model'}/>
                     <NumField id='mpg' name='mpg' decimal={false} showInlineError={true}
-                              placeholder={'Miles per gallon of vehicle'}/>
+                              placeholder={'Miles per gallon'}/>
                   </Form.Group>
                   <SubmitField id='update-profile' value='Update Profile'/>
                 </Segment>
@@ -99,14 +104,16 @@ class UserProfile extends React.Component {
 /** Require an array of userProfile documents in the props. */
 UserProfile.propTypes = {
   profile: PropTypes.array,
+  userTransportation: PropTypes.array.isRequired,
   ready: PropTypes.bool.isRequired,
 };
 
 /** withTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker */
 export default withTracker(() => {
-  // Get access to UserProfiles documents.
-  const subscription = Meteor.subscribe(UserProfiles.userPublicationName);
+  // Get access to UserInfo documents.
+  const sub1 = Meteor.subscribe(UserInfo.userPublicationName);
+  const sub2 = Meteor.subscribe(UserTransportation.userPublicationName);
   return {
-    ready: subscription.ready(),
+    ready: sub1.ready() && sub2.ready(),
   };
 })(UserProfile);

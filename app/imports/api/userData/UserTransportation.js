@@ -17,7 +17,6 @@ class UserTransportationCollection {
       },
       date: Date,
       miles: Number,
-      milesPerGallon: Number,
       userID: String,
     }, { tracker: Tracker });
     // Attach the schema to the collection, so all attempts to insert a document are checked against schema.

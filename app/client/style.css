@@ -138,5 +138,8 @@ body, html, .menu, .table {
     font-size: 0.85em;
     font-weight: 700;
     text-align: left;
+}
 
+.column {
+    border: 0;
 }
