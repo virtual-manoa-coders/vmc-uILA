@@ -91,17 +91,22 @@ class Community extends React.Component {
 
             <Grid.Row id='space-row'>
             </Grid.Row>
+            <Grid.Row>
+              <Grid.Column verticalAlign='middle'>
+                <Header style={{ fontFamily: 'Comfortaa' }} textAlign='center' as='h2' inverted>Modes of Transportation This Month</Header>
+              </Grid.Column>
+            </Grid.Row>
             <Grid.Row columns={2} stretched>
               <Grid.Column verticalAlign='middle'>
                 <Segment>
-                  <Header style={{ fontFamily: 'Comfortaa' }} textAlign='center' as='h2'>Your Modes of Transportation This Month</Header>
-                  <TransportationMethodPieChart userTransportation={ this.props.userTransportation } timeSpan={moment().subtract(1, 'years')}/>
+                  <Header style={{ fontFamily: 'Comfortaa' }} textAlign='center' as='h2'>You</Header>
+                  <TransportationMethodPieChart userTransportation={ this.props.userTransportation } timeSpan={moment().subtract(1, 'months')}/>
                 </Segment>
               </Grid.Column>
               <Grid.Column verticalAlign='middle'>
                 <Segment>
-                  <Header style={{ fontFamily: 'Comfortaa' }} textAlign='center' as='h2'>Cummulative Modes of Transportation This Month</Header>
-                  <TransportationMethodPieChart userTransportation={ this.props.userTransportation } timeSpan={moment().subtract(1, 'years')}/>
+                  <Header style={{ fontFamily: 'Comfortaa' }} textAlign='center' as='h2'>Community</Header>
+                  <TransportationMethodPieChart userTransportation={ this.props.userTransportation } timeSpan={moment().subtract(1, 'months')}/>
                 </Segment>
               </Grid.Column>
             </Grid.Row>
