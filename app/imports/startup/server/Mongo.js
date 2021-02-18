@@ -11,9 +11,9 @@ function addData(data) {
   Stuffs.collection.insert(data);
 }
 
-function addProfile({ name, email, image, carMake, carModel, mpg, ghgReduced, vmtReduced, fuelSaved }) {
+function addProfile({ name, email, image, carMake, carModel, year, mpg, ghgReduced, vmtReduced, fuelSaved }) {
   console.log(` Defining profile: ${email}`);
-  UserInfo.collection.insert({ name, email, image, carMake, carModel, mpg, ghgReduced, vmtReduced, fuelSaved });
+  UserInfo.collection.insert({ name, email, image, carMake, carModel, year, mpg, ghgReduced, vmtReduced, fuelSaved });
 }
 
 /** Initialize the collection if empty. */

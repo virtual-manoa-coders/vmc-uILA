@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card, Header, Loader, Image, Grid, Segment, Form, Divider } from 'semantic-ui-react';
-import { AutoForm, SubmitField, TextField, NumField } from 'uniforms-semantic';
+import { Card, Header, Loader, Image, Grid, Segment, Form } from 'semantic-ui-react';
+import { AutoForm, SubmitField, TextField, SelectField, NumField } from 'uniforms-semantic';
 import swal from 'sweetalert';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
@@ -17,6 +17,8 @@ const formSchema = new SimpleSchema({
   image: { type: String, label: 'Profile picture', optional: true },
   carMake: { type: String, label: 'Car make', optional: true },
   carModel: { type: String, label: 'Car model', optional: true },
+  year: { type: String, optional: true, allowedValues: ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008',
+      '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'] },
   mpg: { type: Number, label: 'Average miles per gallon', optional: true },
 });
 
@@ -25,8 +27,8 @@ class UserProfile extends React.Component {
 
   /** On submit, insert the data. */
   submit(data) {
-    const { _id, name, image, carMake, carModel, mpg } = data;
-    UserInfo.collection.update(_id, { $set: { name, image, carMake, carModel, mpg } }, (error) => {
+    const { _id, name, image, carMake, carModel, year, mpg } = data;
+    UserInfo.collection.update(_id, { $set: { name, image, carMake, carModel, year, mpg } }, (error) => {
       if (error) {
         swal('Error', error.message, 'error');
       } else {
@@ -42,12 +44,13 @@ class UserProfile extends React.Component {
 
   /** Render the page once subscriptions have been received. */
   renderPage() {
+    const pageStyle = { marginTop: '10px' };
     const email = Meteor.user().username;
     const bridge = new SimpleSchema2Bridge(formSchema);
     const profile = UserInfo.collection.findOne({ email });
     return (
-        <Grid container stackable centered verticalAlign='middle'>
-          <Header style={{ fontFamily: 'Comfortaa' }} as="h2" textAlign="center" inverted>Aloha, {profile.name} </Header>
+        <Grid container stackable centered verticalAlign='middle' style={pageStyle}>
+          <Header style={{ fontFamily: 'Comfortaa', fontSize: '2.0em' }} as="h2" textAlign="center" inverted>Aloha, {profile.name} </Header>
           <Grid.Row columns={2} height='equal' width='equal'>
             <Grid.Column verticalAlign='middle'>
               <Card fluid>
@@ -78,9 +81,9 @@ class UserProfile extends React.Component {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column centered>
-              <Header style={{ fontFamily: 'Comfortaa' }} textAlign='center' as='h4' inverted>Edit Your Information</Header>
               <AutoForm model={profile} schema={bridge} onSubmit={data => this.submit(data)}>
                 <Segment>
+                  <Header style={{ fontFamily: 'Comfortaa', color: '#2292b3' }} textAlign='center' as='h4'>Edit Your Information</Header>
                   <Form.Group widths='equal'>
                     <TextField id='name' name='name' showInlineError={true} placeholder={'Your name'}/>
                     <TextField id='image' name='image' showInlineError={true} placeholder={'Image URL'}/>
@@ -88,9 +91,10 @@ class UserProfile extends React.Component {
                   <Form.Group widths='equal'>
                     <TextField id='carMake' name='carMake' showInlineError={true} placeholder={'Car make'}/>
                     <TextField id='carModel' name='carModel' showInlineError={true} placeholder={'Car model'}/>
+                    <SelectField id='year' name='year' showInlineError={true} placeholder={'Year'}/>
+                  </Form.Group>
                     <NumField id='mpg' name='mpg' decimal={false} showInlineError={true}
                               placeholder={'Miles per gallon'}/>
-                  </Form.Group>
                   <SubmitField id='update-profile' value='Update Profile'/>
                 </Segment>
               </AutoForm>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Header, Loader } from 'semantic-ui-react';
+import { Grid, Header, Loader, Segment } from 'semantic-ui-react';
 import { AutoForm, ErrorsField, NumField, SelectField, SubmitField, DateField } from 'uniforms-semantic';
 import swal from 'sweetalert';
 import { Meteor } from 'meteor/meteor';
@@ -60,7 +60,8 @@ class TransportDataEntry extends React.Component {
             <AutoForm ref={ref => {
               fRef = ref;
             }} schema={bridge} onSubmit={data => this.submit(data, fRef)}>
-              <Header style={{ fontFamily: 'Comfortaa' }} textAlign='center' as='h4' inverted>Log Your Commute</Header>
+              <Segment>
+              <Header style={{ fontFamily: 'Comfortaa', color: '#2292b3' }} textAlign='center' as='h4'>Log Your Commute</Header>
                 <DateField name='date'
                            max={new Date()}
                            min={new Date(2017, 1, 1)}
@@ -69,6 +70,7 @@ class TransportDataEntry extends React.Component {
                 <NumField name='miles' decimal={false}/>
                 <SubmitField value='Submit'/>
                 <ErrorsField/>
+              </Segment>
             </AutoForm>
           </Grid.Column>
         </Grid>
