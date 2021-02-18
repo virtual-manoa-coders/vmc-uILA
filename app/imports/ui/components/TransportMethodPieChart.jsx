@@ -23,11 +23,6 @@ const noDataPreset = {
 
 /** Renders a single row in the List Stuff table. See pages/ListStuff.jsx. */
 class TransportMethodPieChart extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { data: null };
-  }
-
   /**
    * Aggregate the userTransportation into an array for the pie chart
    * @param timeSpan Only select data from today to the timespan
@@ -44,7 +39,7 @@ class TransportMethodPieChart extends React.Component {
     // count the occurance of each type of transport
     const dataArray = [0, 0, 0, 0, 0, 0]; // gosh darn imutable data paradigm
     transportMethod.forEach(doc => {
-      console.log(dataArray);
+      // console.log(dataArray);
       switch (doc) {
         case 'Telecommute':
           dataArray[0] += 1;
