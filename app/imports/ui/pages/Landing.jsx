@@ -30,37 +30,6 @@ class Landing extends React.Component {
                             </Grid.Column>
                         </Grid>
                     </div>
-                    <div className='summary'>
-                        <Grid columns={3}>
-                            <Grid.Column>
-                                <Icon name='handshake outline'/>
-                                <div>
-                                    Connect
-                                </div>
-                                <div>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                </div>
-                            </Grid.Column>
-                            <Grid.Column>
-                                <Icon name='clipboard outline'/>
-                                <div>
-                                    Log
-                                </div>
-                                <div>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                </div>
-                            </Grid.Column>
-                            <Grid.Column>
-                                <Icon name='sliders horizontal'/>
-                                <div>
-                                    Compare
-                                </div>
-                                <div>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                </div>
-                            </Grid.Column>
-                        </Grid>
-                    </div>
                 </div>
             </div>
             <Grid className='description-section' textAlign='left'>
@@ -76,7 +45,7 @@ class Landing extends React.Component {
                         </div>
                     </Grid.Column>
                     <Grid.Column width={12}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        Connect with the community and see how you are helping reduce emissions.
                     </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>
@@ -84,11 +53,11 @@ class Landing extends React.Component {
                         <Icon name='clipboard outline'/>
                         <br/>
                         <div>
-                            Log
+                            Track
                         </div>
                     </Grid.Column>
                     <Grid.Column width={12}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        Log in your distance traveled alongside your method of transportation to track your emissions
                     </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>
@@ -100,7 +69,7 @@ class Landing extends React.Component {
                         </div>
                     </Grid.Column>
                     <Grid.Column width={12}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        Compare your current emission options to other options
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
