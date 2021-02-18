@@ -131,5 +131,12 @@ body, html, .menu, .table {
 
 .h2 {
     font-family: 'Comfortaa', sans-serif;
+}
+
+.profile-card {
+    font-family: 'Comfortaa', sans-serif;
+    font-size: 0.85em;
+    font-weight: 700;
+    text-align: left;
 
 }

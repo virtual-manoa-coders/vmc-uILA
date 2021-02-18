@@ -48,22 +48,26 @@ class UserProfile extends React.Component {
         <Grid container centered verticalAlign='middle' divided>
           <Header as="h2" textAlign="center" inverted>Aloha, {profile.name} </Header>
           <Grid.Row>
-            <Grid.Column>
-              <Card centered>
+            <Grid.Column verticalAlign='middle' width={7}>
+              <Card centered fluid>
                 <Card.Content>
-                  <Image src={profile.image} wrapped
-                         ui={false}/>
-                  <br/>
-                  <Card.Meta>
+                  <Image src={profile.image}
+                         size='small'/>
+                  <Card.Meta style={{ fontSize: '0.65em' }}>
+                    <br/>
                     Email: {email}
                   </Card.Meta>
-                  <Header as='h5'>Car: {profile.carMake} {profile.carModel} </Header>
-                  <Header as='h5'>
-                    Miles per gallon: {profile.mpg} miles</Header>
-                  <Header as='h5'>GHG reduced: {profile.ghgReduced} pounds</Header>
-                  <Header as='h5'>Vehicle miles traveled
-                    reduced: {profile.vmtReduced} miles</Header>
-                  <Header as='h5'>Fuel saved: {profile.fuelSaved} gallons</Header>
+                  <Card.Description className='profile-card'>Car: {profile.carMake} {profile.carModel}
+                    <br/>
+                    Miles per gallon: {profile.mpg} miles
+                    <br/>
+                    GHG reduced: {profile.ghgReduced} pounds
+                    <br/>
+                    Vehicle miles traveled
+                    reduced: {profile.vmtReduced} miles
+                    <br/>
+                    Fuel saved: {profile.fuelSaved} gallons
+                  </Card.Description>
                 </Card.Content>
               </Card>
             </Grid.Column>
