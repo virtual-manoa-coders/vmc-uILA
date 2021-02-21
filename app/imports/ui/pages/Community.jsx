@@ -11,6 +11,7 @@ const GHGperGallon = 19.6; // pounds per gallon
 
 /** A simple static component to render some text for the landing page. */
 class Community extends React.Component {
+  // Problem: mpg needs to be entered into transport at user's update
   fuelSaved(milesSaved, milesPerGallon) {
     return milesSaved / milesPerGallon;
   }
@@ -19,14 +20,14 @@ class Community extends React.Component {
    timespan is a Date object; i.e. timespan = moment().subtract(1, 'y')
    data is the fetched userTransport collection; i.e. data = this.props.userTransportation
    This assumes that the data is from one user, so its not averaged by person
-  */
+   */
   userCO2Aggregate(data, timeSpan) {
     // get rid of data outside of timeSpan range and filter out car transport method
     const afterDateAndCar = data.filter(doc => doc.date > timeSpan && doc.transport !== 'Car');
     if (afterDateAndCar.length === 0) {
       return 'No Data';
     }
-    const fuelSaved = afterDateAndCar.map(doc => this.fuelSaved(doc.miles, doc.milesPerGallon));
+    const fuelSaved = afterDateAndCar.map(doc => this.fuelSaved(doc.miles, doc.milesPerGallon)); // all code til here can be resused in finding community GHG
     // sum fuel saved
     const fuelSavedSum = fuelSaved.reduce((acc, curr) => acc + curr);
     // multiply by GHG per gallon of gas
@@ -35,7 +36,63 @@ class Community extends React.Component {
     return Math.round(CO2Reduced * 1000) / 1000;
   }
 
+  userTransportDataFilter(data) {
+    return data.filter(doc => doc.userID === Meteor.userId());
+  }
+
+  // WIP
+  // feed this data with cut time span and precalculated fuelsaved
+  // This aggregate all user's GHG (miles for now)
+  getIndividualGHG(data) {
+    const result = [];
+
+    data.forEach(function (doc) {
+      // find other doc with same id in the result
+      let existing = result.filter(function (v) {
+        return v.userID === doc.userID;
+      });
+
+      // if the item is already in the result
+      if (existing.length) {
+        let existingIndex = result.indexOf(existing[0]);
+        result[existingIndex].miles = result[existingIndex].miles + doc.miles;
+      } else { // if the item isn't in the result list, just push it to the list
+        result.push(doc);
+      }
+    });
+
+    return result;
+  }
+
+  // Calculate fuelsaved and add it to each document, should filter for both one user and all users
+  calculateFuelSavedForAllUsers(data, timeSpan) {
+    // cut the data not in time span and calculate fuelsaved and store it inside the doc
+    const afterDateAndCar = data.filter(doc => doc.date > timeSpan && doc.transport !== 'Car');
+    const fuelSaved = afterDateAndCar.map(doc => ({
+      ...doc,
+      fuelSaved: this.fuelSaved(doc.miles, doc.milesPerGallon),
+    }));
+    return fuelSaved;
+  }
+
+  /* Will add this when MPG is added back to userTransportation, should summarize CO2 saved
+  theUltimateGHGCalculator(data, timeSpan, type) {
+    // filter data to certain time span
+    const filter = this.calculateFuelSavedForAllUsers(data, timeSpan);
+    const result;
+    if (type is for average)
+      result = average(this.getIndividualGHG(filter));
+    else if (type is for user)
+      result = userCO2Aggregate(data, timeSpan);
+
+    return result;
+  }
+   */
+
   dashboard() {
+    const data = this.props.userTransportation;
+    const timeSpan = moment().subtract(1, 'months');
+
     return (
         <Grid id='landing-page' verticalAlign='middle' textAlign='center' container>
 
@@ -100,7 +157,7 @@ class Community extends React.Component {
               <Grid.Column verticalAlign='middle'>
                 <Segment>
                   <Header style={{ fontFamily: 'Comfortaa' }} textAlign='center' as='h2'>You</Header>
-                  <TransportationMethodPieChart userTransportation={ this.props.userTransportation } timeSpan={moment().subtract(1, 'months')}/>
+                  <TransportationMethodPieChart userTransportation={ this.userTransportDataFilter(this.props.userTransportation) } timeSpan={moment().subtract(1, 'months')}/>
                 </Segment>
               </Grid.Column>
               <Grid.Column verticalAlign='middle'>
@@ -134,7 +191,7 @@ Community.propTypes = {
 /** withTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker */
 export default withTracker(() => {
   // Get access to Stuff documents.
-  const subscription = Meteor.subscribe(UserTransportation.userPublicationName);
+  const subscription = Meteor.subscribe(UserTransportation.communityPublicationName);
   return {
     userTransportation: UserTransportation.collection.find({}).fetch(),
     ready: subscription.ready(),
