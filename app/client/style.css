@@ -110,6 +110,16 @@ body, html, .table {
 
 /** SOPHIA **/
 
+#dash {
+  background-image: url("/images/dash-img.jpg");
+  /* background-color: rgba(255, 255, 255, 0.5); */
+  background-size: cover;
+  width: 100%!important;
+  color: white;
+  margin-top: -10px!important;
+  font-size:20px;
+}
+
 #community-table {
   border: 5px solid #fff;
 }
