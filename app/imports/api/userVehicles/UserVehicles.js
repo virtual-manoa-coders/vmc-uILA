@@ -81,3 +81,5 @@ class UserVehiclesCollection {
     this.adminPublicationName = `${this.name}.publication.admin`;
   }
 }
+
+export const UserVehicles = new UserVehiclesCollection();
