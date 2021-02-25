@@ -104,6 +104,10 @@ body, html, .table {
   font-size: 40px;
 }
 
+.trial-converter {
+  padding-top: 1em;
+}
+
 /** SOPHIA **/
 
 #community-table {
