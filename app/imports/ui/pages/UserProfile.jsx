@@ -9,6 +9,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import { UserInfo } from '../../api/userData/UserInfo';
 import { UserTransportation } from '../../api/userData/UserTransportation';
+import { UserVehicles } from '../../api/userVehicles/UserVehicles';
 import TransportDataEntry from '../components/TransportDataEntry';
 
 /** Create a schema to specify the structure of the data to appear in the form. */
@@ -48,6 +49,8 @@ class UserProfile extends React.Component {
     const email = Meteor.user().username;
     const bridge = new SimpleSchema2Bridge(formSchema);
     const profile = UserInfo.collection.findOne({ email });
+    // operate under assumption that the car exists, error otherwise (WIP)
+    const userCar = this.props.userVehicles.filter(car => car._id === profile.carID)[0];
     return (
         <Grid container stackable centered verticalAlign='middle' style={pageStyle}>
           <Header style={{ fontFamily: 'Comfortaa', fontSize: '2.0em' }} as="h2" textAlign="center" inverted>Aloha, {profile.name} </Header>
@@ -61,9 +64,9 @@ class UserProfile extends React.Component {
                     <br/>
                     Email: {email}
                   </Card.Meta>
-                  <Card.Description className='profile-card'>Car: {profile.carMake} {profile.carModel}
+                  <Card.Description className='profile-card'>Car: {userCar.carMake} {userCar.carModel}
                     <br/>
-                    Miles per gallon: {profile.mpg} miles
+                    Miles per gallon: {userCar.carMPG} miles
                     <br/>
                     GHG reduced: {profile.ghgReduced} pounds
                     <br/>
@@ -76,11 +79,14 @@ class UserProfile extends React.Component {
               </Card>
             </Grid.Column>
             <Grid.Column verticalAlign='middle'>
-              <TransportDataEntry userTransportation={this.props.userTransportation}/>
+              <TransportDataEntry carMPG={userCar.carMPG} userTransportation={this.props.userTransportation}/>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
             <Grid.Column centered>
+              {
+                // TODO: Add a widget that allows the user to use cars from the UserVehicles database
+              }
               <AutoForm model={profile} schema={bridge} onSubmit={data => this.submit(data)}>
                 <Segment>
                   <Header style={{ fontFamily: 'Comfortaa', color: '#2292b3' }} textAlign='center' as='h4'>Edit Your Information</Header>
@@ -109,6 +115,7 @@ class UserProfile extends React.Component {
 UserProfile.propTypes = {
   profile: PropTypes.array,
   userTransportation: PropTypes.array.isRequired,
+  userVehicles: PropTypes.array.isRequired,
   ready: PropTypes.bool.isRequired,
 };
 
@@ -117,7 +124,10 @@ export default withTracker(() => {
   // Get access to UserInfo documents.
   const sub1 = Meteor.subscribe(UserInfo.userPublicationName);
   const sub2 = Meteor.subscribe(UserTransportation.userPublicationName);
+  const sub3 = Meteor.subscribe(UserVehicles.userPublicationName);
   return {
-    ready: sub1.ready() && sub2.ready(),
+    userVehicles: UserVehicles.collection.find({}).fetch(),
+    userTransportation: UserTransportation.collection.find({}).fetch(),
+    ready: sub1.ready() && sub2.ready() && sub3.ready(),
   };
 })(UserProfile);

@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 // import { _ } from 'meteor/underscore';
 import { Stuffs } from '../../api/stuff/Stuff.js';
 import { UserInfo } from '../../api/userData/UserInfo';
+import { UserVehicles } from '../../api/userVehicles/UserVehicles';
 
 /* eslint-disable no-console */
 
@@ -11,9 +12,22 @@ function addData(data) {
   Stuffs.collection.insert(data);
 }
 
+// carMake, carModel, year, mpg isn't really needed, but is left here due to legacy code
 function addProfile({ name, email, image, carMake, carModel, year, mpg, ghgReduced, vmtReduced, fuelSaved }) {
-  console.log(` Defining profile: ${email}`);
-  UserInfo.collection.insert({ name, email, image, carMake, carModel, year, mpg, ghgReduced, vmtReduced, fuelSaved });
+  const carID = UserVehicles.collection.find().fetch().filter(car => car.carModel === carModel && car.carYear === year)[0]._id;
+  console.log(carID);
+  if (carID) {
+    console.log(` Defining profile: ${email} with car: ${year} ${carModel} carID: ${carID}`);
+    UserInfo.collection.insert({ name, email, image, carID, ghgReduced, vmtReduced, fuelSaved });
+  } else {
+    console.log(` Unable to define ${email} with car ${year} ${carModel}`);
+  }
+}
+
+function addCar({ carMake, carModel, carYear, carMPG, carPrice }) {
+  console.log(` Defining car: ${carModel}`);
+  UserVehicles.collection.insert({ carMake, carModel, carYear, carMPG, carPrice });
+  // console.log(UserVehicles.collection.find().fetch());
 }
 
 /** Initialize the collection if empty. */
@@ -21,6 +35,15 @@ if (Stuffs.collection.find().count() === 0) {
   if (Meteor.settings.defaultData) {
     console.log('Creating default data.');
     Meteor.settings.defaultData.map(data => addData(data));
+  }
+}
+
+if (UserVehicles.collection.find().count() === 0) {
+  if (Meteor.settings.defaultCars) {
+    console.log('Creating default cars');
+    Meteor.settings.defaultCars.map(car => addCar(car));
+  } else {
+    console.log('Cannot initialize the database. Please invoke meteor with a settings file.');
   }
 }
 
@@ -35,8 +58,11 @@ if (UserInfo.collection.find().count() === 0) {
 /** Initialize the DB if empty (no users defined.) */
 if (Meteor.users.find().count() === 0) {
   if (Meteor.settings.defaultProfiles) {
-    console.log('Creating default profiles');
-    Meteor.settings.defaultProfiles.map(profile => addProfile(profile));
+    if (UserVehicles.find().count() !== 0) {
+      console.log('Creating default profiles');
+      Meteor.settings.defaultProfiles.map(profile => addProfile(profile));
+    }
+    console.log('Error: Unable to find cars');
   } else {
     console.log('Cannot initialize the database. Please invoke meteor with a settings file.');
   }

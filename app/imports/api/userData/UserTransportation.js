@@ -17,7 +17,7 @@ class UserTransportationCollection {
       },
       date: Date,
       miles: Number,
-      // TODO: Add mpg back into user transport, frontend could just add it during log submit by using user's saved car data
+      mpg: Number,
       userID: String,
     }, { tracker: Tracker });
     // Attach the schema to the collection, so all attempts to insert a document are checked against schema.

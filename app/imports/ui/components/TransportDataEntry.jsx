@@ -36,10 +36,12 @@ class TransportDataEntry extends React.Component {
   submit(data, formRef) {
     const { date, transport, miles } = data;
     const userID = Meteor.user()._id;
+    const mpg = this.props.carMPG;
     UserTransportation.collection.insert({
           transport,
           date,
           miles,
+          mpg,
           userID,
         },
         (error) => {
@@ -88,6 +90,7 @@ class TransportDataEntry extends React.Component {
 /** Require an array of userInfo documents in the props. */
 TransportDataEntry.propTypes = {
   userInfo: PropTypes.array.isRequired,
+  carMPG: PropTypes.number.isRequired,
   ready: PropTypes.bool.isRequired,
 };
 

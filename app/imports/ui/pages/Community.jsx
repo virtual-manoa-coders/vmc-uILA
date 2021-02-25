@@ -27,23 +27,38 @@ class Community extends React.Component {
     if (afterDateAndCar.length === 0) {
       return 'No Data';
     }
-    const fuelSaved = afterDateAndCar.map(doc => this.fuelSaved(doc.miles, doc.milesPerGallon)); // all code til here can be resused in finding community GHG
+    const fuelSaved = afterDateAndCar.map(doc => this.fuelSaved(doc.miles, doc.mpg)); // all code til here can be resused in finding community GHG
     // sum fuel saved
     const fuelSavedSum = fuelSaved.reduce((acc, curr) => acc + curr);
     // multiply by GHG per gallon of gas
     const CO2Reduced = fuelSavedSum * GHGperGallon;
-    // round to 3 decimal place
-    return Math.round(CO2Reduced * 1000) / 1000;
+
+    return CO2Reduced;
   }
 
   userTransportDataFilter(data) {
     return data.filter(doc => doc.userID === Meteor.userId());
   }
 
+  // Calculate fuelsaved and add it to each document and this should be good for both one user and all users
+  calculateFuelSavedForAllUsers(data, timeSpan) {
+    // cut the data not in time span and calculate fuelsaved and store it inside the doc
+    const afterDateAndCar = data.filter(doc => doc.date > timeSpan && doc.transport !== 'Car');
+    if (afterDateAndCar.length === 0) {
+      return 'No Data';
+    }
+    const fuelSaved = afterDateAndCar.map(doc => ({
+      ...doc,
+      fuelSaved: this.fuelSaved(doc.miles, doc.mpg),
+    }));
+    return fuelSaved;
+  }
+
   // WIP
-  // feed this data with cut time span and precalculated fuelsaved
-  // This aggregate all user's GHG (miles for now)
-  getIndividualGHG(data) {
+  // feed this data with within a timespan and fuelsaved already calculated
+  // This combine individual user's fuelsaved over timespan
+  // returns a list of each user's total fuelsaved
+  aggregateIndividualFuelSaved(data) {
     const result = [];
 
     data.forEach(function (doc) {
@@ -55,7 +70,7 @@ class Community extends React.Component {
       // if the item is already in the result
       if (existing.length) {
         let existingIndex = result.indexOf(existing[0]);
-        result[existingIndex].miles = result[existingIndex].miles + doc.miles;
+        result[existingIndex].fuelSaved = result[existingIndex].fuelSaved + doc.fuelSaved;
       } else { // if the item isn't in the result list, just push it to the list
         result.push(doc);
       }
@@ -64,30 +79,29 @@ class Community extends React.Component {
     return result;
   }
 
-  // Calculate fuelsaved and add it to each document, should filter for both one user and all users
-  calculateFuelSavedForAllUsers(data, timeSpan) {
-    // cut the data not in time span and calculate fuelsaved and store it inside the doc
-    const afterDateAndCar = data.filter(doc => doc.date > timeSpan && doc.transport !== 'Car');
-    const fuelSaved = afterDateAndCar.map(doc => ({
-      ...doc,
-      fuelSaved: this.fuelSaved(doc.miles, doc.milesPerGallon),
-    }));
-    return fuelSaved;
-  }
+  // Will add this when MPG is added back to userTransportation, should summarize CO2 saved
+  theUltimateCO2Calculator(data, timeSpan, type) {
+    let result = 0;
+    if (type === 'average') {
+      // filter data to certain time span
+      const filter = this.calculateFuelSavedForAllUsers(data, timeSpan);
+      if (filter === 'No Data') {
+        return 'No Data';
+      }
+      const totalUserNumber = this.aggregateIndividualFuelSaved(filter).length;
+      const combinedFuelSaved = this.aggregateIndividualFuelSaved(filter).map(doc => doc.fuelSaved).reduce((accumulator, currentValue) => accumulator + currentValue);
+      const averageFuelSaved = combinedFuelSaved / totalUserNumber;
+      const averageCO2Reduced = averageFuelSaved * GHGperGallon;
 
-  /* Will add this when MPG is added back to userTransportation, should summarize CO2 saved
-  theUltimateGHGCalculator(data, timeSpan, type) {
-    // filter data to certain time span
-    const filter = this.calculateFuelSavedForAllUsers(data, timeSpan);
-    const result;
-    if (type is for average)
-      result = average(this.getIndividualGHG(filter));
-    else if (type is for user)
-      result = userCO2Aggregate(data, timeSpan);
+      result = averageCO2Reduced;
+    } else if (type === 'user') {
+      const userData = this.userTransportDataFilter(data);
+      result = this.userCO2Aggregate(userData, timeSpan);
+    }
 
-    return result;
+    // round to 3 decimal place
+    return Math.round(result * 1000) / 1000;
   }
-   */
 
   dashboard() {
     const data = this.props.userTransportation;
@@ -123,23 +137,23 @@ class Community extends React.Component {
                   <Table.Body>
                     <Table.Row>
                       <Table.Cell>Today</Table.Cell>
-                      <Table.Cell>{ this.userCO2Aggregate(this.props.userTransportation, moment().subtract(1, 'd')) }</Table.Cell>
-                      <Table.Cell>#g</Table.Cell>
+                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'd'), 'user') }</Table.Cell>
+                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'd'), 'average')}</Table.Cell>
                     </Table.Row>
                     <Table.Row>
                       <Table.Cell>Week</Table.Cell>
-                      <Table.Cell>{ this.userCO2Aggregate(this.props.userTransportation, moment().subtract(1, 'w')) }</Table.Cell>
-                      <Table.Cell>#g</Table.Cell>
+                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'w'), 'user') }</Table.Cell>
+                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'w'), 'average') }</Table.Cell>
                     </Table.Row>
                     <Table.Row>
                       <Table.Cell>Month</Table.Cell>
-                      <Table.Cell>{ this.userCO2Aggregate(this.props.userTransportation, moment().subtract(1, 'months')) }</Table.Cell>
-                      <Table.Cell>#g</Table.Cell>
+                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'months'), 'user') }</Table.Cell>
+                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'months'), 'average') }</Table.Cell>
                     </Table.Row>
                     <Table.Row>
                       <Table.Cell>Annual</Table.Cell>
-                      <Table.Cell>{ this.userCO2Aggregate(this.props.userTransportation, moment().subtract(1, 'years')) }</Table.Cell>
-                      <Table.Cell>#g</Table.Cell>
+                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'years'), 'user') }</Table.Cell>
+                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'years'), 'average') }</Table.Cell>
                     </Table.Row>
                   </Table.Body>
                 </Table>
