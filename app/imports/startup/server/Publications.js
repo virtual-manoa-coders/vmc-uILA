@@ -4,6 +4,7 @@ import { Stuffs } from '../../api/stuff/Stuff';
 import { UserTransportation } from '../../api/userData/UserTransportation';
 import { UserInformation } from '../../api/userData/UserInformation';
 import { UserInfo } from '../../api/userData/UserInfo';
+import { UserVehicles } from '../../api/userVehicles/UserVehicles';
 
 Meteor.publish(UserInfo.userPublicationName, () => UserInfo.collection.find());
 
@@ -35,9 +36,17 @@ Meteor.publish(UserTransportation.userPublicationName, function () {
   return this.ready();
 });
 
+// User-level publication.
+// If logged in, then publish documents owned by this user. Otherwise publish nothing.
+Meteor.publish(UserVehicles.userPublicationName, function () {
+  if (this.userId) {
+    return UserVehicles.collection.find();
+  }
+  return this.ready();
+});
+
 // community-level publication.
 // If logged in, then publish documents with user id redacted. Otherwise publish nothing.
-// TODO: Only publish Dates, Miles, and MPG, nothing else
 Meteor.publish(UserTransportation.communityPublicationName, function () {
   if (this.userId) {
     return UserTransportation.collection.find();
