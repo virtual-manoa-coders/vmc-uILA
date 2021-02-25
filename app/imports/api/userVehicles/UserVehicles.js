@@ -4,16 +4,16 @@ import { Tracker } from 'meteor/tracker';
 
 class UserVehiclesCollection {
   constructor() {
-    //Name of collection
+    // Name of collection
     this.name = 'UserVehiclesCollection';
-    //Sets the name of the Mongo Collection
+    // Sets the name of the Mongo Collection
     this.collection = new Mongo.Collection(this.name);
     this.schema = new SimpleSchema({
     /**
      * Car Database:
      * Car Make, Model, MPG, Price, Subsidiary
      */
-    //List of all of the car make (Dropdown for model will depend on selection of make)
+    // List of all of the car make (Dropdown for model will depend on selection of make)
     carMake: {
       type: String,
       allowedValues: ['...',
@@ -63,15 +63,18 @@ class UserVehiclesCollection {
           'Tesla',
           'Toyota',
           'Volkswagen',
-          'Volvo'
+          'Volvo',
       ],
-      //If no car model is chosen, the default parameter
+      // If no car model is chosen, the default parameter
       defaultValue: '...',
     },
-      //Car miles per gallon
+      carModel: String,
+      carYear: { type: String, optional: true, allowedValues: ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008',
+          '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'] },
+      // Car miles per gallon
       carMPG: Number,
-      //Price of car
-      carPrice: Number
+      // Price of car
+      carPrice: Number,
     });
     this.collection.attachSchema(this.schema);
     this.userPublicationName = `${this.name}.publication.user`;
