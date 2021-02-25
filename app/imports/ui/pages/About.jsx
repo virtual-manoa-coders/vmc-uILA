@@ -10,10 +10,10 @@ class About extends React.Component {
           <Grid verticalAlign='middle' container style={aboutStyle}>
             <Grid.Row textAlign='center'>
               <Header textAlign='center' as='h4' inverted>
-                <b className='about-header' style={{ color: '#fbd589' }}>Welcome to uILA!</b>
+                <b className='about-header' style={{ color: '#fbd589' }}>Welcome to Project Malama!</b>
                 <br/><br/>
                 <p className='font-comfortaa'>
-                  uILA is designed by a team of computer science students at University of Hawaii – Manoa, with one goal
+                  Project Malama is designed by a team of computer science students at University of Hawaii – Manoa, with one goal
                   in mind: to slow the rate of climate change, starting with our local community.</p>
               </Header>
               <Image className='about-image' src='/images/about-background.png' centered/>
@@ -28,7 +28,7 @@ class About extends React.Component {
                 to an electric or hybrid vehicle.
                 <br/>
                 <br/>
-                uILA is an application that allows you to track your daily GHG emissions from transportation related
+                Project Malama is an application that allows you to track your daily GHG emissions from transportation related
                 activities as well as the amount of saved vehicle miles traveled, saved fuel, and reduced CO2 from
                 choosing more environmentally friendly alternatives. You can also compare costs of your current car to a
                 greener alternative.
@@ -37,7 +37,7 @@ class About extends React.Component {
                 You are encouraged to log your means of transportation daily (ICEV, EV, carpool, public transportation,
                 bicycle, walk, etc.,) and track your weekly, monthly, and annual emissions/savings. Translated data of
                 your GHG emissions, saved vehicle miles traveled, saved fuel, and reduced CO2 will be used to provide
-                beneficial collective data to all registered users of uILA. Your personal information and logs will not
+                beneficial collective data to all registered users of Project Malama. Your personal information and logs will not
                 be shared with the public.
               </p>
             </Grid.Row>

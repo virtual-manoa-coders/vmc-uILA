@@ -1,7 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap');
 
-body, html, .menu, .table {
+body, html, .table {
   background-color: #5ac2e0!important;
+  color: white!important;
+  font-family: 'Comfortaa', cursive!important;
+}
+
+.menu {
+  background-color: #41337A;
   color: white!important;
   font-family: 'Comfortaa', cursive!important;
 }
@@ -73,6 +79,8 @@ body, html, .menu, .table {
 
 .banner-image-row .welcome-text {
   height: 11em;
+  font-weight: bold;
+  color: #41337A;
 }
 
 .banner-image {

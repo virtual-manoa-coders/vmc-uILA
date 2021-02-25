@@ -11,7 +11,7 @@ class Landing extends React.Component {
                 <div className='banner-image-row'>
                     <div className='welcome-text'>
                         <div>
-                            Welcome to uILA
+                            How did YOU impact Hawai'i today?
                         </div>
                     </div>
                     <div>
@@ -34,7 +34,7 @@ class Landing extends React.Component {
             </div>
             <Grid className='description-section' textAlign='left'>
                 <Grid.Row className='description-header'>
-                    What does Uila offer
+                    What does Project Malama offer
                 </Grid.Row>
                 <Grid.Row>
                     <Grid.Column width={2}>
