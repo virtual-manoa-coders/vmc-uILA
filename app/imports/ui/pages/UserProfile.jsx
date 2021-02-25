@@ -84,7 +84,9 @@ class UserProfile extends React.Component {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column centered>
-              {// TODO: Add a widget that allows the user to use cars from the UserVehicles database }
+              {
+                // TODO: Add a widget that allows the user to use cars from the UserVehicles database
+              }
               <AutoForm model={profile} schema={bridge} onSubmit={data => this.submit(data)}>
                 <Segment>
                   <Header style={{ fontFamily: 'Comfortaa', color: '#2292b3' }} textAlign='center' as='h4'>Edit Your Information</Header>
