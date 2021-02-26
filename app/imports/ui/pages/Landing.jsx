@@ -1,18 +1,36 @@
 import React from 'react';
+<<<<<<< Updated upstream
 import { Grid, Image, Button, Icon } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
+=======
+import { Meteor } from 'meteor/meteor';
+import { withTracker } from 'meteor/react-meteor-data';
+import { Grid, Button, Icon, Input, Dropdown, Transition } from 'semantic-ui-react';
+import { NavLink, withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
+>>>>>>> Stashed changes
 
 /** A simple static component to render some text for the landing page. */
 class Landing extends React.Component {
   render() {
     return (
         <Grid id='landing-page' verticalAlign='middle' textAlign='center' container>
+          <video autoPlay muted loop id="myVideo">
+            <source src="traffic.mp4" type="video/mp4"/>
+          </video>
             <div className='banner-image'>
                 <div className='banner-image-row'>
                     <div className='welcome-text'>
-                        <div>
-                            How did YOU impact Hawai'i today?
-                        </div>
+                        <Grid centered padded column={3}>
+                          <Grid.Row>
+                            <Grid.Column id="text1" width={5}>24,000lb of CO2 today</Grid.Column>
+                            <Grid.Column id="text2" width={5}>75,500lb of CO2 this week</Grid.Column>
+                            <Grid.Column id="text3" width={5}>1,000,000lb of CO2 this year</Grid.Column>
+                          </Grid.Row>
+                          <Grid.Row id="text4">
+                            What is your contribution?
+                          </Grid.Row>
+                        </Grid>
                     </div>
                     <div>
                         <Grid centered columns={4}>
@@ -32,6 +50,7 @@ class Landing extends React.Component {
                     </div>
                 </div>
             </div>
+
             <Grid className='description-section' textAlign='left'>
                 <Grid.Row className='description-header'>
                     What does Project Malama offer
