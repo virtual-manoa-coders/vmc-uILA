@@ -21,10 +21,12 @@ class Community extends React.Component {
    // @param data The fetched userTransport collection; i.e. data = this.props.userTransportation
    // This assumes that the data is from one user, so its not averaged by person
   userCO2Aggregate(data, timeSpan) {
+    // remove this block
     const afterDateAndCar = data.filter(doc => doc.date > timeSpan && doc.transport !== 'Car');
     if (afterDateAndCar.length === 0) {
       return 'No Data';
     }
+    // remove this block
     const fuelSaved = afterDateAndCar.map(doc => this.fuelSaved(doc.miles, doc.mpg)); // TODO: all code til here can be resused in finding community GHG
     const fuelSavedSum = fuelSaved.reduce((acc, curr) => acc + curr);
     const CO2Reduced = fuelSavedSum * GHGperGallon;
@@ -38,10 +40,12 @@ class Community extends React.Component {
 
   // Calculate fuelsaved and add it to each document and this should be good for both one user and all users
   calculateFuelSavedForAllUsers(data, timeSpan) {
+    // remove this block
     const afterDateAndCar = data.filter(doc => doc.date > timeSpan && doc.transport !== 'Car');
     if (afterDateAndCar.length === 0) {
       return 'No Data';
     }
+    // remove this block
     const fuelSaved = afterDateAndCar.map(doc => ({
       ...doc,
       fuelSaved: this.fuelSaved(doc.miles, doc.mpg),
@@ -75,20 +79,28 @@ class Community extends React.Component {
   // @param data The fetched userTransport collection; i.e. data = this.props.userTransportation
   // This assumes that the data is from one user, so its not averaged by person
   theUltimateCO2Calculator(data, timeSpan, type) {
+    // const afterDateAndCar = data.filter(doc => doc.date > timeSpan && doc.transport !== 'Car');
+    //     if (afterDateAndCar.length === 0) {
+    //       return 'No Data';
+    //     }
+    //
+    // Do user or average
+    //
     let result = 0;
     if (type === 'average') {
       const filter = this.calculateFuelSavedForAllUsers(data, timeSpan);
       if (filter === 'No Data') {
         return 'No Data';
       }
-      const totalUserNumber = this.aggregateIndividualFuelSaved(filter).length;
+      // calculate aggregateFuelsaved here, using afterDateAndCar as filter
+      const totalUserNumber = this.aggregateIndividualFuelSaved(filter).length; // remove this
       const combinedFuelSaved = this.aggregateIndividualFuelSaved(filter).map(doc => doc.fuelSaved).reduce((accumulator, currentValue) => accumulator + currentValue);
-      const averageFuelSaved = combinedFuelSaved / totalUserNumber;
+      const averageFuelSaved = combinedFuelSaved / totalUserNumber; // instead of total user number, use aggregateFuelsaved.length
       const averageCO2Reduced = averageFuelSaved * GHGperGallon;
 
       result = averageCO2Reduced;
     } else if (type === 'user') {
-      const userData = this.userTransportDataFilter(data);
+      const userData = this.userTransportDataFilter(data); // use the aggregateFuelsaved here
       result = this.userCO2Aggregate(userData, timeSpan);
     }
 
