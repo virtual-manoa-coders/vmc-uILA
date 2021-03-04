@@ -8,6 +8,7 @@ import { UserTransportation } from '../../api/userData/UserTransportation';
 import TransportationMethodPieChart from '../components/TransportMethodPieChart';
 
 const GHGperGallon = 19.6; // pounds per gallon
+const textStyle = { fontFamily: 'Comfortaa' };
 
 /** A simple static component to render some text for the landing page. */
 class Community extends React.Component {
@@ -16,21 +17,16 @@ class Community extends React.Component {
     return milesSaved / milesPerGallon;
   }
 
-  /**
-   timespan is a Date object; i.e. timespan = moment().subtract(1, 'y')
-   data is the fetched userTransport collection; i.e. data = this.props.userTransportation
-   This assumes that the data is from one user, so its not averaged by person
-   */
+   // @param timespan A Date object; i.e. timespan = moment().subtract(1, 'y')
+   // @param data The fetched userTransport collection; i.e. data = this.props.userTransportation
+   // This assumes that the data is from one user, so its not averaged by person
   userCO2Aggregate(data, timeSpan) {
-    // get rid of data outside of timeSpan range and filter out car transport method
     const afterDateAndCar = data.filter(doc => doc.date > timeSpan && doc.transport !== 'Car');
     if (afterDateAndCar.length === 0) {
       return 'No Data';
     }
-    const fuelSaved = afterDateAndCar.map(doc => this.fuelSaved(doc.miles, doc.mpg)); // all code til here can be resused in finding community GHG
-    // sum fuel saved
+    const fuelSaved = afterDateAndCar.map(doc => this.fuelSaved(doc.miles, doc.mpg)); // TODO: all code til here can be resused in finding community GHG
     const fuelSavedSum = fuelSaved.reduce((acc, curr) => acc + curr);
-    // multiply by GHG per gallon of gas
     const CO2Reduced = fuelSavedSum * GHGperGallon;
 
     return CO2Reduced;
@@ -42,7 +38,6 @@ class Community extends React.Component {
 
   // Calculate fuelsaved and add it to each document and this should be good for both one user and all users
   calculateFuelSavedForAllUsers(data, timeSpan) {
-    // cut the data not in time span and calculate fuelsaved and store it inside the doc
     const afterDateAndCar = data.filter(doc => doc.date > timeSpan && doc.transport !== 'Car');
     if (afterDateAndCar.length === 0) {
       return 'No Data';
@@ -54,22 +49,19 @@ class Community extends React.Component {
     return fuelSaved;
   }
 
-  // WIP
-  // feed this data with within a timespan and fuelsaved already calculated
+  // @param data Array of objects with the timespan and fuelsaved already calculated
+  // @returns a list of each user's total fuelsaved
   // This combine individual user's fuelsaved over timespan
-  // returns a list of each user's total fuelsaved
   aggregateIndividualFuelSaved(data) {
     const result = [];
 
     data.forEach(function (doc) {
-      // find other doc with same id in the result
-      let existing = result.filter(function (v) {
+      const existing = result.filter(function (v) {
         return v.userID === doc.userID;
       });
 
-      // if the item is already in the result
-      if (existing.length) {
-        let existingIndex = result.indexOf(existing[0]);
+      if (existing.length) { // if the item is already in the result
+        const existingIndex = result.indexOf(existing[0]);
         result[existingIndex].fuelSaved = result[existingIndex].fuelSaved + doc.fuelSaved;
       } else { // if the item isn't in the result list, just push it to the list
         result.push(doc);
@@ -79,11 +71,12 @@ class Community extends React.Component {
     return result;
   }
 
-  // Will add this when MPG is added back to userTransportation, should summarize CO2 saved
+  // @param timespan A Date object; i.e. timespan = moment().subtract(1, 'y')
+  // @param data The fetched userTransport collection; i.e. data = this.props.userTransportation
+  // This assumes that the data is from one user, so its not averaged by person
   theUltimateCO2Calculator(data, timeSpan, type) {
     let result = 0;
     if (type === 'average') {
-      // filter data to certain time span
       const filter = this.calculateFuelSavedForAllUsers(data, timeSpan);
       if (filter === 'No Data') {
         return 'No Data';
@@ -99,13 +92,11 @@ class Community extends React.Component {
       result = this.userCO2Aggregate(userData, timeSpan);
     }
 
-    // round to 3 decimal place
     return Math.round(result * 1000) / 1000;
   }
 
   dashboard() {
     const data = this.props.userTransportation;
-    const timeSpan = moment().subtract(1, 'months');
 
     return (
         <Grid id='landing-page' verticalAlign='middle' textAlign='center' container>
@@ -124,7 +115,7 @@ class Community extends React.Component {
                 </Grid.Row>
               </Grid.Column>
               <Grid.Column width={13}>
-                <Header style={{ fontFamily: 'Comfortaa' }} textAlign='center' as='h2' inverted>CO2 Saved by Alternative Transport</Header>
+                <Header style={textStyle} textAlign='center' as='h2' inverted>CO2 Saved by Alternative Transport</Header>
                 <Table padded basic definition id="community-table">
                   <Table.Header>
                     <Table.Row>
@@ -164,19 +155,19 @@ class Community extends React.Component {
             </Grid.Row>
             <Grid.Row>
               <Grid.Column verticalAlign='middle'>
-                <Header style={{ fontFamily: 'Comfortaa' }} textAlign='center' as='h2' inverted>Modes of Transportation This Month</Header>
+                <Header style={textStyle} textAlign='center' as='h2' inverted>Modes of Transportation This Month</Header>
               </Grid.Column>
             </Grid.Row>
             <Grid.Row columns={2} stretched>
               <Grid.Column verticalAlign='middle'>
                 <Segment>
-                  <Header style={{ fontFamily: 'Comfortaa' }} textAlign='center' as='h2'>You</Header>
+                  <Header style={textStyle} textAlign='center' as='h2'>You</Header>
                   <TransportationMethodPieChart userTransportation={ this.userTransportDataFilter(this.props.userTransportation) } timeSpan={moment().subtract(1, 'months')}/>
                 </Segment>
               </Grid.Column>
               <Grid.Column verticalAlign='middle'>
                 <Segment>
-                  <Header style={{ fontFamily: 'Comfortaa' }} textAlign='center' as='h2'>Community</Header>
+                  <Header style={textStyle} textAlign='center' as='h2'>Community</Header>
                   <TransportationMethodPieChart userTransportation={ this.props.userTransportation } timeSpan={moment().subtract(1, 'months')}/>
                 </Segment>
               </Grid.Column>
@@ -196,7 +187,6 @@ class Community extends React.Component {
   }
 }
 
-/** Require an array of Stuff documents in the props. */
 Community.propTypes = {
   userTransportation: PropTypes.array.isRequired,
   ready: PropTypes.bool.isRequired,

@@ -1,8 +1,19 @@
 import React from 'react';
-import { Header } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { Pie } from '@reactchartjs/react-chart.js';
-import moment from 'moment';
+
+const chartColor = [
+  'rgba(255, 99, 132, 0.5)',
+  'rgba(54, 162, 235, 0.5)',
+  'rgba(255, 206, 86, 0.5)',
+  'rgba(75, 192, 192, 0.5)',
+  'rgba(153, 102, 255, 0.5)',
+  'rgba(255, 159, 64, 0.5)',
+];
+
+const noDataColor = [
+  'rgba(255, 99, 132, 0.5)',
+];
 
 const noDataPreset = {
   labels: ['No Data'],
@@ -10,12 +21,8 @@ const noDataPreset = {
     {
       label: '# of Transport',
       data: [1],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.5)',
-      ],
-      borderColor: [
-        'rgba(255, 99, 132, 1)',
-      ],
+      backgroundColor: noDataColor,
+      borderColor: noDataColor,
       borderWidth: 2,
     },
   ],
@@ -23,23 +30,19 @@ const noDataPreset = {
 
 /** Renders a single row in the List Stuff table. See pages/ListStuff.jsx. */
 class TransportMethodPieChart extends React.Component {
-  /**
+  /*
    * Aggregate the userTransportation into an array for the pie chart
    * @param timeSpan Only select data from today to the timespan
    * @returns {number[]} A 6-element array of # of mode of transport
    */
   userTransportAggregate(timeSpan) {
-    // filter data to today's date
     const afterDateAndCar = this.props.userTransportation.filter(doc => doc.date > timeSpan);
     if (afterDateAndCar.length === 0) {
       return [0];
     }
-    // reduce array to the transport property
     const transportMethod = afterDateAndCar.map(doc => doc.transport);
-    // count the occurance of each type of transport
-    const dataArray = [0, 0, 0, 0, 0, 0]; // gosh darn imutable data paradigm
+    const dataArray = [0, 0, 0, 0, 0, 0]; // TODO: change to transport methods object
     transportMethod.forEach(doc => {
-      // console.log(dataArray);
       switch (doc) {
         case 'Telecommute':
           dataArray[0] += 1;
@@ -64,9 +67,7 @@ class TransportMethodPieChart extends React.Component {
           break;
       }
     });
-    // return an array of the number of each transport
-    const result = dataArray;
-    return result;
+    return dataArray;
   }
 
   /**
@@ -80,42 +81,21 @@ class TransportMethodPieChart extends React.Component {
     if (afterDate.length === 0) {
       return noDataPreset;
     }
-
-    // defined in here just cuz
-    const defaultPreset = {
+    return {
       labels: ['Telecommute', 'Walk', 'Bike', 'Carpool', 'Bus', 'Car'],
       datasets: [
         {
           label: '# of Transport',
           data: this.userTransportAggregate(timeSpan),
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.5)',
-            'rgba(54, 162, 235, 0.5)',
-            'rgba(255, 206, 86, 0.5)',
-            'rgba(75, 192, 192, 0.5)',
-            'rgba(153, 102, 255, 0.5)',
-            'rgba(255, 159, 64, 0.5)',
-          ],
-          borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)',
-          ],
+          backgroundColor: chartColor,
+          borderColor: chartColor,
           borderWidth: 2,
         },
       ],
     };
-
-    return defaultPreset;
   }
 
   render() {
-    // console.log(this.props.userTransportation);
-    // console.log(this.userTransportAggregate(moment().subtract(1, 'years')));
-
     return (
           <Pie data={this.pieChartPreset(this.props.userTransportation, this.props.timeSpan)} />
     );
