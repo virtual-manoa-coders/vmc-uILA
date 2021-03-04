@@ -165,3 +165,23 @@ body, html, .table {
 .column {
     border: 0;
 }
+
+.ghg-results {
+    color: black;
+}
+
+.ghg-landing {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    font-size: 1em;
+    font-weight: bold;
+    color: #41337A;
+    text-align: center;
+}
+
+.ghg-form {
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+}
+
