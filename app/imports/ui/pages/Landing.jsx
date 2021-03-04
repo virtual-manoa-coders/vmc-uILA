@@ -1,13 +1,21 @@
 import React from 'react';
 import { Grid, Button, Icon } from 'semantic-ui-react';
+<<<<<<< Updated upstream
 import { NavLink } from 'react-router-dom';
 import GhgCalculator from '../components/GhgCalculator';
+=======
+import { NavLink, withRouter } from 'react-router-dom';
+import { Meteor } from 'meteor/meteor';
+import { withTracker } from 'meteor/react-meteor-data';
+import PropTypes from 'prop-types';
+>>>>>>> Stashed changes
 
 /** A simple static component to render some text for the landing page. */
 class Landing extends React.Component {
   render() {
     return (
         <Grid id='landing-page' verticalAlign='middle' textAlign='center' container>
+<<<<<<< Updated upstream
           <div className='banner-image'>
             <div className='banner-image-row'>
               <div className='welcome-text'>
@@ -20,12 +28,47 @@ class Landing extends React.Component {
                   <Grid.Column textAlign='center'>
                     <div>
                       Already a Member?
+=======
+          <video autoPlay muted loop id="myVideo">
+            <source src="traffic.mp4" type="video/mp4"/>
+          </video>
+            <div className='banner-image'>
+                <div className='banner-image-row'>
+                    <div className='welcome-text'>
+                        <Grid fluid centered padded column={3}>
+                          <Grid.Row>
+                            <Grid.Column id="text1" width={5}>24,000lb of CO2 today</Grid.Column>
+                            <Grid.Column id="text2" width={5}>75,500lb of CO2 this week</Grid.Column>
+                            <Grid.Column id="text3" width={5}>1,000,000lb of CO2 this year</Grid.Column>
+                          </Grid.Row>
+                          <Grid.Row id="text4">
+                            What is your contribution?
+                          </Grid.Row>
+                        </Grid>
+>>>>>>> Stashed changes
                     </div>
                     <Button inverted as={NavLink} exact to="/login" key='login'>Login</Button>
                   </Grid.Column>
                   <Grid.Column textAlign='center'>
                     <div>
+<<<<<<< Updated upstream
                       Not a Member?
+=======
+                        <Grid className='signUp' centered columns={4}>
+                            <Grid.Column textAlign='center'>
+                                <div>
+                                    Already a Member?
+                                </div>
+                                <Button inverted as={NavLink} exact to="/login" key='login'>Login</Button>
+                            </Grid.Column>
+                            <Grid.Column textAlign='center'>
+                                <div>
+                                    Not a Member?
+                                </div>
+                                <Button inverted as={NavLink} exact to="/login" key='signup'>Sign up</Button>
+                            </Grid.Column>
+                        </Grid>
+>>>>>>> Stashed changes
                     </div>
                     <Button inverted as={NavLink} exact to="/login" key='signup'>Sign up</Button>
                   </Grid.Column>
