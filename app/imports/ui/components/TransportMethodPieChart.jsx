@@ -30,7 +30,7 @@ const noDataPreset = {
 
 /** Renders a single row in the List Stuff table. See pages/ListStuff.jsx. */
 class TransportMethodPieChart extends React.Component {
-  /*
+  /**
    * Aggregate the userTransportation into an array for the pie chart
    * @param timeSpan Only select data from today to the timespan
    * @returns {number[]} A 6-element array of # of mode of transport

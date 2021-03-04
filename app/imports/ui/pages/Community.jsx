@@ -12,50 +12,56 @@ const textStyle = { fontFamily: 'Comfortaa' };
 
 /** A simple static component to render some text for the landing page. */
 class Community extends React.Component {
-  // Problem: mpg needs to be entered into transport at user's update
+  /**
+   * Calculate the fuel saved
+   * @param milesSaved The miles saved from not using a car
+   * @param milesPerGallon The car's miles per gallon
+   * @returns {number} Fuel saved by gallon
+   */
   fuelSaved(milesSaved, milesPerGallon) {
     return milesSaved / milesPerGallon;
   }
 
-   // @param timespan A Date object; i.e. timespan = moment().subtract(1, 'y')
-   // @param data The fetched userTransport collection; i.e. data = this.props.userTransportation
-   // This assumes that the data is from one user, so its not averaged by person
-  userCO2Aggregate(data, timeSpan) {
-    // remove this block
-    const afterDateAndCar = data.filter(doc => doc.date > timeSpan && doc.transport !== 'Car');
-    if (afterDateAndCar.length === 0) {
-      return 'No Data';
-    }
-    // remove this block
-    const fuelSaved = afterDateAndCar.map(doc => this.fuelSaved(doc.miles, doc.mpg)); // TODO: all code til here can be resused in finding community GHG
+  /**
+   * Calculate the CO2 saved for one user
+   * @param data The fetched userTransport collection; i.e. data = this.props.userTransportation
+   * @returns {number} A number of pounds of CO2 reduced
+   */
+  userCO2Aggregate(data) {
+    const fuelSaved = data.map(doc => this.fuelSaved(doc.miles, doc.mpg));
     const fuelSavedSum = fuelSaved.reduce((acc, curr) => acc + curr);
     const CO2Reduced = fuelSavedSum * GHGperGallon;
 
     return CO2Reduced;
   }
 
+  /**
+   * Calculate fuelsaved and add it to each document and this should be good for both one user and all users
+   * @param data An array of user transportation log objects
+   * @returns An array of user transportation log for the currently logged in user
+   */
   userTransportDataFilter(data) {
     return data.filter(doc => doc.userID === Meteor.userId());
   }
 
-  // Calculate fuelsaved and add it to each document and this should be good for both one user and all users
-  calculateFuelSavedForAllUsers(data, timeSpan) {
-    // remove this block
-    const afterDateAndCar = data.filter(doc => doc.date > timeSpan && doc.transport !== 'Car');
-    if (afterDateAndCar.length === 0) {
-      return 'No Data';
-    }
-    // remove this block
-    const fuelSaved = afterDateAndCar.map(doc => ({
+  /**
+   * Calculate fuelsaved and add it to each document and this should be good for both one user and all users
+   * @param data An array of user transportation log objects
+   * @returns An array of user transportation log that has an attribute fuelSaved
+   */
+  calculateFuelSavedForAllUsers(data) {
+    const fuelSaved = data.map(doc => ({
       ...doc,
       fuelSaved: this.fuelSaved(doc.miles, doc.mpg),
     }));
     return fuelSaved;
   }
 
-  // @param data Array of objects with the timespan and fuelsaved already calculated
-  // @returns a list of each user's total fuelsaved
-  // This combine individual user's fuelsaved over timespan
+  /**
+   * This combine individual user's fuelsaved over timespan
+   * @param data Array of objects with the timespan and fuelsaved already calculated
+   * @returns a list of each user's total fuelsaved
+   */
   aggregateIndividualFuelSaved(data) {
     const result = [];
 
@@ -75,33 +81,33 @@ class Community extends React.Component {
     return result;
   }
 
-  // @param timespan A Date object; i.e. timespan = moment().subtract(1, 'y')
-  // @param data The fetched userTransport collection; i.e. data = this.props.userTransportation
-  // This assumes that the data is from one user, so its not averaged by person
+  /**
+   * Calculate the number of CO2 reduced either from one user or the averaged of the community
+   * @param data The fetched userTransport collection; i.e. data = this.props.userTransportation
+   * @param timeSpan A Date object to specify the time span for calculation; i.e. timespan = moment().subtract(1, 'y')
+   * @param type The types are: user (for one user) or average (the community average)
+   * @returns a number pounds of CO2 reduced
+   */
   theUltimateCO2Calculator(data, timeSpan, type) {
-    // const afterDateAndCar = data.filter(doc => doc.date > timeSpan && doc.transport !== 'Car');
-    //     if (afterDateAndCar.length === 0) {
-    //       return 'No Data';
-    //     }
-    //
-    // Do user or average
-    //
+    const afterDateAndCar = data.filter(doc => doc.date > timeSpan && doc.transport !== 'Car');
+    if (afterDateAndCar.length === 0) {
+      return 'No Data';
+    }
     let result = 0;
     if (type === 'average') {
-      const filter = this.calculateFuelSavedForAllUsers(data, timeSpan);
-      if (filter === 'No Data') {
-        return 'No Data';
-      }
-      // calculate aggregateFuelsaved here, using afterDateAndCar as filter
-      const totalUserNumber = this.aggregateIndividualFuelSaved(filter).length; // remove this
-      const combinedFuelSaved = this.aggregateIndividualFuelSaved(filter).map(doc => doc.fuelSaved).reduce((accumulator, currentValue) => accumulator + currentValue);
-      const averageFuelSaved = combinedFuelSaved / totalUserNumber; // instead of total user number, use aggregateFuelsaved.length
+      const fuelSaved = this.calculateFuelSavedForAllUsers(afterDateAndCar);
+      const aggregateFuleSaved = this.aggregateIndividualFuelSaved(fuelSaved);
+      const combinedFuelSaved = aggregateFuleSaved.map(doc => doc.fuelSaved).reduce((accumulator, currentValue) => accumulator + currentValue);
+      const averageFuelSaved = combinedFuelSaved / aggregateFuleSaved.length;
       const averageCO2Reduced = averageFuelSaved * GHGperGallon;
 
       result = averageCO2Reduced;
     } else if (type === 'user') {
-      const userData = this.userTransportDataFilter(data); // use the aggregateFuelsaved here
-      result = this.userCO2Aggregate(userData, timeSpan);
+      const userData = this.userTransportDataFilter(afterDateAndCar);
+      if (userData.length === 0) {
+        return 'No Data';
+      }
+      result = this.userCO2Aggregate(userData);
     }
 
     return Math.round(result * 1000) / 1000;
