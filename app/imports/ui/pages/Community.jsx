@@ -58,7 +58,7 @@ class Community extends React.Component {
   }
 
   /**
-   * This combine individual user's fuelsaved over timespan
+   * This combine individual user's fuelsaved over timespan. Code inspired by: https://stackoverflow.com/a/33850667
    * @param data Array of objects with the timespan and fuelsaved already calculated
    * @returns a list of each user's total fuelsaved
    */
