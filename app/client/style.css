@@ -83,6 +83,55 @@ body, html, .table {
   color: #41337A;
 }
 
+.welcome-text {
+    font-size: 72px;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    height: 90vh;
+    width: 100%;
+    color: white;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
+    line-height: 1.5;
+    /*margin-top: -600px;*/
+}
+
+#text1 {
+    animation-name: introAni;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+    animation-delay: 1s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+#text2 {
+    animation-name: introAni;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+    animation-delay: 2s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+#text3 {
+    animation-name: introAni;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+    animation-delay: 3s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+#text4 {
+    animation-name: introAni;
+    animation-duration: 1.5s;
+    animation-iteration-count: 1;
+    animation-delay: 4s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
 .banner-image {
   width: 100%;
   background: url("/images/banner-image.png") center no-repeat;
@@ -96,7 +145,7 @@ body, html, .table {
   font-size: 24px;
   width: 100%;
   height: 15em;
-  margin-top: 1em!important;
+  margin-top: 50px!important;
 }
 
 .description-section .description-header {
@@ -106,6 +155,20 @@ body, html, .table {
 
 .trial-converter {
   padding-top: 1em;
+}
+
+#myVideo {
+    position: absolute;
+    right: 0;
+    left: 0;
+    min-width: 110%;
+    min-height: 50%;
+}
+
+.signUp {
+    font-size: 36px;
+    margin-bottom: 30px;
+    line-height: 4.5vh;
 }
 
 /** SOPHIA **/
@@ -183,5 +246,9 @@ body, html, .table {
     margin: 0 auto;
     justify-content: center;
     align-items: center;
+}
+
+footer {
+    background-color: #41337A;
 }
 
