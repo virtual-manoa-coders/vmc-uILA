@@ -5,12 +5,6 @@ import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import GhgCalculator from '../components/GhgCalculator';
-=======
-import { NavLink, withRouter } from 'react-router-dom';
-import { Meteor } from 'meteor/meteor';
-import { withTracker } from 'meteor/react-meteor-data';
-import PropTypes from 'prop-types';
->>>>>>> Stashed changes
 
 /** A simple static component to render some text for the landing page. */
 class Landing extends React.Component {
