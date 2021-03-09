@@ -13,7 +13,7 @@ class Signup extends React.Component {
   /** Initialize state fields. */
   constructor(props) {
     super(props);
-    this.state = { email: '', password: '', error: '', redirectToReferer: false };
+    this.state = { email: '', password: '', confirmPassword: '', error: '', redirectToReferer: false };
   }
 
   /** Update the form controls each time the user interacts with them. */
@@ -30,24 +30,28 @@ class Signup extends React.Component {
 
   /** Handle Signup submission. Create user account and a profile entry, then redirect to the home page. */
   submit = () => {
-    const { email, password } = this.state;
-    Accounts.createUser({ email, username: email, password }, (err) => {
-      if (err) {
-        this.setState({ error: err.reason });
-      } else {
-        this.setState({ error: '', redirectToReferer: true });
-        // add the UserDatabase code here
-        // console.log('Adding user to userInformation');
-        // const userID = Accounts.userId();
-        // const informationEntered = false;
-        // console.log(userID);
-        // console.log(UserInformation.collection.insert({
-        //   userID,
-        //   informationEntered,
-        // }));
-        UserInfo.collection.insert({ email });
-      }
-    });
+    const { email, password, confirmPassword } = this.state;
+    if (password !== confirmPassword) {
+      console.log('password no match');
+    } else {
+      Accounts.createUser({ email, username: email, password }, (err) => {
+        if (err) {
+          this.setState({ error: err.reason });
+        } else {
+          this.setState({ error: '', redirectToReferer: true });
+          // add the UserDatabase code here
+          // console.log('Adding user to userInformation');
+          // const userID = Accounts.userId();
+          // const informationEntered = false;
+          // console.log(userID);
+          // console.log(UserInformation.collection.insert({
+          //   userID,
+          //   informationEntered,
+          // }));
+          UserInfo.collection.insert({ email });
+        }
+      });
+    }
   }
 
   /** Display the signup form. Redirect to add page after successful registration and login. */
@@ -85,6 +89,16 @@ class Signup extends React.Component {
                   placeholder="Password"
                   type="password"
                   onChange={this.handleChange}
+                />
+                <Form.Input
+                    label="Confirm Password"
+                    id="signup-form-password"
+                    icon="lock"
+                    iconPosition="left"
+                    name="confirmPassword"
+                    placeholder="Confirm Password"
+                    type="password"
+                    onChange={this.handleChange}
                 />
                 <Form.Button id="signup-form-submit" content="Submit"/>
               </Segment>

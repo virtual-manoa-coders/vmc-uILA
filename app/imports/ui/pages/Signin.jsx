@@ -70,11 +70,17 @@ export default class Signin extends React.Component {
                   type="password"
                   onChange={this.handleChange}
                 />
+                <Message>
+                  Forgot your password? Click <Link to="/resetpassword">here</Link> to Reset
+                </Message>
                 <Form.Button id="signin-form-submit" content="Submit"/>
               </Segment>
             </Form>
             <Message>
               Don&apos;t have an account? Click <Link to="/signup">here</Link> to Register
+            </Message>
+            <Message>
+              Forgot your password? Click <Link to="/resetpassword">here</Link> to reset your password
             </Message>
             {this.state.error === '' ? (
               ''
