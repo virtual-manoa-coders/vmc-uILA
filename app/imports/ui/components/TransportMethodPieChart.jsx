@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Pie } from '@reactchartjs/react-chart.js';
+  import { Pie } from '@reactchartjs/react-chart.js';
 
 const chartColor = [
   'rgba(255, 99, 132, 0.5)',

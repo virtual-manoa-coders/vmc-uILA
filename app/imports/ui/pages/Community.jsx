@@ -113,6 +113,7 @@ class Community extends React.Component {
     return Math.round(result * 1000) / 1000;
   }
 
+  //Note: This is where all of the dashboard information is
   dashboard() {
     const data = this.props.userTransportation;
 
