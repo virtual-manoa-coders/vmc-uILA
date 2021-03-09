@@ -12,23 +12,21 @@ class Landing extends React.Component {
     return (
         <Grid id='landing-page' verticalAlign='middle' textAlign='center' container>
           <video autoPlay muted loop id="myVideo">
-            <source src="traffic.mp4" type="video/mp4"/>
+            <source src="/images/traffic.mp4" type="video/mp4"/>
           </video>
-          <div className='banner-image'>
-            <div className='banner-image-row'>
-              <div className='welcome-text'>
-                <Grid fluid centered padded column={3}>
-                  <Grid.Row>
-                    <Grid.Column id="text1" width={5}>24,000lb of CO2 today</Grid.Column>
-                    <Grid.Column id="text2" width={5}>75,500lb of CO2 this week</Grid.Column>
-                    <Grid.Column id="text3" width={5}>1,000,000lb of CO2 this year</Grid.Column>
-                  </Grid.Row>
-                  <Grid.Row id="text4">
-                    What is your contribution?
-                  </Grid.Row>
-                </Grid>
-              </div>
-              {
+          <div className='welcome-text'>
+            <Grid fluid centered padded column={3}>
+              <Grid.Row>
+                <Grid.Column id="text1" width={5}>24,000lb of CO2 today</Grid.Column>
+                <Grid.Column id="text2" width={5}>75,500lb of CO2 this week</Grid.Column>
+                <Grid.Column id="text3" width={5}>1,000,000lb of CO2 this year</Grid.Column>
+              </Grid.Row>
+              <Grid.Row id="text4">
+                What is your contribution?
+              </Grid.Row>
+            </Grid>
+          </div>
+             {
                 !this.props.currentUser &&
                 <div>
                   <Grid className='signUp' centered columns={4}>
@@ -49,19 +47,11 @@ class Landing extends React.Component {
               }
               {
                 this.props.currentUser &&
-                <div>
-                  <Grid centered columns={3}>
-                    <Grid.Column textAlign='center'>
-                      <div>
-                        Get started
-                      </div>
-                      <Button inverted as={NavLink} exact to="/dashboard" key='dashboard'>Go to Dashboard</Button>
-                    </Grid.Column>
-                  </Grid>
+                <div className='get-started'>
+                  <div>Get started</div>
+                      <Button className='landingButton' inverted as={NavLink} exact to="/dashboard" key='dashboard'>Go to Dashboard</Button>
                 </div>
               }
-            </div>
-          </div>
           <Grid className='description-section' textAlign='left'>
             <Grid.Row className='description-header'>
               What does Project Malama offer
