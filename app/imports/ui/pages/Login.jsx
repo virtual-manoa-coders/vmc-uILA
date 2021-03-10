@@ -5,8 +5,8 @@ import { withTracker } from 'meteor/react-meteor-data';
 import { NavLink, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-/** A simple static component to render some text for the landing page. */
-class Landing extends React.Component {
+/** A simple static component to render some text for the Login page. */
+class Login extends React.Component {
     render() {
         return (
 
@@ -29,12 +29,12 @@ class Landing extends React.Component {
     }
 }
 
-Landing.propTypes = {
+Login.propTypes = {
     currentUser: PropTypes.string,
 };
 
-const LandingContainer = withTracker(() => ({
+const LoginContainer = withTracker(() => ({
     currentUser: Meteor.user() ? Meteor.user().username : '',
-}))(Landing);
+}))(Login);
 
-export default withRouter(LandingContainer);
+export default withRouter(LoginContainer);
