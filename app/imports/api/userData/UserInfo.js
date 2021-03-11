@@ -15,8 +15,8 @@ class UserInfoCollection {
       email: { type: String, index: true },
       image: { type: String, optional: true },
       carID: String,
-      ghgReduced: Number,
-      vmtReduced: Number,
+      CO2Reduced: Number,
+      VMTReduced: Number,
       fuelSaved: Number,
     }, { tracker: Tracker });
     // Attach the schema to the collection, so all attempts to insert a document are checked against schema.

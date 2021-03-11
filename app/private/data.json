@@ -1,6 +1,6 @@
 {
   "profiles": [
-    { "name":  "Bob Wild", "email": "bobwild@foo.com", "image":  "https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png", "carMake": "Nissan", "carModel": "Sentra", "carYear": "2013","carMPG": 31, "ghgReduced":1200, "vmtReduced": 3200, "fuelSaved": 105 },
-    { "name":  "Kat Dog", "email": "katdog@foo.com", "image":  "https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png", "carMake": "Honda", "carModel": "Fit", "carYear": "2014","carMPG": 29, "ghgReduced":1000, "vmtReduced": 2900, "fuelSaved": 110 }
+    { "name":  "Bob Wild", "email": "bobwild@foo.com", "image":  "https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png", "carMake": "Nissan", "carModel": "Sentra", "carYear": "2013","carMPG": 31, "CO2Reduced":1200, "VMTReduced": 3200, "fuelSaved": 105 },
+    { "name":  "Kat Dog", "email": "katdog@foo.com", "image":  "https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png", "carMake": "Honda", "carModel": "Fit", "carYear": "2014","carMPG": 29, "CO2Reduced":1000, "VMTReduced": 2900, "fuelSaved": 110 }
   ]
 }

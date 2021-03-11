@@ -8,7 +8,7 @@ import { UserTransportation } from '../../api/userData/UserTransportation';
 import TransportationMethodPieChart from '../components/TransportMethodPieChart';
 import ComparisonChart from '../components/CommunityPage/ComparisonChart';
 
-const GHGperGallon = 19.6; // pounds per gallon
+const GHGperGallon = 19.59; // pounds per gallon
 const textStyle = { fontFamily: 'Comfortaa' };
 
 /** A simple static component to render some text for the landing page. */
@@ -31,7 +31,7 @@ class Community extends React.Component {
   userCO2Aggregate(data) {
     const fuelSaved = data.map(doc => this.fuelSaved(doc.miles, doc.mpg));
     const fuelSavedSum = fuelSaved.reduce((acc, curr) => acc + curr);
-    const CO2Reduced = fuelSavedSum * GHGperGallon;
+    const CO2Reduced = (fuelSavedSum * GHGperGallon).toFixed(2);
 
     return CO2Reduced;
   }
@@ -97,10 +97,10 @@ class Community extends React.Component {
     let result = 0;
     if (type === 'average') {
       const fuelSaved = this.calculateFuelSavedForAllUsers(afterDateAndCar);
-      const aggregateFuleSaved = this.aggregateIndividualFuelSaved(fuelSaved);
-      const combinedFuelSaved = aggregateFuleSaved.map(doc => doc.fuelSaved).reduce((accumulator, currentValue) => accumulator + currentValue);
-      const averageFuelSaved = combinedFuelSaved / aggregateFuleSaved.length;
-      const averageCO2Reduced = averageFuelSaved * GHGperGallon;
+      const aggregateFuelSaved = this.aggregateIndividualFuelSaved(fuelSaved);
+      const combinedFuelSaved = aggregateFuelSaved.map(doc => doc.fuelSaved).reduce((accumulator, currentValue) => accumulator + currentValue);
+      const averageFuelSaved = combinedFuelSaved / aggregateFuelSaved.length;
+      const averageCO2Reduced = (averageFuelSaved * GHGperGallon).toFixed(2);
 
       result = averageCO2Reduced;
     } else if (type === 'user') {
@@ -110,8 +110,7 @@ class Community extends React.Component {
       }
       result = this.userCO2Aggregate(userData);
     }
-
-    return Math.round(result * 1000) / 1000;
+    return result;
   }
 
   dashboard() {
@@ -279,7 +278,6 @@ Community.propTypes = {
 
 /** withTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker */
 export default withTracker(() => {
-  // Get access to Stuff documents.
   const subscription = Meteor.subscribe(UserTransportation.communityPublicationName);
   return {
     userTransportation: UserTransportation.collection.find({}).fetch(),

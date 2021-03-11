@@ -14,8 +14,8 @@
   ],
 
   "defaultProfiles": [
-    { "name":  "John Foo", "email": "john@foo.com", "image":  "https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png", "carMake": "Toyota", "carModel": "Camry", "carYear": "2012", "carMPG": 33, "ghgReduced":1200, "vmtReduced": 3500, "fuelSaved": 100 },
-    { "name":  "Admin", "email": "admin@foo.com", "image":  "https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png", "carMake": "Honda", "carModel": "Civic", "carYear": "2018","carMPG": 30, "ghgReduced":1400, "vmtReduced": 3600, "fuelSaved": 115 }
+    { "name":  "John Foo", "email": "john@foo.com", "image":  "https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png", "carMake": "Toyota", "carModel": "Camry", "carYear": "2012", "carMPG": 33, "CO2Reduced":1200, "VMTReduced": 3500, "fuelSaved": 100 },
+    { "name":  "Admin", "email": "admin@foo.com", "image":  "https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png", "carMake": "Honda", "carModel": "Civic", "carYear": "2018","carMPG": 30, "CO2Reduced":1400, "VMTReduced": 3600, "fuelSaved": 115 }
   ],
 
   "defaultCars": [

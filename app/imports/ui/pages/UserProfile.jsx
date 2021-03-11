@@ -75,10 +75,10 @@ class UserProfile extends React.Component {
                     <br/>
                     Miles per gallon: {userCar.carMPG} miles
                     <br/>
-                    GHG reduced: {profile.ghgReduced} pounds
+                    CO2 reduced: {profile.CO2Reduced} pounds
                     <br/>
                     VMT
-                    reduced: {profile.vmtReduced} miles
+                    reduced: {profile.VMTReduced} miles
                     <br/>
                     Fuel saved: {profile.fuelSaved} gallons
                   </Card.Description>
