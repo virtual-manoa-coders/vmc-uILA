@@ -14,11 +14,12 @@ function addData(data) {
 
 // carMake, carModel, year, mpg isn't really needed, but is left here due to legacy code
 function addProfile({ name, email, image, carMake, carModel, carYear, carMPG, CO2Reduced, VMTReduced, fuelSaved }) {
+  const createdAt = new Date();
   const carID = UserVehicles.collection.find().fetch().filter(car => car.carModel === carModel && car.carYear === carYear)[0]._id;
   console.log(carID);
   if (carID) {
     console.log(` Defining profile: ${email} with car: ${carYear} ${carModel} carID: ${carID}`);
-    UserInfo.collection.insert({ name, email, image, carID, CO2Reduced, VMTReduced, fuelSaved });
+    UserInfo.collection.insert({ name, email, image, carID, CO2Reduced, VMTReduced, fuelSaved, createdAt });
   } else {
     console.log(` Unable to define ${email} with car ${carYear} ${carModel}`);
   }

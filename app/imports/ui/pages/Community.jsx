@@ -32,7 +32,6 @@ class Community extends React.Component {
     const fuelSaved = data.map(doc => this.fuelSaved(doc.miles, doc.mpg));
     const fuelSavedSum = fuelSaved.reduce((acc, curr) => acc + curr);
     const CO2Reduced = (fuelSavedSum * GHGperGallon).toFixed(2);
-
     return CO2Reduced;
   }
 
@@ -192,7 +191,7 @@ class Community extends React.Component {
           <Grid.Row>
             <ComparisonChart
                 icon={'cloud'}
-                metricName={'GHG GAS'}
+                metricName={'GHG'}
                 userData={13}
                 communityData={24}
                 userTransportation={ this.props.userTransportation }
@@ -278,9 +277,9 @@ Community.propTypes = {
 
 /** withTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker */
 export default withTracker(() => {
-  const subscription = Meteor.subscribe(UserTransportation.communityPublicationName);
+  const sub1 = Meteor.subscribe(UserTransportation.communityPublicationName);
   return {
     userTransportation: UserTransportation.collection.find({}).fetch(),
-    ready: subscription.ready(),
+    ready: sub1.ready(),
   };
 })(Community);
