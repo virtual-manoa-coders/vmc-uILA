@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import TransportationMethodPieChart from '../TransportMethodPieChart';
 
-const curvedStyle = { borderRadius: 20 };
-
 const TextHeader = (props) => {
   const { textSize, textAlign, textStyle, textWeight, as, inverted, children } = props;
   const { fontFamily } = textStyle;
@@ -17,7 +15,7 @@ const TextHeader = (props) => {
   return <Header style={headerStyle} inverted={inverted || false} textAlign={textAlign || 'left'} as={as}>{children}</Header>;
 };
 
-// so this somehow works? i guess react god didn't liked me today
+// so this somehow works? i guess react didn't liked me today
 TextHeader.propTypes = {
   textSize: PropTypes.number,
   textAlign: PropTypes.string,
@@ -25,7 +23,55 @@ TextHeader.propTypes = {
   textWeight: PropTypes.any,
   as: PropTypes.string,
   inverted: PropTypes.bool,
-  children: PropTypes.string.isRequired,
+  children: PropTypes.any.isRequired,
+};
+
+const ValueDifference = (props) => {
+  const difference = props.userData - props.communityData;
+  let color = 'yellow';
+  let icon = 'circle';
+  if (Math.sign(difference) > 0) {
+    color = 'green';
+    icon = 'arrow up';
+  } else if (Math.sign(difference) < 0) {
+    color = 'red';
+    icon = 'arrow down';
+  }
+
+  return (
+      <Grid textAlign='right' columns={2}>
+        <Grid.Column floated='right'>
+          <Grid.Row>
+            <Header as='h1' textAlign='right' floated='right' style={props.textStyle} color={color}>
+              <Icon fitted size='small' name={icon} color={color}/>
+              <Header.Content>
+                {Math.abs(difference)}
+              </Header.Content>
+            </Header>
+          </Grid.Row>
+        </Grid.Column>
+        <Grid.Column>
+          <Grid.Row>
+            <TextHeader textSize={23} inverted={true} textAlign={'right'} textStyle={props.textStyle} as={'h3'}>
+              vs community
+            </TextHeader>
+          </Grid.Row>
+          <Grid.Row>
+            <TextHeader textSize={12} inverted={true} textAlign={'right'} textStyle={props.textStyle} as={'h3'}>
+              {props.communityData} {props.metric} average
+            </TextHeader>
+          </Grid.Row>
+        </Grid.Column>
+      </Grid>
+
+  );
+};
+
+ValueDifference.propTypes = {
+  textStyle: PropTypes.object.isRequired,
+  userData: PropTypes.number.isRequired,
+  communityData: PropTypes.number.isRequired,
+  metric: PropTypes.string,
 };
 
 class ComparisonChart extends React.Component {
@@ -39,27 +85,24 @@ class ComparisonChart extends React.Component {
                   <Grid.Row>
                     <Grid.Column floated='left' verticalAlign='middle'>
                       <TextHeader textAlign={'left'} inverted={true} textStyle={this.props.textStyle} as={'h1'} textSize={40}>
-                        <Icon name='cloud'/> GHG GAS
+                        <Icon name={this.props.icon}/> {this.props.metricName}
                       </TextHeader>
                     </Grid.Column>
                     <Grid.Column floated='left'>
                       <TextHeader textAlign={'left'} inverted={true} textStyle={this.props.textStyle} as={'h3'} textSize={22}>
                         Your Data This Week
                         <br/>
-                        # pounds
+                        {this.props.userData} {this.props.metric}
                       </TextHeader>
                     </Grid.Column>
                     <Grid.Column floated='right'>
-
                       <Grid.Row>
-                        <TextHeader textSize={22} inverted={true} textAlign={'right'} textStyle={this.props.textStyle} as={'h3'}>
-                          <Icon fitted name='arrow up'/> # vs community
-                        </TextHeader>
-                      </Grid.Row>
-                      <Grid.Row>
-                        <TextHeader textSize={16} inverted={true} textAlign={'right'} textStyle={this.props.textStyle} as={'h3'}>
-                          # pounds average
-                        </TextHeader>
+                        <Grid.Column>
+                          <Grid.Row>
+                            <ValueDifference userData={this.props.userData} communityData={this.props.communityData}
+                                             textStyle={this.props.textStyle} metric={this.props.metric}/>
+                          </Grid.Row>
+                        </Grid.Column>
                       </Grid.Row>
                     </Grid.Column>
                   </Grid.Row>
@@ -68,28 +111,7 @@ class ComparisonChart extends React.Component {
             </Grid.Row>
             <Grid.Row>
               <Segment padded style={{ borderRadius: '0px 0px 20px 20px' }}>
-                <Grid columns={2} container>
-                  <Grid.Column>
-                    <Grid.Row>
-                      <TransportationMethodPieChart userTransportation={ this.props.userTransportation } timeSpan={moment().subtract(1, 'months')}/>
-                    </Grid.Row>
-                  </Grid.Column>
-                  <Grid.Column>
-                    <Grid.Row>
-                      <TextHeader textSize={18} textStyle={this.props.textStyle} as={'h3'}>
-                        This is an explanatory text that explains stuff about this metric.
-                        Perhaps one could talk about how this metric has impact on the island of
-                        Hawaii or discuss a fun fact about
-                      </TextHeader>
-                    </Grid.Row>
-                    <Grid.Row>
-                      <Divider/>
-                    </Grid.Row>
-                    <Grid.Row>
-                      <Header as={'h4'} style={this.props.textStyle} color='blue'>Learn more</Header>
-                    </Grid.Row>
-                  </Grid.Column>
-                </Grid>
+                {this.props.children}
               </Segment>
             </Grid.Row>
           </Grid.Column>
@@ -101,6 +123,12 @@ class ComparisonChart extends React.Component {
 // Problem: prop types check receive undefined if using a functional component
 ComparisonChart.propTypes = {
   textStyle: PropTypes.object.isRequired,
+  icon: PropTypes.string.isRequired,
+  metricName: PropTypes.string.isRequired,
+  userData: PropTypes.number.isRequired,
+  communityData: PropTypes.number.isRequired,
+  metric: PropTypes.string,
+  children: PropTypes.any.isRequired,
 };
 
 export default ComparisonChart;
