@@ -18,7 +18,7 @@ const formSchema = new SimpleSchema({
   image: { type: String, label: 'Profile picture', optional: true },
   carMake: { type: String, label: 'Car make', optional: true },
   carModel: { type: String, label: 'Car model', optional: true },
-  year: { type: String, optional: true, allowedValues: ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008',
+  carYear: { type: String, optional: true, allowedValues: ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008',
       '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'] },
   mpg: { type: Number, label: 'Average miles per gallon', optional: true },
 });
@@ -28,8 +28,8 @@ class UserProfile extends React.Component {
 
   /** On submit, insert the data. */
   submit(data) {
-    const { _id, name, image, carMake, carModel, year, mpg } = data;
-    UserInfo.collection.update(_id, { $set: { name, image, carMake, carModel, year, mpg } }, (error) => {
+    const { _id, name, image, carMake, carModel, carYear, mpg } = data;
+    UserInfo.collection.update(_id, { $set: { name, image, carMake, carModel, carYear, mpg } }, (error) => {
       if (error) {
         swal('Error', error.message, 'error');
       } else {
@@ -64,7 +64,7 @@ class UserProfile extends React.Component {
                     <br/>
                     Email: {email}
                   </Card.Meta>
-                  <Card.Description className='profile-card'>Car: {userCar.carMake} {userCar.carModel}
+                  <Card.Description className='profile-card'>Car: {userCar.carYear} {userCar.carMake} {userCar.carModel}
                     <br/>
                     Miles per gallon: {userCar.carMPG} miles
                     <br/>
@@ -97,7 +97,7 @@ class UserProfile extends React.Component {
                   <Form.Group widths='equal'>
                     <TextField id='carMake' name='carMake' showInlineError={true} placeholder={'Car make'}/>
                     <TextField id='carModel' name='carModel' showInlineError={true} placeholder={'Car model'}/>
-                    <SelectField id='year' name='year' showInlineError={true} placeholder={'Year'}/>
+                    <SelectField id='carYear' name='carYear' showInlineError={true} placeholder={'Year'}/>
                   </Form.Group>
                     <NumField id='mpg' name='mpg' decimal={false} showInlineError={true}
                               placeholder={'Miles per gallon'}/>

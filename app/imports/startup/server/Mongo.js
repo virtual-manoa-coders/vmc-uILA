@@ -13,14 +13,14 @@ function addData(data) {
 }
 
 // carMake, carModel, year, mpg isn't really needed, but is left here due to legacy code
-function addProfile({ name, email, image, carMake, carModel, year, mpg, ghgReduced, vmtReduced, fuelSaved }) {
-  const carID = UserVehicles.collection.find().fetch().filter(car => car.carModel === carModel && car.carYear === year)[0]._id;
+function addProfile({ name, email, image, carMake, carModel, carYear, mpg, ghgReduced, vmtReduced, fuelSaved }) {
+  const carID = UserVehicles.collection.find().fetch().filter(car => car.carModel === carModel && car.carYear === carYear)[0]._id;
   console.log(carID);
   if (carID) {
-    console.log(` Defining profile: ${email} with car: ${year} ${carModel} carID: ${carID}`);
+    console.log(` Defining profile: ${email} with car: ${carYear} ${carModel} carID: ${carID}`);
     UserInfo.collection.insert({ name, email, image, carID, ghgReduced, vmtReduced, fuelSaved });
   } else {
-    console.log(` Unable to define ${email} with car ${year} ${carModel}`);
+    console.log(` Unable to define ${email} with car ${carYear} ${carModel}`);
   }
 }
 
