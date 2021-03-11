@@ -40,7 +40,7 @@ class UserProfile extends React.Component {
       if (error) {
         swal('Error', error.message, 'error');
       } else {
-        swal('Success', 'Profile updated successfully. Refresh page to view changes.', 'success');
+        swal('Success', 'Profile updated successfully.', 'success');
       }
     });
   }

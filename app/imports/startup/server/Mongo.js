@@ -13,7 +13,7 @@ function addData(data) {
 }
 
 // carMake, carModel, year, mpg isn't really needed, but is left here due to legacy code
-function addProfile({ name, email, image, carMake, carModel, carYear, mpg, ghgReduced, vmtReduced, fuelSaved }) {
+function addProfile({ name, email, image, carMake, carModel, carYear, carMPG, ghgReduced, vmtReduced, fuelSaved }) {
   const carID = UserVehicles.collection.find().fetch().filter(car => car.carModel === carModel && car.carYear === carYear)[0]._id;
   console.log(carID);
   if (carID) {
