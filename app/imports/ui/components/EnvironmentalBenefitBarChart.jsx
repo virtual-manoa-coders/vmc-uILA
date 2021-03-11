@@ -15,5 +15,25 @@ const state = {
       data: [3]
     }
   ]
+};
+
+class EnvironmentalBenefitBarChart extends React.Component {
+  /**
+   * Grabs the CO2 information into a given array for the bar chart
+   */
+
+  barGraph(data, timeSpan) {
+    const afterDate = data.filter(doc => doc.date > timeSpan);
+    if (afterDate.length === 0) {
+      return noDataPresent;
+    }
+  }
+
+  render() {
+    return (
+      //Create the bar chart
+    );
+  }
 }
+
 
