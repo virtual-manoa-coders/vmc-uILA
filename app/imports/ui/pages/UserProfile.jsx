@@ -20,7 +20,7 @@ const formSchema = new SimpleSchema({
   carModel: { type: String, label: 'Car model', optional: true },
   carYear: { type: String, optional: true, allowedValues: ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008',
       '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'] },
-  mpg: { type: Number, label: 'Average miles per gallon', optional: true },
+  carMPG: { type: Number, label: 'Average miles per gallon', optional: true },
 });
 
 /** Renders the Profile page */
@@ -28,8 +28,15 @@ class UserProfile extends React.Component {
 
   /** On submit, insert the data. */
   submit(data) {
-    const { _id, name, image, carMake, carModel, carYear, mpg } = data;
-    UserInfo.collection.update(_id, { $set: { name, image, carMake, carModel, carYear, mpg } }, (error) => {
+    const { carID, name, image, carMake, carModel, carYear, carMPG } = data;
+    UserInfo.collection.update(carID, { $set: { name, image } }, (error) => {
+      if (error) {
+        swal('Error', error.message, 'error');
+      } else {
+        swal('Success', 'Profile updated successfully. Refresh page to view changes.', 'success');
+      }
+    });
+    UserVehicles.collection.update(carID, { $set: { carMake, carModel, carYear, carMPG } }, (error) => {
       if (error) {
         swal('Error', error.message, 'error');
       } else {
@@ -99,7 +106,7 @@ class UserProfile extends React.Component {
                     <TextField id='carModel' name='carModel' showInlineError={true} placeholder={'Car model'}/>
                     <SelectField id='carYear' name='carYear' showInlineError={true} placeholder={'Year'}/>
                   </Form.Group>
-                    <NumField id='mpg' name='mpg' decimal={false} showInlineError={true}
+                    <NumField id='carMPG' name='carMPG' decimal={false} showInlineError={true}
                               placeholder={'Miles per gallon'}/>
                   <SubmitField id='update-profile' value='Update Profile'/>
                 </Segment>
