@@ -31,7 +31,7 @@ class Signup extends React.Component {
   submit = () => {
     const { email, password, confirmPassword } = this.state;
     if (password !== confirmPassword) {
-      this.setState({ error: 'Passwords do not match' });
+      this.setState({ error: 'Passwords do not match, try again' });
     } else {
       Accounts.createUser({ email, username: email, password }, (err) => {
         if (err) {
