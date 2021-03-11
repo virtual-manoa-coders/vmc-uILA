@@ -1,11 +1,12 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { Grid, Table, Divider, Loader, Header, Segment } from 'semantic-ui-react';
+import { Grid, Table, Divider, Loader, Header, Segment, Image } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { withTracker } from 'meteor/react-meteor-data';
 import moment from 'moment';
 import { UserTransportation } from '../../api/userData/UserTransportation';
 import TransportationMethodPieChart from '../components/TransportMethodPieChart';
+import ComparisonChart from '../components/CommunityPage/ComparisonChart';
 
 const GHGperGallon = 19.6; // pounds per gallon
 const textStyle = { fontFamily: 'Comfortaa' };
@@ -115,13 +116,11 @@ class Community extends React.Component {
 
   dashboard() {
     const data = this.props.userTransportation;
-
     return (
         <Grid id='landing-page' verticalAlign='middle' textAlign='center' container>
 
           <Grid padded relaxed verticalAlign='middle'>
-            <Grid.Row id='space-row'>
-            </Grid.Row>
+            <Divider horizontal/>
             <Grid.Row>
               <Grid.Column width={3} verticalAlign='middle'>
                 <Grid.Row>
@@ -168,9 +167,7 @@ class Community extends React.Component {
                 </Table>
               </Grid.Column>
             </Grid.Row>
-
-            <Grid.Row id='space-row'>
-            </Grid.Row>
+            <Divider horizontal/>
             <Grid.Row>
               <Grid.Column verticalAlign='middle'>
                 <Header style={textStyle} textAlign='center' as='h2' inverted>Modes of Transportation This Month</Header>
@@ -192,6 +189,76 @@ class Community extends React.Component {
             </Grid.Row>
 
           </Grid>
+          <Divider horizontal/>
+          <Grid.Row>
+            <ComparisonChart
+                icon={'cloud'}
+                metricName={'GHG GAS'}
+                userData={13}
+                communityData={24}
+                userTransportation={ this.props.userTransportation }
+                textStyle={textStyle}
+                metric={'pounds'}
+            >
+              <Grid columns={2} container>
+                <Grid.Column>
+                  <Grid.Row>
+                    <Image height="80%" width="80%" src="images/temp_graph.png" centered/>
+                  </Grid.Row>
+                </Grid.Column>
+                <Grid.Column>
+                  <Grid.Row>
+                    <Header textAlign='left' textStyle={textStyle} as={'h3'}>
+                      This is an explanatory text that explains stuff about this metric.
+                      Perhaps one could talk about how this metric has impact on the island of
+                      Hawaii or discuss a fun fact about
+                    </Header>
+                  </Grid.Row>
+                  <Grid.Row>
+                    <Divider/>
+                  </Grid.Row>
+                  <Grid.Row>
+                    <Header as={'h4'} style={textStyle} color='blue'>Learn more</Header>
+                  </Grid.Row>
+                </Grid.Column>
+              </Grid>
+            </ComparisonChart>
+          </Grid.Row>
+
+          <Grid.Row>
+            <ComparisonChart
+                icon={'money bill alternate'}
+                metricName={'$ SAVED'}
+                userData={321}
+                communityData={167}
+                userTransportation={ this.props.userTransportation }
+                textStyle={textStyle}
+                metric={'dollars'}
+            >
+              <Grid columns={2} container>
+                <Grid.Column>
+                  <Grid.Row>
+                    <Image height="80%" width="80%" src="images/temp_bar.png" centered/>
+                  </Grid.Row>
+                </Grid.Column>
+                <Grid.Column>
+                  <Grid.Row>
+                    <Header textAlign='left' textStyle={textStyle} as={'h3'}>
+                      This is an explanatory text that explains stuff about this metric.
+                      Perhaps one could talk about how this metric has impact on the island of
+                      Hawaii or discuss a fun fact about
+                    </Header>
+                  </Grid.Row>
+                  <Grid.Row>
+                    <Divider/>
+                  </Grid.Row>
+                  <Grid.Row>
+                    <Header as={'h4'} style={textStyle} color='blue'>Learn more</Header>
+                  </Grid.Row>
+                </Grid.Column>
+              </Grid>
+            </ComparisonChart>
+          </Grid.Row>
 
           <Divider hidden/>
 
