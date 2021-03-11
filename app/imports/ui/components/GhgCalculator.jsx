@@ -22,7 +22,7 @@ class GhgCalculator extends React.Component {
   /** Function that calculates gallons of fuel consumed and CO2 emissions */
   calculateGHG = function () {
     const gasConsumed = ((this.state.inputVMT) / (this.state.inputMPG)).toFixed(6);
-    return (gasConsumed * 8.87).toFixed(2);
+    return (gasConsumed * 19.59).toFixed(2);
   }
 
   calculateResults = () => {
@@ -76,7 +76,7 @@ class GhgCalculator extends React.Component {
             </Form>
             {this.state.show &&
             (
-                <p className='ghg-results'>{this.calculateGHG()} kg of CO2 is emitted from
+                <p className='ghg-results'>{this.calculateGHG()} pounds of CO2 is emitted from
                   traveling {this.state.inputVMT} miles with a vehicle
                   averaging {this.state.inputMPG} MPG.</p>
             )}
