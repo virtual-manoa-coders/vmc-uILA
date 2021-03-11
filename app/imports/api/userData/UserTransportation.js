@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import SimpleSchema from 'simpl-schema';
 import { Tracker } from 'meteor/tracker';
@@ -26,6 +27,44 @@ class UserTransportationCollection {
     this.userPublicationName = `${this.name}.publication.user`;
     this.adminPublicationName = `${this.name}.publication.admin`;
     this.communityPublicationName = `${this.name}.publication.community`;
+  }
+
+  define({ transport, date, miles, mpg, userID }) {
+    return this._collection.insert({ transport, date, miles, mpg, userID });
+  }
+
+  update(id, { transport, date, miles, mpg }) {
+    const entry = this.entryDoesExist(id);
+
+    if (!entry) {
+      throw new Meteor.Error('No such record exists');
+    } else {
+      return this._collection.update({ _id: id }, { $set: { transport, date, miles, mpg } });
+    }
+  }
+
+  remove(id) {
+    const entry = this.entryDoesExist(id);
+
+    if (!entry) {
+      throw new Meteor.Error('No such record exists');
+    } else {
+      return this._collection.remove({ _id: id });
+    }
+  }
+
+  entryDoesExist(id) {
+    return this._collection.findOne({ _id: id });
+  }
+
+  publish() {
+    Meteor.publish(this.communityPublicationName, () => this.collection.find());
+  }
+
+  subscribe(name) {
+    if (Meteor.isClient) {
+      Meteor.subscribe(name || this.communityPublicationName);
+    }
   }
 }
 
