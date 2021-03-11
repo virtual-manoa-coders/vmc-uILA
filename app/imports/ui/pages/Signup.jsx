@@ -12,7 +12,7 @@ class Signup extends React.Component {
   /** Initialize state fields. */
   constructor(props) {
     super(props);
-    this.state = { email: '', password: '', confirmPassword: '', error: '', redirectToReferer: false };
+    this.state = { email: '', password: '', confirmPassword: '', error: '', errorConfirm: false, redirectToReferer: false };
   }
 
   /** Update the form controls each time the user interacts with them. */
@@ -31,7 +31,7 @@ class Signup extends React.Component {
   submit = () => {
     const { email, password, confirmPassword } = this.state;
     if (password !== confirmPassword) {
-      console.log('password no match');
+      this.setState({ error: 'Passwords do not match' });
     } else {
       Accounts.createUser({ email, username: email, password }, (err) => {
         if (err) {
