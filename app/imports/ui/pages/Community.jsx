@@ -6,6 +6,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import moment from 'moment';
 import { UserTransportation } from '../../api/userData/UserTransportation';
 import TransportationMethodPieChart from '../components/TransportMethodPieChart';
+import ComparisonChart from '../components/CommunityPage/ComparisonChart';
 
 const GHGperGallon = 19.6; // pounds per gallon
 const textStyle = { fontFamily: 'Comfortaa' };
@@ -115,7 +116,6 @@ class Community extends React.Component {
 
   dashboard() {
     const data = this.props.userTransportation;
-
     return (
         <Grid id='landing-page' verticalAlign='middle' textAlign='center' container>
 
@@ -192,6 +192,9 @@ class Community extends React.Component {
             </Grid.Row>
 
           </Grid>
+          <Grid.Row>
+            <ComparisonChart userTransportation={ this.props.userTransportation } textStyle={textStyle}/>
+          </Grid.Row>
 
           <Divider hidden/>
 
