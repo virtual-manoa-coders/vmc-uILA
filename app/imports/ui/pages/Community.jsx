@@ -1,12 +1,14 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { Grid, Table, Divider, Loader, Header, Segment, Image } from 'semantic-ui-react';
+import { Grid, Table, Divider, Loader, Header, Segment, Image, GridColumn } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { withTracker } from 'meteor/react-meteor-data';
 import moment from 'moment';
 import { UserTransportation } from '../../api/userData/UserTransportation';
 import TransportationMethodPieChart from '../components/Visualization/TransportMethodPieChart';
 import ComparisonChart from '../components/Visualization/ComparisonChart';
+import Section from '../components/Section';
+import { TextHeader } from '../components/Visualization/ComparisonChart';
 
 const GHGperGallon = 19.59; // pounds per gallon
 const textStyle = { fontFamily: 'Comfortaa' };
@@ -115,79 +117,100 @@ class Community extends React.Component {
   dashboard() {
     const data = this.props.userTransportation;
     return (
-        <Grid id='landing-page' verticalAlign='middle' textAlign='center' container>
+        <Grid verticalAlign='middle' textAlign='center'>
+          <Grid.Row>
+            <Grid.Column>
+              <Section
+                  background='/images/background1.png'
+                  topMargin='4px'>
+                <Grid padded relaxed verticalAlign='middle'>
+                  <Divider horizontal/>
+                  <Grid.Row>
+                    <Grid.Column width={3} verticalAlign='middle'>
+                      <Grid.Row>
+                        This is you vs. the average person in your city.
+                      </Grid.Row>
+                      <Divider hidden/>
+                      <Grid.Row>
+                        You are doing x% better than the average person in your city.
+                      </Grid.Row>
+                    </Grid.Column>
+                    <Grid.Column width={13}>
+                      <Header style={textStyle} textAlign='center' as='h2' inverted>CO2 Saved by Alternative Transport</Header>
+                      <Table padded basic definition id="community-table">
+                        <Table.Header>
+                          <Table.Row>
+                            <Table.HeaderCell />
+                            <Table.HeaderCell>You (Pounds)</Table.HeaderCell>
+                            <Table.HeaderCell>Average (Pounds)</Table.HeaderCell>
+                          </Table.Row>
+                        </Table.Header>
 
-          <Grid padded relaxed verticalAlign='middle'>
-            <Divider horizontal/>
-            <Grid.Row>
-              <Grid.Column width={3} verticalAlign='middle'>
-                <Grid.Row>
-                  This is you vs. the average person in your city.
-                </Grid.Row>
-                <Divider hidden/>
-                <Grid.Row>
-                  You are doing x% better than the average person in your city.
-                </Grid.Row>
-              </Grid.Column>
-              <Grid.Column width={13}>
-                <Header style={textStyle} textAlign='center' as='h2' inverted>CO2 Saved by Alternative Transport</Header>
-                <Table padded basic definition id="community-table">
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.HeaderCell />
-                      <Table.HeaderCell>You (Pounds)</Table.HeaderCell>
-                      <Table.HeaderCell>Average (Pounds)</Table.HeaderCell>
-                    </Table.Row>
-                  </Table.Header>
-
-                  <Table.Body>
-                    <Table.Row>
-                      <Table.Cell>Today</Table.Cell>
-                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'd'), 'user') }</Table.Cell>
-                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'd'), 'average')}</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>Week</Table.Cell>
-                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'w'), 'user') }</Table.Cell>
-                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'w'), 'average') }</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>Month</Table.Cell>
-                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'months'), 'user') }</Table.Cell>
-                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'months'), 'average') }</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>Annual</Table.Cell>
-                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'years'), 'user') }</Table.Cell>
-                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'years'), 'average') }</Table.Cell>
-                    </Table.Row>
-                  </Table.Body>
-                </Table>
-              </Grid.Column>
-            </Grid.Row>
-            <Divider horizontal/>
-            <Grid.Row>
-              <Grid.Column verticalAlign='middle'>
-                <Header style={textStyle} textAlign='center' as='h2' inverted>Modes of Transportation This Month</Header>
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row columns={2} stretched>
-              <Grid.Column verticalAlign='middle'>
-                <Segment>
-                  <Header style={textStyle} textAlign='center' as='h2'>You</Header>
-                  <TransportationMethodPieChart userTransportation={ this.userTransportDataFilter(this.props.userTransportation) } timeSpan={moment().subtract(1, 'months')}/>
-                </Segment>
-              </Grid.Column>
-              <Grid.Column verticalAlign='middle'>
-                <Segment>
-                  <Header style={textStyle} textAlign='center' as='h2'>Community</Header>
-                  <TransportationMethodPieChart userTransportation={ this.props.userTransportation } timeSpan={moment().subtract(1, 'months')}/>
-                </Segment>
-              </Grid.Column>
-            </Grid.Row>
-
-          </Grid>
+                        <Table.Body>
+                          <Table.Row>
+                            <Table.Cell>Today</Table.Cell>
+                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'd'), 'user') }</Table.Cell>
+                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'd'), 'average')}</Table.Cell>
+                          </Table.Row>
+                          <Table.Row>
+                            <Table.Cell>Week</Table.Cell>
+                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'w'), 'user') }</Table.Cell>
+                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'w'), 'average') }</Table.Cell>
+                          </Table.Row>
+                          <Table.Row>
+                            <Table.Cell>Month</Table.Cell>
+                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'months'), 'user') }</Table.Cell>
+                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'months'), 'average') }</Table.Cell>
+                          </Table.Row>
+                          <Table.Row>
+                            <Table.Cell>Annual</Table.Cell>
+                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'years'), 'user') }</Table.Cell>
+                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'years'), 'average') }</Table.Cell>
+                          </Table.Row>
+                        </Table.Body>
+                      </Table>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              </Section>
+            </Grid.Column>
+          </Grid.Row>
           <Divider horizontal/>
+          <Grid.Row>
+            <Grid.Column>
+              <Grid container>
+                <Grid.Row>
+                  <Grid.Column verticalAlign='middle'>
+                    <TextHeader textStyle={textStyle} inverted as='h1' textAlign='middle' textSize={30}>
+                      Modes of Transportation This Month
+                    </TextHeader>
+                  </Grid.Column>
+                </Grid.Row>
+                <Grid.Row columns={2} stretched>
+                  <Grid.Column verticalAlign='middle'>
+                    <Segment>
+                      <Header style={textStyle} textAlign='center' as='h2'>You</Header>
+                      <TransportationMethodPieChart userTransportation={ this.userTransportDataFilter(this.props.userTransportation) } timeSpan={moment().subtract(1, 'months')}/>
+                    </Segment>
+                  </Grid.Column>
+                  <Grid.Column verticalAlign='middle'>
+                    <Segment>
+                      <Header style={textStyle} textAlign='center' as='h2'>Community</Header>
+                      <TransportationMethodPieChart userTransportation={ this.props.userTransportation } timeSpan={moment().subtract(1, 'months')}/>
+                    </Segment>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </Grid.Column>
+          </Grid.Row>
+          <Divider horizontal/>
+          <Grid.Row>
+            <Grid.Column>
+              <TextHeader textStyle={textStyle} inverted as='h1' textAlign='middle' textSize={30}>
+                Some of Your Personal Metric
+              </TextHeader>
+            </Grid.Column>
+          </Grid.Row>
           <Grid.Row>
             <ComparisonChart
                 icon={'cloud'}
