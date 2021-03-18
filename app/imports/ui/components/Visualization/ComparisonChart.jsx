@@ -1,6 +1,15 @@
 import React from 'react';
-import { Container, Header, Segment, Grid, Icon, Divider } from 'semantic-ui-react';
+import { Container, Header, Segment, Grid, Icon, Divider, Loader } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
+
+const checkForNoData = (data, metric) => {
+  const returnString = '';
+  if (data === 'No Data') {
+    return returnString.concat('0', ' ', metric);
+  }
+
+  return returnString.concat(data.toString(), ' ', metric);
+};
 
 export const TextHeader = (props) => {
   const { textSize, textAlign, textStyle, textWeight, as, inverted, children } = props;
@@ -25,9 +34,12 @@ TextHeader.propTypes = {
 };
 
 const ValueDifference = (props) => {
-  const difference = props.userData - props.communityData;
+  let difference = (props.userData - props.communityData).toFixed(2);
   let color = 'yellow';
   let icon = 'circle';
+  if (Number.isNaN(difference)) {
+    difference = 0;
+  }
   if (Math.sign(difference) > 0) {
     color = 'green';
     icon = 'arrow up';
@@ -56,7 +68,7 @@ const ValueDifference = (props) => {
           </Grid.Row>
           <Grid.Row>
             <TextHeader textSize={12} inverted={true} textAlign={'right'} textStyle={props.textStyle} as={'h3'}>
-              {props.communityData} {props.metric} average
+              { checkForNoData(props.communityData, props.metric) } average
             </TextHeader>
           </Grid.Row>
         </Grid.Column>
@@ -90,7 +102,7 @@ class ComparisonChart extends React.Component {
                       <TextHeader textAlign={'left'} inverted={true} textStyle={this.props.textStyle} as={'h3'} textSize={22}>
                         Your Data This Week
                         <br/>
-                        {this.props.userData} {this.props.metric}
+                        { checkForNoData(this.props.userData, this.props.metric) }
                       </TextHeader>
                     </Grid.Column>
                     <Grid.Column floated='right'>

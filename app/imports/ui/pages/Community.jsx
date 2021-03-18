@@ -218,8 +218,8 @@ class Community extends React.Component {
               <ComparisonChart
                   icon={'cloud'}
                   metricName={'GHG'}
-                  userData={13}
-                  communityData={24}
+                  userData={this.theUltimateCO2Calculator(data, moment().subtract(1, 'w'), 'user')}
+                  communityData={this.theUltimateCO2Calculator(data, moment().subtract(1, 'w'), 'average')}
                   userTransportation={ this.props.userTransportation }
                   textStyle={textStyle}
                   metric={'pounds'}
