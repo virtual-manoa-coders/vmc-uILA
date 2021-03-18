@@ -1,6 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
-import { Grid, Table, Divider, Loader, Header, Segment, Image, GridColumn } from 'semantic-ui-react';
+import { Grid, Table, Divider, Loader, Header, Segment, Image } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { withTracker } from 'meteor/react-meteor-data';
 import moment from 'moment';
@@ -8,7 +9,6 @@ import { UserTransportation } from '../../api/userData/UserTransportation';
 import TransportationMethodPieChart from '../components/Visualization/TransportMethodPieChart';
 import ComparisonChart from '../components/Visualization/ComparisonChart';
 import Section from '../components/Section';
-import { TextHeader } from '../components/Visualization/ComparisonChart';
 import { SectionHeader } from '../components/Visualization/SectionHeader';
 
 const GHGperGallon = 19.59; // pounds per gallon
@@ -241,7 +241,7 @@ class Community extends React.Component {
             <Grid.Column>
               <ComparisonChart
                   icon={'cloud'}
-                  metricName={'GHG'}
+                  metricName={'GHG Saved'}
                   userData={this.theUltimateCO2Calculator(data, moment().subtract(1, 'w'), 'user')}
                   communityData={this.theUltimateCO2Calculator(data, moment().subtract(1, 'w'), 'average')}
                   userTransportation={ this.props.userTransportation }
@@ -258,16 +258,17 @@ class Community extends React.Component {
                   <Grid.Column>
                     <Grid.Row>
                       <Header textAlign='left' textStyle={textStyle} as={'h3'}>
-                        This is an explanatory text that explains stuff about this metric.
-                        Perhaps one could talk about how this metric has impact on the island of
-                        Hawaii or discuss a fun fact about
+                        A greenhouse gas (sometimes abbreviated GHG) is a gas that absorbs and emits radiant energy
+                        within the thermal infrared range, causing the greenhouse effect. This gas is one of your main
+                        contribution to climate change, so the higher you reduce your carbon footprint, the better.
                       </Header>
                     </Grid.Row>
                     <Grid.Row>
                       <Divider/>
                     </Grid.Row>
                     <Grid.Row>
-                      <Header as={'h4'} style={textStyle} color='blue'>Learn more</Header>
+                        <Header as={'a'} href={'https://www.epa.gov/ghgemissions/overview-greenhouse-gases'}
+                                style={textStyle} color='blue'>Learn more</Header>
                     </Grid.Row>
                   </Grid.Column>
                 </Grid>
@@ -296,16 +297,17 @@ class Community extends React.Component {
                   <Grid.Column>
                     <Grid.Row>
                       <Header textAlign='left' textStyle={textStyle} as={'h3'}>
-                        This is an explanatory text that explains stuff about this metric.
-                        Perhaps one could talk about how this metric has impact on the island of
-                        Hawaii or discuss a fun fact about
+                        An electric car will save you $632 per year on average over its gas-powered counterpart.
+                        Generally, it costs $1,117 per year to run a new gas-powered vehicle, and only $485 per
+                        year to run a new electric one.
                       </Header>
                     </Grid.Row>
                     <Grid.Row>
                       <Divider/>
                     </Grid.Row>
                     <Grid.Row>
-                      <Header as={'h4'} style={textStyle} color='blue'>Learn more</Header>
+                      <Header as={'a'} href={'https://www.capitalone.com/bank/money-management/life-events/do-electric-cars-save-money/'}
+                              style={textStyle} color='blue'>Learn more</Header>
                     </Grid.Row>
                   </Grid.Column>
                 </Grid>
