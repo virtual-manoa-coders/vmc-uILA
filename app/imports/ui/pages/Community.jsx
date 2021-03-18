@@ -12,6 +12,7 @@ import { TextHeader } from '../components/Visualization/ComparisonChart';
 import { SectionHeader } from '../components/Visualization/SectionHeader';
 
 const GHGperGallon = 19.59; // pounds per gallon
+const gasPrice = 3.57;
 const textStyle = { fontFamily: 'Comfortaa' };
 
 /** A simple static component to render some text for the landing page. */
@@ -115,8 +116,31 @@ class Community extends React.Component {
     return result;
   }
 
+  moneySavedCalculator(data, timeSpan, type) {
+    let result;
+    const afterDateAndCar = data.filter(doc => doc.date > timeSpan && doc.transport !== 'Car');
+    if (afterDateAndCar.length === 0) {
+      return 'No Data';
+    }
+    const fuelSaved = this.calculateFuelSavedForAllUsers(afterDateAndCar);
+    const aggregateFuelSaved = this.aggregateIndividualFuelSaved(fuelSaved);
+    if (type === 'user') {
+      const userData = this.userTransportDataFilter(aggregateFuelSaved);
+      console.log(userData[0].fuelSaved);
+      result = userData[0].fuelSaved;
+    } else if (type === 'average') {
+      const combinedFuelSaved = aggregateFuelSaved.map(doc => doc.fuelSaved).reduce((accumulator, currentValue) => accumulator + currentValue);
+      const averageFuelSaved = combinedFuelSaved / aggregateFuelSaved.length;
+      console.log(averageFuelSaved);
+      result = averageFuelSaved;
+    }
+
+    return (result * gasPrice).toFixed(2);
+  }
+
   dashboard() {
     const data = this.props.userTransportation;
+
     return (
         <Grid verticalAlign='middle' textAlign='center'>
           <Grid.Row>
@@ -256,8 +280,8 @@ class Community extends React.Component {
               <ComparisonChart
                   icon={'money bill alternate'}
                   metricName={'$ SAVED'}
-                  userData={321}
-                  communityData={167}
+                  userData={this.moneySavedCalculator(data, moment().subtract(1, 'w'), 'user')}
+                  communityData={this.moneySavedCalculator(data, moment().subtract(1, 'w'), 'average')}
                   userTransportation={ this.props.userTransportation }
                   textStyle={textStyle}
                   metric={'dollars'}
