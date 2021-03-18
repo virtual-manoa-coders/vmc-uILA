@@ -50,7 +50,7 @@ const ValueDifference = (props) => {
         </Grid.Column>
         <Grid.Column>
           <Grid.Row>
-            <TextHeader textSize={23} inverted={true} textAlign={'right'} textStyle={props.textStyle} as={'h3'}>
+            <TextHeader textSize={21} inverted={true} textAlign={'right'} textStyle={props.textStyle} as={'h3'}>
               vs community
             </TextHeader>
           </Grid.Row>
