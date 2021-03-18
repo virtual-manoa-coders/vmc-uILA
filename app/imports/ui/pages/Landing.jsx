@@ -34,13 +34,13 @@ class Landing extends React.Component {
                       <div>
                         Already a Member?
                       </div>
-                      <Button inverted as={NavLink} exact to="/login" key='login'>Login</Button>
+                      <Button inverted as={NavLink} exact to="/signin" key='login'>Login</Button>
                     </Grid.Column>
                     <Grid.Column textAlign='center'>
                       <div>
                         Not a Member?
                       </div>
-                      <Button inverted as={NavLink} exact to="/login" key='signup'>Sign up</Button>
+                      <Button inverted as={NavLink} exact to="/signup" key='signup'>Sign up</Button>
                     </Grid.Column>
                   </Grid>
                 </div>
