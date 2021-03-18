@@ -41,7 +41,7 @@ class TransportMethodPieChart extends React.Component {
       return [0];
     }
     const transportMethod = afterDateAndCar.map(doc => doc.transport);
-    const dataArray = [0, 0, 0, 0, 0, 0]; // TODO: change to transport methods object
+    const dataArray = [0, 0, 0, 0, 0, 0]; // We can only use an array for the Pie component. don't change
     transportMethod.forEach(doc => {
       switch (doc) {
         case 'Telecommute':

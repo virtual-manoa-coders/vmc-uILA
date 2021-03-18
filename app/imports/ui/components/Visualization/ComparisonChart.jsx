@@ -1,10 +1,17 @@
 import React from 'react';
-import { Container, Header, Segment, Grid, Icon, Divider } from 'semantic-ui-react';
+import { Container, Header, Segment, Grid, Icon, Divider, Loader } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-import TransportationMethodPieChart from '../TransportMethodPieChart';
 
-const TextHeader = (props) => {
+const checkForNoData = (data, metric) => {
+  const returnString = '';
+  if (data === 'No Data') {
+    return returnString.concat('0', ' ', metric);
+  }
+
+  return returnString.concat(data.toString(), ' ', metric);
+};
+
+export const TextHeader = (props) => {
   const { textSize, textAlign, textStyle, textWeight, as, inverted, children } = props;
   const { fontFamily } = textStyle;
   const headerStyle = {
@@ -27,9 +34,12 @@ TextHeader.propTypes = {
 };
 
 const ValueDifference = (props) => {
-  const difference = props.userData - props.communityData;
+  let difference = (props.userData - props.communityData).toFixed(2);
   let color = 'yellow';
   let icon = 'circle';
+  if (Number.isNaN(difference)) {
+    difference = 0;
+  }
   if (Math.sign(difference) > 0) {
     color = 'green';
     icon = 'arrow up';
@@ -52,13 +62,13 @@ const ValueDifference = (props) => {
         </Grid.Column>
         <Grid.Column>
           <Grid.Row>
-            <TextHeader textSize={23} inverted={true} textAlign={'right'} textStyle={props.textStyle} as={'h3'}>
+            <TextHeader textSize={21} inverted={true} textAlign={'right'} textStyle={props.textStyle} as={'h3'}>
               vs community
             </TextHeader>
           </Grid.Row>
           <Grid.Row>
             <TextHeader textSize={12} inverted={true} textAlign={'right'} textStyle={props.textStyle} as={'h3'}>
-              {props.communityData} {props.metric} average
+              { checkForNoData(props.communityData, props.metric) } average
             </TextHeader>
           </Grid.Row>
         </Grid.Column>
@@ -77,7 +87,7 @@ ValueDifference.propTypes = {
 class ComparisonChart extends React.Component {
   render() {
     return (
-        <Grid>
+        <Grid container={this.props.container}>
           <Grid.Column>
             <Grid.Row>
               <Segment style={{ borderRadius: '20px 20px 0px 0px' }} size={'large'} inverted color='violet'>
@@ -92,7 +102,7 @@ class ComparisonChart extends React.Component {
                       <TextHeader textAlign={'left'} inverted={true} textStyle={this.props.textStyle} as={'h3'} textSize={22}>
                         Your Data This Week
                         <br/>
-                        {this.props.userData} {this.props.metric}
+                        { checkForNoData(this.props.userData, this.props.metric) }
                       </TextHeader>
                     </Grid.Column>
                     <Grid.Column floated='right'>
@@ -125,9 +135,10 @@ ComparisonChart.propTypes = {
   textStyle: PropTypes.object.isRequired,
   icon: PropTypes.string.isRequired,
   metricName: PropTypes.string.isRequired,
-  userData: PropTypes.number.isRequired,
-  communityData: PropTypes.number.isRequired,
+  userData: PropTypes.any.isRequired,
+  communityData: PropTypes.any.isRequired,
   metric: PropTypes.string,
+  container: PropTypes.bool,
   children: PropTypes.any.isRequired,
 };
 

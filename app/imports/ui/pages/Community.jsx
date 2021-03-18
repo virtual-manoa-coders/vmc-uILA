@@ -1,14 +1,18 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { Grid, Table, Divider, Loader, Header, Segment, Image } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { withTracker } from 'meteor/react-meteor-data';
 import moment from 'moment';
 import { UserTransportation } from '../../api/userData/UserTransportation';
-import TransportationMethodPieChart from '../components/TransportMethodPieChart';
-import ComparisonChart from '../components/CommunityPage/ComparisonChart';
+import TransportationMethodPieChart from '../components/Visualization/TransportMethodPieChart';
+import ComparisonChart from '../components/Visualization/ComparisonChart';
+import Section from '../components/Section';
+import { SectionHeader } from '../components/Visualization/SectionHeader';
 
 const GHGperGallon = 19.59; // pounds per gallon
+const gasPrice = 3.57;
 const textStyle = { fontFamily: 'Comfortaa' };
 
 /** A simple static component to render some text for the landing page. */
@@ -112,150 +116,203 @@ class Community extends React.Component {
     return result;
   }
 
+  moneySavedCalculator(data, timeSpan, type) {
+    let result;
+    const afterDateAndCar = data.filter(doc => doc.date > timeSpan && doc.transport !== 'Car');
+    if (afterDateAndCar.length === 0) {
+      return 'No Data';
+    }
+    const fuelSaved = this.calculateFuelSavedForAllUsers(afterDateAndCar);
+    const aggregateFuelSaved = this.aggregateIndividualFuelSaved(fuelSaved);
+    if (type === 'user') {
+      const userData = this.userTransportDataFilter(aggregateFuelSaved);
+      console.log(userData[0].fuelSaved);
+      result = userData[0].fuelSaved;
+    } else if (type === 'average') {
+      const combinedFuelSaved = aggregateFuelSaved.map(doc => doc.fuelSaved).reduce((accumulator, currentValue) => accumulator + currentValue);
+      const averageFuelSaved = combinedFuelSaved / aggregateFuelSaved.length;
+      console.log(averageFuelSaved);
+      result = averageFuelSaved;
+    }
+
+    return (result * gasPrice).toFixed(2);
+  }
+
   dashboard() {
     const data = this.props.userTransportation;
+
     return (
-        <Grid id='landing-page' verticalAlign='middle' textAlign='center' container>
+        <Grid verticalAlign='middle' textAlign='center'>
+          <Grid.Row>
+            <Grid.Column>
+              <Section
+                  background='/images/background1.png'
+                  topMargin='4px'
+                  childMargin='5vh'>
+                <Grid padded relaxed verticalAlign='middle'>
+                  <Grid.Row>
+                    <Grid.Column width={3} verticalAlign='middle'>
+                      <Grid.Row>
+                        This is you vs. the average person in your city.
+                      </Grid.Row>
+                      <Divider hidden/>
+                      <Grid.Row>
+                        You are doing x% better than the average person in your city.
+                      </Grid.Row>
+                    </Grid.Column>
+                    <Grid.Column width={13}>
+                      <Header style={textStyle} textAlign='center' as='h2' inverted>CO2 Saved by Alternative Transport</Header>
+                      <Table padded basic definition id="community-table">
+                        <Table.Header>
+                          <Table.Row>
+                            <Table.HeaderCell />
+                            <Table.HeaderCell>You (Pounds)</Table.HeaderCell>
+                            <Table.HeaderCell>Average (Pounds)</Table.HeaderCell>
+                          </Table.Row>
+                        </Table.Header>
 
-          <Grid padded relaxed verticalAlign='middle'>
-            <Divider horizontal/>
-            <Grid.Row>
-              <Grid.Column width={3} verticalAlign='middle'>
-                <Grid.Row>
-                  This is you vs. the average person in your city.
-                </Grid.Row>
-                <Divider hidden/>
-                <Grid.Row>
-                  You are doing x% better than the average person in your city.
-                </Grid.Row>
-              </Grid.Column>
-              <Grid.Column width={13}>
-                <Header style={textStyle} textAlign='center' as='h2' inverted>CO2 Saved by Alternative Transport</Header>
-                <Table padded basic definition id="community-table">
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.HeaderCell />
-                      <Table.HeaderCell>You (Pounds)</Table.HeaderCell>
-                      <Table.HeaderCell>Average (Pounds)</Table.HeaderCell>
-                    </Table.Row>
-                  </Table.Header>
-
-                  <Table.Body>
-                    <Table.Row>
-                      <Table.Cell>Today</Table.Cell>
-                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'd'), 'user') }</Table.Cell>
-                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'd'), 'average')}</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>Week</Table.Cell>
-                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'w'), 'user') }</Table.Cell>
-                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'w'), 'average') }</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>Month</Table.Cell>
-                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'months'), 'user') }</Table.Cell>
-                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'months'), 'average') }</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>Annual</Table.Cell>
-                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'years'), 'user') }</Table.Cell>
-                      <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'years'), 'average') }</Table.Cell>
-                    </Table.Row>
-                  </Table.Body>
-                </Table>
-              </Grid.Column>
-            </Grid.Row>
-            <Divider horizontal/>
-            <Grid.Row>
-              <Grid.Column verticalAlign='middle'>
-                <Header style={textStyle} textAlign='center' as='h2' inverted>Modes of Transportation This Month</Header>
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row columns={2} stretched>
-              <Grid.Column verticalAlign='middle'>
-                <Segment>
-                  <Header style={textStyle} textAlign='center' as='h2'>You</Header>
-                  <TransportationMethodPieChart userTransportation={ this.userTransportDataFilter(this.props.userTransportation) } timeSpan={moment().subtract(1, 'months')}/>
-                </Segment>
-              </Grid.Column>
-              <Grid.Column verticalAlign='middle'>
-                <Segment>
-                  <Header style={textStyle} textAlign='center' as='h2'>Community</Header>
-                  <TransportationMethodPieChart userTransportation={ this.props.userTransportation } timeSpan={moment().subtract(1, 'months')}/>
-                </Segment>
-              </Grid.Column>
-            </Grid.Row>
-
-          </Grid>
+                        <Table.Body>
+                          <Table.Row>
+                            <Table.Cell>Today</Table.Cell>
+                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'd'), 'user') }</Table.Cell>
+                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'd'), 'average')}</Table.Cell>
+                          </Table.Row>
+                          <Table.Row>
+                            <Table.Cell>Week</Table.Cell>
+                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'w'), 'user') }</Table.Cell>
+                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'w'), 'average') }</Table.Cell>
+                          </Table.Row>
+                          <Table.Row>
+                            <Table.Cell>Month</Table.Cell>
+                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'months'), 'user') }</Table.Cell>
+                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'months'), 'average') }</Table.Cell>
+                          </Table.Row>
+                          <Table.Row>
+                            <Table.Cell>Annual</Table.Cell>
+                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'years'), 'user') }</Table.Cell>
+                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'years'), 'average') }</Table.Cell>
+                          </Table.Row>
+                        </Table.Body>
+                      </Table>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              </Section>
+            </Grid.Column>
+          </Grid.Row>
           <Divider horizontal/>
           <Grid.Row>
-            <ComparisonChart
-                icon={'cloud'}
-                metricName={'GHG'}
-                userData={13}
-                communityData={24}
-                userTransportation={ this.props.userTransportation }
-                textStyle={textStyle}
-                metric={'pounds'}
-            >
-              <Grid columns={2} container>
-                <Grid.Column>
-                  <Grid.Row>
-                    <Image height="80%" width="80%" src="images/temp_graph.png" centered/>
-                  </Grid.Row>
-                </Grid.Column>
-                <Grid.Column>
-                  <Grid.Row>
-                    <Header textAlign='left' textStyle={textStyle} as={'h3'}>
-                      This is an explanatory text that explains stuff about this metric.
-                      Perhaps one could talk about how this metric has impact on the island of
-                      Hawaii or discuss a fun fact about
-                    </Header>
-                  </Grid.Row>
-                  <Grid.Row>
-                    <Divider/>
-                  </Grid.Row>
-                  <Grid.Row>
-                    <Header as={'h4'} style={textStyle} color='blue'>Learn more</Header>
-                  </Grid.Row>
-                </Grid.Column>
+            <Grid.Column>
+              <Grid container>
+                <Grid.Row>
+                  <Grid.Column verticalAlign='middle'>
+                    <SectionHeader textStyle={textStyle}>
+                      Modes of Transportation This Month
+                    </SectionHeader>
+                  </Grid.Column>
+                </Grid.Row>
+                <Grid.Row columns={2} stretched>
+                  <Grid.Column verticalAlign='middle'>
+                    <Segment>
+                      <Header style={textStyle} textAlign='center' as='h2'>You</Header>
+                      <TransportationMethodPieChart userTransportation={ this.userTransportDataFilter(this.props.userTransportation) } timeSpan={moment().subtract(1, 'months')}/>
+                    </Segment>
+                  </Grid.Column>
+                  <Grid.Column verticalAlign='middle'>
+                    <Segment>
+                      <Header style={textStyle} textAlign='center' as='h2'>Community</Header>
+                      <TransportationMethodPieChart userTransportation={ this.props.userTransportation } timeSpan={moment().subtract(1, 'months')}/>
+                    </Segment>
+                  </Grid.Column>
+                </Grid.Row>
               </Grid>
-            </ComparisonChart>
+            </Grid.Column>
+          </Grid.Row>
+          <Divider horizontal/>
+          <Grid.Row>
+            <Grid.Column>
+              <SectionHeader textStyle={textStyle} container>
+                Some of Your Personal Metric
+              </SectionHeader>
+            </Grid.Column>
           </Grid.Row>
 
           <Grid.Row>
-            <ComparisonChart
-                icon={'money bill alternate'}
-                metricName={'$ SAVED'}
-                userData={321}
-                communityData={167}
-                userTransportation={ this.props.userTransportation }
-                textStyle={textStyle}
-                metric={'dollars'}
-            >
-              <Grid columns={2} container>
-                <Grid.Column>
-                  <Grid.Row>
-                    <Image height="80%" width="80%" src="images/temp_bar.png" centered/>
-                  </Grid.Row>
-                </Grid.Column>
-                <Grid.Column>
-                  <Grid.Row>
-                    <Header textAlign='left' textStyle={textStyle} as={'h3'}>
-                      This is an explanatory text that explains stuff about this metric.
-                      Perhaps one could talk about how this metric has impact on the island of
-                      Hawaii or discuss a fun fact about
-                    </Header>
-                  </Grid.Row>
-                  <Grid.Row>
-                    <Divider/>
-                  </Grid.Row>
-                  <Grid.Row>
-                    <Header as={'h4'} style={textStyle} color='blue'>Learn more</Header>
-                  </Grid.Row>
-                </Grid.Column>
-              </Grid>
-            </ComparisonChart>
+            <Grid.Column>
+              <ComparisonChart
+                  icon={'cloud'}
+                  metricName={'GHG Saved'}
+                  userData={this.theUltimateCO2Calculator(data, moment().subtract(1, 'w'), 'user')}
+                  communityData={this.theUltimateCO2Calculator(data, moment().subtract(1, 'w'), 'average')}
+                  userTransportation={ this.props.userTransportation }
+                  textStyle={textStyle}
+                  metric={'pounds'}
+                  container
+              >
+                <Grid columns={2} container>
+                  <Grid.Column>
+                    <Grid.Row>
+                      <Image height="80%" width="80%" src="images/temp_graph.png" centered/>
+                    </Grid.Row>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Grid.Row>
+                      <Header textAlign='left' textStyle={textStyle} as={'h3'}>
+                        A greenhouse gas (sometimes abbreviated GHG) is a gas that absorbs and emits radiant energy
+                        within the thermal infrared range, causing the greenhouse effect. This gas is one of your main
+                        contribution to climate change, so the higher you reduce your carbon footprint, the better.
+                      </Header>
+                    </Grid.Row>
+                    <Grid.Row>
+                      <Divider/>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Header as={'a'} href={'https://www.epa.gov/ghgemissions/overview-greenhouse-gases'}
+                                style={textStyle} color='blue'>Learn more</Header>
+                    </Grid.Row>
+                  </Grid.Column>
+                </Grid>
+              </ComparisonChart>
+            </Grid.Column>
+          </Grid.Row>
+
+          <Grid.Row>
+            <Grid.Column>
+              <ComparisonChart
+                  icon={'money bill alternate'}
+                  metricName={'$ SAVED'}
+                  userData={this.moneySavedCalculator(data, moment().subtract(1, 'w'), 'user')}
+                  communityData={this.moneySavedCalculator(data, moment().subtract(1, 'w'), 'average')}
+                  userTransportation={ this.props.userTransportation }
+                  textStyle={textStyle}
+                  metric={'dollars'}
+                  container
+              >
+                <Grid columns={2} container>
+                  <Grid.Column>
+                    <Grid.Row>
+                      <Image height="80%" width="80%" src="images/temp_bar.png" centered/>
+                    </Grid.Row>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Grid.Row>
+                      <Header textAlign='left' textStyle={textStyle} as={'h3'}>
+                        An electric car will save you $632 per year on average over its gas-powered counterpart.
+                        Generally, it costs $1,117 per year to run a new gas-powered vehicle, and only $485 per
+                        year to run a new electric one.
+                      </Header>
+                    </Grid.Row>
+                    <Grid.Row>
+                      <Divider/>
+                    </Grid.Row>
+                    <Grid.Row>
+                      <Header as={'a'} href={'https://www.capitalone.com/bank/money-management/life-events/do-electric-cars-save-money/'}
+                              style={textStyle} color='blue'>Learn more</Header>
+                    </Grid.Row>
+                  </Grid.Column>
+                </Grid>
+              </ComparisonChart>
+            </Grid.Column>
           </Grid.Row>
 
           <Divider hidden/>
