@@ -4,7 +4,7 @@ import {Grid, Icon, Divider, Image, Segment, Header} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { withTracker } from 'meteor/react-meteor-data';
 import { UserTransportation } from '../../api/userData/UserTransportation';
-import TransportPieChartWithDates from '../components/TransportPieChartWithDates';
+import TransportPieChartWithDates from '../components/Visualization/TransportPieChartWithDates';
 
 /** A simple static component to render some text for the landing page. */
 class Dashboard extends React.Component {

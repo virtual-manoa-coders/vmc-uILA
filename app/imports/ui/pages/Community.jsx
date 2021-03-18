@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import { withTracker } from 'meteor/react-meteor-data';
 import moment from 'moment';
 import { UserTransportation } from '../../api/userData/UserTransportation';
-import TransportationMethodPieChart from '../components/TransportMethodPieChart';
-import ComparisonChart from '../components/CommunityPage/ComparisonChart';
+import TransportationMethodPieChart from '../components/Visualization/TransportMethodPieChart';
+import ComparisonChart from '../components/Visualization/ComparisonChart';
 
 const GHGperGallon = 19.59; // pounds per gallon
 const textStyle = { fontFamily: 'Comfortaa' };

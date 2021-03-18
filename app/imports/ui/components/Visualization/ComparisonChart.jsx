@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Header, Segment, Grid, Icon, Divider } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import TransportationMethodPieChart from '../TransportMethodPieChart';
+import TransportationMethodPieChart from './TransportMethodPieChart';
 
 const TextHeader = (props) => {
   const { textSize, textAlign, textStyle, textWeight, as, inverted, children } = props;
