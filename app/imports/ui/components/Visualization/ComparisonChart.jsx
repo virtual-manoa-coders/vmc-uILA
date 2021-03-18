@@ -75,7 +75,7 @@ ValueDifference.propTypes = {
 class ComparisonChart extends React.Component {
   render() {
     return (
-        <Grid>
+        <Grid container={this.props.container}>
           <Grid.Column>
             <Grid.Row>
               <Segment style={{ borderRadius: '20px 20px 0px 0px' }} size={'large'} inverted color='violet'>
@@ -126,6 +126,7 @@ ComparisonChart.propTypes = {
   userData: PropTypes.number.isRequired,
   communityData: PropTypes.number.isRequired,
   metric: PropTypes.string,
+  container: PropTypes.bool,
   children: PropTypes.any.isRequired,
 };
 

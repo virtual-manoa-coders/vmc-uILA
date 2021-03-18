@@ -9,6 +9,7 @@ import TransportationMethodPieChart from '../components/Visualization/TransportM
 import ComparisonChart from '../components/Visualization/ComparisonChart';
 import Section from '../components/Section';
 import { TextHeader } from '../components/Visualization/ComparisonChart';
+import { SectionHeader } from '../components/Visualization/SectionHeader';
 
 const GHGperGallon = 19.59; // pounds per gallon
 const textStyle = { fontFamily: 'Comfortaa' };
@@ -122,9 +123,9 @@ class Community extends React.Component {
             <Grid.Column>
               <Section
                   background='/images/background1.png'
-                  topMargin='4px'>
+                  topMargin='4px'
+                  childMargin='5vh'>
                 <Grid padded relaxed verticalAlign='middle'>
-                  <Divider horizontal/>
                   <Grid.Row>
                     <Grid.Column width={3} verticalAlign='middle'>
                       <Grid.Row>
@@ -181,9 +182,9 @@ class Community extends React.Component {
               <Grid container>
                 <Grid.Row>
                   <Grid.Column verticalAlign='middle'>
-                    <TextHeader textStyle={textStyle} inverted as='h1' textAlign='middle' textSize={30}>
+                    <SectionHeader textStyle={textStyle}>
                       Modes of Transportation This Month
-                    </TextHeader>
+                    </SectionHeader>
                   </Grid.Column>
                 </Grid.Row>
                 <Grid.Row columns={2} stretched>
@@ -206,79 +207,86 @@ class Community extends React.Component {
           <Divider horizontal/>
           <Grid.Row>
             <Grid.Column>
-              <TextHeader textStyle={textStyle} inverted as='h1' textAlign='middle' textSize={30}>
+              <SectionHeader textStyle={textStyle} container>
                 Some of Your Personal Metric
-              </TextHeader>
+              </SectionHeader>
             </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
-            <ComparisonChart
-                icon={'cloud'}
-                metricName={'GHG'}
-                userData={13}
-                communityData={24}
-                userTransportation={ this.props.userTransportation }
-                textStyle={textStyle}
-                metric={'pounds'}
-            >
-              <Grid columns={2} container>
-                <Grid.Column>
-                  <Grid.Row>
-                    <Image height="80%" width="80%" src="images/temp_graph.png" centered/>
-                  </Grid.Row>
-                </Grid.Column>
-                <Grid.Column>
-                  <Grid.Row>
-                    <Header textAlign='left' textStyle={textStyle} as={'h3'}>
-                      This is an explanatory text that explains stuff about this metric.
-                      Perhaps one could talk about how this metric has impact on the island of
-                      Hawaii or discuss a fun fact about
-                    </Header>
-                  </Grid.Row>
-                  <Grid.Row>
-                    <Divider/>
-                  </Grid.Row>
-                  <Grid.Row>
-                    <Header as={'h4'} style={textStyle} color='blue'>Learn more</Header>
-                  </Grid.Row>
-                </Grid.Column>
-              </Grid>
-            </ComparisonChart>
           </Grid.Row>
 
           <Grid.Row>
-            <ComparisonChart
-                icon={'money bill alternate'}
-                metricName={'$ SAVED'}
-                userData={321}
-                communityData={167}
-                userTransportation={ this.props.userTransportation }
-                textStyle={textStyle}
-                metric={'dollars'}
-            >
-              <Grid columns={2} container>
-                <Grid.Column>
-                  <Grid.Row>
-                    <Image height="80%" width="80%" src="images/temp_bar.png" centered/>
-                  </Grid.Row>
-                </Grid.Column>
-                <Grid.Column>
-                  <Grid.Row>
-                    <Header textAlign='left' textStyle={textStyle} as={'h3'}>
-                      This is an explanatory text that explains stuff about this metric.
-                      Perhaps one could talk about how this metric has impact on the island of
-                      Hawaii or discuss a fun fact about
-                    </Header>
-                  </Grid.Row>
-                  <Grid.Row>
-                    <Divider/>
-                  </Grid.Row>
-                  <Grid.Row>
-                    <Header as={'h4'} style={textStyle} color='blue'>Learn more</Header>
-                  </Grid.Row>
-                </Grid.Column>
-              </Grid>
-            </ComparisonChart>
+            <Grid.Column>
+              <ComparisonChart
+                  icon={'cloud'}
+                  metricName={'GHG'}
+                  userData={13}
+                  communityData={24}
+                  userTransportation={ this.props.userTransportation }
+                  textStyle={textStyle}
+                  metric={'pounds'}
+                  container
+              >
+                <Grid columns={2} container>
+                  <Grid.Column>
+                    <Grid.Row>
+                      <Image height="80%" width="80%" src="images/temp_graph.png" centered/>
+                    </Grid.Row>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Grid.Row>
+                      <Header textAlign='left' textStyle={textStyle} as={'h3'}>
+                        This is an explanatory text that explains stuff about this metric.
+                        Perhaps one could talk about how this metric has impact on the island of
+                        Hawaii or discuss a fun fact about
+                      </Header>
+                    </Grid.Row>
+                    <Grid.Row>
+                      <Divider/>
+                    </Grid.Row>
+                    <Grid.Row>
+                      <Header as={'h4'} style={textStyle} color='blue'>Learn more</Header>
+                    </Grid.Row>
+                  </Grid.Column>
+                </Grid>
+              </ComparisonChart>
+            </Grid.Column>
+          </Grid.Row>
+
+          <Grid.Row>
+            <Grid.Column>
+              <ComparisonChart
+                  icon={'money bill alternate'}
+                  metricName={'$ SAVED'}
+                  userData={321}
+                  communityData={167}
+                  userTransportation={ this.props.userTransportation }
+                  textStyle={textStyle}
+                  metric={'dollars'}
+                  container
+              >
+                <Grid columns={2} container>
+                  <Grid.Column>
+                    <Grid.Row>
+                      <Image height="80%" width="80%" src="images/temp_bar.png" centered/>
+                    </Grid.Row>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Grid.Row>
+                      <Header textAlign='left' textStyle={textStyle} as={'h3'}>
+                        This is an explanatory text that explains stuff about this metric.
+                        Perhaps one could talk about how this metric has impact on the island of
+                        Hawaii or discuss a fun fact about
+                      </Header>
+                    </Grid.Row>
+                    <Grid.Row>
+                      <Divider/>
+                    </Grid.Row>
+                    <Grid.Row>
+                      <Header as={'h4'} style={textStyle} color='blue'>Learn more</Header>
+                    </Grid.Row>
+                  </Grid.Column>
+                </Grid>
+              </ComparisonChart>
+            </Grid.Column>
           </Grid.Row>
 
           <Divider hidden/>
