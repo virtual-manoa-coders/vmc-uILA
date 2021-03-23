@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, Modal, Button, Header, Icon } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
-import { NavLink, withRouter, Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import moment from 'moment';
 
 /** Renders a single row in the List Transport Entries table. See pages/ListTransportEntries.jsx. */
@@ -23,10 +23,11 @@ class ListTransportEntry extends React.Component {
   }
 
   render() {
+
     const date = ` ${this.props.entry.date} `;
     const shortenedDate = moment(date).format('DD MMMM, YYYY');
     return (
-        <Table.Row>
+        <Table.Row className='entry-table'>
           <Table.Cell>{shortenedDate}</Table.Cell>
           <Table.Cell>{this.props.entry.transport}</Table.Cell>
           <Table.Cell>{this.props.entry.miles}</Table.Cell>
@@ -34,11 +35,11 @@ class ListTransportEntry extends React.Component {
             <Modal
                 closeIcon
                 open={this.state.open}
-                trigger={<Button basic size='tiny' color='red' icon='trash' />}
+                trigger={<Button basic size='tiny' color='red' icon='trash alternate' />}
                 onClose={() => this.setOpen(false)}
                 onOpen={() => this.setOpen(true)}
             >
-              <Header icon="trash" content="Delete Entry" />
+              <Header icon="trash alternate" content="Delete Entry" />
               <Modal.Content>
                 <p style={{ color: 'black' }}>
                   Are you sure you want to delete this entry?
