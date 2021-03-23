@@ -9,7 +9,6 @@ import Footer from '../components/Footer';
 import Landing from '../pages/Landing';
 import About from '../pages/About';
 import UserProfile from '../pages/UserProfile';
-import TransportDataEntry from '../pages/TransportDataEntry';
 import CarComparator from '../pages/CarComparator';
 import EditStuff from '../pages/EditStuff';
 import NotFound from '../pages/NotFound';
@@ -19,6 +18,8 @@ import Signout from '../pages/Signout';
 import Community from '../pages/Community';
 import Dashboard from '../pages/Dashboard';
 import Login from '../pages/Login';
+import ListTransportEntries from '../pages/ListTransportEntries';
+import EditTransportEntry from '../pages/EditTransportEntry';
 
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 class App extends React.Component {
@@ -37,7 +38,8 @@ class App extends React.Component {
               <ProtectedRoute path="/about" component={About}/>
                 <ProtectedRoute path="/community" component={Community}/>
                 <ProtectedRoute path='/dashboard' component={Dashboard}/>
-              <ProtectedRoute path="/log" component={TransportDataEntry}/>
+              <ProtectedRoute path="/list-transport-entries" component={ListTransportEntries}/>
+              <ProtectedRoute path="/edit-transport-entry/:_id" component={EditTransportEntry}/>
               <ProtectedRoute path="/comparator" component={CarComparator}/>
               <ProtectedRoute path="/edit/:_id" component={EditStuff}/>
               <Route component={NotFound}/>

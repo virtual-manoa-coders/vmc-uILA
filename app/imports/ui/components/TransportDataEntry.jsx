@@ -1,11 +1,12 @@
 import React from 'react';
-import { Grid, Header, Loader, Segment } from 'semantic-ui-react';
+import { Grid, Header, Loader, Segment, Button } from 'semantic-ui-react';
 import { AutoForm, ErrorsField, NumField, SelectField, SubmitField, DateField } from 'uniforms-semantic';
 import swal from 'sweetalert';
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 import { withTracker } from 'meteor/react-meteor-data';
+import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { UserTransportation } from '../../api/userData/UserTransportation';
 import { UserInfo } from '../../api/userData/UserInfo';
@@ -72,6 +73,8 @@ class TransportDataEntry extends React.Component {
                 <NumField name='miles' decimal={false}/>
                 <SubmitField value='Submit'/>
                 <ErrorsField/>
+                <Button as={NavLink} floated='right' activeClassName="active" exact to="/list-transport-entries" key='list-transport-entries'> View/Edit All Entries
+                </Button>
               </Segment>
             </AutoForm>
           </Grid.Column>
