@@ -73,7 +73,7 @@ class TransportDataEntry extends React.Component {
                 <NumField name='miles' decimal={false}/>
                 <SubmitField value='Submit'/>
                 <ErrorsField/>
-                <Button as={NavLink} floated='right' activeClassName="active" exact to="/list-transport-entries" key='list-transport-entries'> View/Edit All Entries
+                <Button id='view-trips' as={NavLink} activeClassName="active" exact to="/list-transport-entries" key='list-transport-entries'> View/Edit Your Trips
                 </Button>
               </Segment>
             </AutoForm>

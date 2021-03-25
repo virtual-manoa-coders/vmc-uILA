@@ -256,3 +256,13 @@ footer {
     color: black;
 }
 
+.edit {
+    color: black;
+}
+
+#view-trips {
+    border: none;
+    background: white;
+    float: right;
+}
+

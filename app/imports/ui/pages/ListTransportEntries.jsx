@@ -17,7 +17,7 @@ class ListTransportEntries extends React.Component {
   renderPage() {
     return (
         <Container>
-          <Header inverted as="h2" textAlign="center">Transport Entries</Header>
+          <Header inverted as="h2" textAlign="center">Your Trips</Header>
           <Table celled>
             <Table.Header>
               <Table.Row>
@@ -25,7 +25,7 @@ class ListTransportEntries extends React.Component {
                 <Table.HeaderCell>Transport</Table.HeaderCell>
                 <Table.HeaderCell>Miles</Table.HeaderCell>
                 <Table.HeaderCell>Delete</Table.HeaderCell>
-                <Table.HeaderCell>Edit</Table.HeaderCell>
+                <Table.HeaderCell className='edit'>Edit</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
