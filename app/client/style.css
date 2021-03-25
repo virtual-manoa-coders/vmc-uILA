@@ -256,7 +256,13 @@ footer {
     color: black;
 }
 
-.ui.basic.button.delete-button {
-    outline: none !important;
+.edit {
+    color: black;
+}
+
+#view-trips {
+    border: none;
+    background: white;
+    float: right;
 }
 
