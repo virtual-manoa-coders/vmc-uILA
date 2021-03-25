@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { Grid, Loader, Header, Segment } from 'semantic-ui-react';
 import swal from 'sweetalert';
 import {
@@ -30,17 +31,42 @@ const bridge = new SimpleSchema2Bridge(formSchema);
 
 /** Renders the Page for editing a single document. */
 class EditTransportEntry extends React.Component {
+  /** Initialize state fields. */
+  constructor(props) {
+    super(props);
+    this.state = {
+      date: 0,
+      transport: '',
+      miles: 0,
+      error: '',
+      redirectToReferer: false,
+    };
+  }
+
+  /** Update the form controls each time the user interacts with them. */
+  handleChange = (e, { name, value }) => {
+    this.setState({ [name]: value });
+  }
 
   /** On successful submit, insert the data. */
   submit(data) {
     const { date, transport, miles, _id } = data;
-    UserTransportation.collection.update(_id, { $set: { date, transport, miles } }, (error) => (error ?
-        swal('Error', error.message, 'error') :
-        swal('Success', 'Entry updated successfully', 'success')));
+    UserTransportation.collection.update(_id, { $set: { date, transport, miles } }, (error) => {
+      if (error) {
+        this.setState({ error: error.reason });
+      } else {
+        this.setState({ error: '', redirectToReferer: true });
+      }
+    });
   }
 
   /** If the subscription(s) have been received, render the page, otherwise show a loading icon. */
   render() {
+    const { from } = this.props.location.state || { from: { pathname: '/list-transport-entries' } };
+    // if correct authentication, redirect to from: page instead of signup screen
+    if (this.state.redirectToReferer) {
+      return <Redirect to={from}/>;
+    }
     return (this.props.ready) ? this.renderPage() : <Loader active>Getting data</Loader>;
   }
 
@@ -51,7 +77,8 @@ class EditTransportEntry extends React.Component {
           <Grid.Column>
             <AutoForm schema={bridge} onSubmit={data => this.submit(data)} model={this.props.doc}>
               <Segment>
-                <Header style={{ fontFamily: 'Comfortaa', color: '#2292b3' }} textAlign='center' as='h4'>Edit Transport Entry</Header>
+                <Header style={{ fontFamily: 'Comfortaa', color: '#2292b3' }} textAlign='center' as='h4'>Edit
+                  Transport Entry</Header>
                 <DateField id='date'
                            name='date'
                            max={new Date()}
@@ -73,6 +100,7 @@ class EditTransportEntry extends React.Component {
 EditTransportEntry.propTypes = {
   doc: PropTypes.object,
   userTransportation: PropTypes.array,
+  location: PropTypes.object,
   ready: PropTypes.bool.isRequired,
 };
 

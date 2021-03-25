@@ -256,3 +256,7 @@ footer {
     color: black;
 }
 
+.ui.basic.button.delete-button {
+    outline: none !important;
+}
+
