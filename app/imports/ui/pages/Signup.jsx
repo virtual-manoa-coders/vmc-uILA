@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
-import { Container, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
+import { Container, Form, FormInput, Grid, Header, Message, Segment } from 'semantic-ui-react';
 import { Accounts } from 'meteor/accounts-base';
 import { UserInfo } from '../../api/userData/UserInfo';
 
@@ -99,6 +99,47 @@ class Signup extends React.Component {
                       type="password"
                       onChange={this.handleChange}
                   />
+                  <FormInput
+                      id="form-input-control-first-name"
+                      label="First Name"
+                      placeholder="First Name"
+                    />
+                    <FormInput
+                        id="form-input-control-last-name"
+                        label="Last Name"
+                        placeholder="Last Name"
+                      />
+                    <FormInput
+                        id="form-input-control-dob"
+                        label="Date of Birth"
+                        icon="birthday"
+                        iconPosition="left"
+                        placeholder="MM/DD/YYYY"
+                      />
+                      <FormInput
+                          id="form-input-control-Address"
+                          label="Street Address"
+                          icon="address card"
+                          iconPosition="left"
+                          placeholder="1234 Street Address"
+                        />
+                        <FormInput
+                            id="form-input-control-state"
+                            label="State"
+                            icon="info"
+                            iconPosition="left"
+                            placeholder="State"
+                          />
+                          <FormInput
+                              id="form-input-control-city"
+                              label="City"
+                              placeholder="City"
+                            />
+                            <FormInput
+                                id="form-input-control-zip"
+                                label="Zip Code"
+                                placeholder="12345-1234"
+                              />
                   <Form.Button id="signup-form-submit" content="Submit"/>
                 </Segment>
               </Form>
