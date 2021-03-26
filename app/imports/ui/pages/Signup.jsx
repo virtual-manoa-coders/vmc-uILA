@@ -103,11 +103,13 @@ class Signup extends React.Component {
                       id="form-input-control-first-name"
                       label="First Name"
                       placeholder="First Name"
+                      onChange={this.handleChange}
                     />
                     <FormInput
                         id="form-input-control-last-name"
                         label="Last Name"
                         placeholder="Last Name"
+                        onChange={this.handleChange}
                       />
                     <FormInput
                         id="form-input-control-dob"
@@ -115,6 +117,7 @@ class Signup extends React.Component {
                         icon="birthday"
                         iconPosition="left"
                         placeholder="MM/DD/YYYY"
+                        onChange={this.handleChange}
                       />
                       <FormInput
                           id="form-input-control-Address"
@@ -122,6 +125,7 @@ class Signup extends React.Component {
                           icon="address card"
                           iconPosition="left"
                           placeholder="1234 Street Address"
+                          onChange={this.handleChange}
                         />
                         <FormInput
                             id="form-input-control-state"
@@ -129,16 +133,19 @@ class Signup extends React.Component {
                             icon="info"
                             iconPosition="left"
                             placeholder="State"
+                            onChange={this.handleChange}
                           />
                           <FormInput
                               id="form-input-control-city"
                               label="City"
                               placeholder="City"
+                              onChange={this.handleChange}
                             />
                             <FormInput
                                 id="form-input-control-zip"
                                 label="Zip Code"
                                 placeholder="12345-1234"
+                                onChange={this.handleChange}
                               />
                   <Form.Button id="signup-form-submit" content="Submit"/>
                 </Segment>
