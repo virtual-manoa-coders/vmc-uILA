@@ -10,6 +10,7 @@ import TransportationMethodPieChart from '../components/Visualization/TransportM
 import ComparisonChart from '../components/Visualization/ComparisonChart';
 import Section from '../components/Section';
 import { SectionHeader } from '../components/Visualization/SectionHeader';
+import CO2Graph from '../components/Visualization/CO2Graph';
 
 const GHGperGallon = 19.59; // pounds per gallon
 const gasPrice = 3.57;
@@ -198,6 +199,11 @@ class Community extends React.Component {
                   </Grid.Row>
                 </Grid>
               </Section>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column>
+              <CO2Graph/>
             </Grid.Column>
           </Grid.Row>
           <Divider horizontal/>
