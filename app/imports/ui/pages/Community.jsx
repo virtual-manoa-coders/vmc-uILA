@@ -127,12 +127,13 @@ class Community extends React.Component {
     const aggregateFuelSaved = this.aggregateIndividualFuelSaved(fuelSaved);
     if (type === 'user') {
       const userData = this.userTransportDataFilter(aggregateFuelSaved);
-      console.log(userData[0].fuelSaved);
+      if (userData.length === 0) {
+        return 'No Data';
+      }
       result = userData[0].fuelSaved;
     } else if (type === 'average') {
       const combinedFuelSaved = aggregateFuelSaved.map(doc => doc.fuelSaved).reduce((accumulator, currentValue) => accumulator + currentValue);
       const averageFuelSaved = combinedFuelSaved / aggregateFuelSaved.length;
-      console.log(averageFuelSaved);
       result = averageFuelSaved;
     }
 
@@ -203,7 +204,7 @@ class Community extends React.Component {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column>
-              <CO2Graph/>
+              <CO2Graph data={data}/>
             </Grid.Column>
           </Grid.Row>
           <Divider horizontal/>
