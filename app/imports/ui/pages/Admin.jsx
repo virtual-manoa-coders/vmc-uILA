@@ -4,27 +4,59 @@ import { withRouter } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
+import UserManagement from '../components/admin/UserManagement';
+import VehicleManagement from '../components/admin/VehicleManagement';
 
 /** A simple static component to render some text for the landing page. */
 class Admin extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentPageView: 'overview',
+        };
+
+        this.handleViewChange = this.handleViewChange.bind(this);
+    }
+
+    handleViewChange(view) {
+        this.setState({ currentPageView: view });
+    }
+
+    renderOverview() {
+        return (
+            <Grid id='landing-page' verticalAlign='middle' textAlign='center' container>
+                <Grid.Row>
+                    Welcome Administrator {this.props.currentUser} <br/>
+                </Grid.Row>
+                <Grid.Row>
+                    <Grid columns={'equal'} style={{ width: '100%' }}>
+                        <Grid.Column>
+                            <Button inverted fluid size={'massive'} onClick={() => this.handleViewChange('user')}>Manage Users</Button>
+                        </Grid.Column>
+                        <Grid.Column>
+                            <Button inverted fluid size={'massive'} onClick={() => this.handleViewChange('vehicle')}>Manage Vehicles</Button>
+                        </Grid.Column>
+                    </Grid>
+                </Grid.Row>
+            </Grid>
+        );
+    }
+
     render() {
         return (
             <Container>
-                <Grid id='landing-page' verticalAlign='middle' textAlign='center' container>
-                    <Grid.Row>
-                        Welcome Administrator {this.props.currentUser} <br/>
-                    </Grid.Row>
-                    <Grid.Row>
-                        <Grid columns={'equal'} style={{ width: '100%' }}>
-                            <Grid.Column>
-                                <Button inverted fluid size={'massive'}>Manage Users</Button>
-                            </Grid.Column>
-                            <Grid.Column>
-                                <Button inverted fluid size={'massive'}>Manage Vehicles</Button>
-                            </Grid.Column>
-                        </Grid>
-                    </Grid.Row>
-                </Grid>
+                {
+                    this.state.currentPageView === 'overview' &&
+                    this.renderOverview()
+                }
+                {
+                    this.state.currentPageView === 'user' &&
+                    <UserManagement/>
+                }
+                {
+                    this.state.currentPageView === 'vehicle' &&
+                    <VehicleManagement/>
+                }
             </Container>
         );
     }
@@ -36,9 +68,9 @@ Admin.propTypes = {
 };
 
 /** withTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker */
-const LandingContainer = withTracker(() => ({
+const AdminContainer = withTracker(() => ({
     currentUser: Meteor.user() ? Meteor.user().username : '',
 }))(Admin);
 
 /** Enable ReactRouter for this component. https://reacttraining.com/react-router/web/api/withRouter */
-export default withRouter(LandingContainer);
+export default withRouter(AdminContainer);
