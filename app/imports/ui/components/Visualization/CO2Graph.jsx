@@ -1,5 +1,4 @@
 import React from 'react';
-import { Header, Grid, Segment } from 'semantic-ui-react';
 import { Line } from '@reactchartjs/react-chart.js';
 import PropTypes from 'prop-types';
 import moment from 'moment';
@@ -69,21 +68,14 @@ const options = {
 
 // shows the graph of the user's historical CO2 data, from timeSpan to now
 // then parent component can change the time span; Week to Month to Year
-const CO2Graph = (props) => <Grid container>
-        <Grid.Row>
-          <Grid.Column>
-            <Segment>
-              <Line data={GraphData(props.data, 'DD/MM', 'weeks', 4)} options={options} />
-            </Segment>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>;
+const CO2Graph = (props) => <Line
+    data={GraphData(props.data, props.format, props.dateType, props.numberOfDataPoints)} options={options} />;
 
 CO2Graph.propTypes = {
   data: PropTypes.array.isRequired,
-  format: PropTypes.string,
-  dateType: PropTypes.string,
-  numberOfDataPoints: PropTypes.string,
+  format: PropTypes.string.isRequired,
+  dateType: PropTypes.string.isRequired,
+  numberOfDataPoints: PropTypes.number.isRequired,
 };
 
 export default CO2Graph;

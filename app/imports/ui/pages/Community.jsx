@@ -10,7 +10,8 @@ import TransportationMethodPieChart from '../components/Visualization/TransportM
 import ComparisonChart from '../components/Visualization/ComparisonChart';
 import Section from '../components/Section';
 import { SectionHeader } from '../components/Visualization/SectionHeader';
-import CO2Graph from '../components/Visualization/CO2Graph';
+import CO2GraphWithTimeRange from '../components/Visualization/CO2GraphWithTimeRange';
+import CO2Table from '../components/Visualization/CO2Table';
 
 const GHGperGallon = 19.59; // pounds per gallon
 const gasPrice = 3.57;
@@ -148,10 +149,10 @@ class Community extends React.Component {
           <Grid.Row>
             <Grid.Column>
               <Section
-                  background='/images/background1.png'
+                  background='/images/honolulu.jpg'
                   topMargin='4px'
                   childMargin='5vh'>
-                <Grid padded relaxed verticalAlign='middle'>
+                <Grid container verticalAlign='middle'>
                   <Grid.Row>
                     <Grid.Column width={3} verticalAlign='middle'>
                       <Grid.Row>
@@ -164,50 +165,19 @@ class Community extends React.Component {
                     </Grid.Column>
                     <Grid.Column width={13}>
                       <Header style={textStyle} textAlign='center' as='h2' inverted>CO2 Saved by Alternative Transport</Header>
-                      <Table padded basic definition id="community-table">
-                        <Table.Header>
-                          <Table.Row>
-                            <Table.HeaderCell />
-                            <Table.HeaderCell>You (Pounds)</Table.HeaderCell>
-                            <Table.HeaderCell>Average (Pounds)</Table.HeaderCell>
-                          </Table.Row>
-                        </Table.Header>
-
-                        <Table.Body>
-                          <Table.Row>
-                            <Table.Cell>Today</Table.Cell>
-                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'd'), 'user') }</Table.Cell>
-                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'd'), 'average')}</Table.Cell>
-                          </Table.Row>
-                          <Table.Row>
-                            <Table.Cell>Week</Table.Cell>
-                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'w'), 'user') }</Table.Cell>
-                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'w'), 'average') }</Table.Cell>
-                          </Table.Row>
-                          <Table.Row>
-                            <Table.Cell>Month</Table.Cell>
-                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'months'), 'user') }</Table.Cell>
-                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'months'), 'average') }</Table.Cell>
-                          </Table.Row>
-                          <Table.Row>
-                            <Table.Cell>Annual</Table.Cell>
-                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'years'), 'user') }</Table.Cell>
-                            <Table.Cell>{ this.theUltimateCO2Calculator(data, moment().subtract(1, 'years'), 'average') }</Table.Cell>
-                          </Table.Row>
-                        </Table.Body>
-                      </Table>
+                      <CO2GraphWithTimeRange data={data} textStyle={textStyle}/>
                     </Grid.Column>
                   </Grid.Row>
                 </Grid>
               </Section>
             </Grid.Column>
           </Grid.Row>
+          <Divider horizontal/>
           <Grid.Row>
             <Grid.Column>
-              <CO2Graph data={data}/>
+              <CO2Table data={data}/>
             </Grid.Column>
           </Grid.Row>
-          <Divider horizontal/>
           <Grid.Row>
             <Grid.Column>
               <Grid container>
