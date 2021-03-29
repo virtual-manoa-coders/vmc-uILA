@@ -22,14 +22,13 @@ import moment from 'moment';
   // Community already have a function for that, but
 
 // mabye make this universal by having a date type var and numbers of labels
-const DayLabels = (format) => {
+const DayLabels = (format, dateType, numberOfDataPoints) => {
   const result = [];
   const now = moment('23:59:59', 'hh:mm:ss'); // assigning now to something will assign a reference, not create new var
-  result[6] = now.format(format);
-  for (let i = 0; i < 6; i++) { // use number of label here - 1 for 0 based and -1 too for current time
-    result[5 - i] = now.subtract(1, 'day').format(format); // use date type here
+  result[numberOfDataPoints - 1] = now.format(format);
+  for (let i = 1; i < numberOfDataPoints; i++) { // use number of label here - 1 for 0 based and -1 too for current time
+    result[numberOfDataPoints - i - 1] = now.subtract(1, dateType).format(format); // use date type here
   }
-  console.log(result);
   return result;
 };
 
@@ -37,35 +36,45 @@ const DayLabels = (format) => {
   // for each dates, calculate the CO2 saved in the timeSpan; within the offset time by w/m/y to the given date
   // returns an array of CO2saved in the same number as the input
 
-const DataPoints = (data, dateType, numberOfDatesBack) => {
+const DataPoints = (data, dateType, numberOfDatesBack, calType) => {
   const result = [];
   const now = moment('23:59:59', 'hh:mm:ss');
+  // if dateType is days, set to '23:59:59', 'hh:mm:ss'
+  // else if dateType is weeks, set to last day of week
+  // else if dateType is months, set to last day of month
+  console.log(CO2CalculationTimespan(data, moment(now.toDate()).subtract(1, dateType), moment(now).toDate(), calType));
   for (let i = 0; i < numberOfDatesBack; i++) {
+    console.log(numberOfDatesBack - i - 1);
+    result[numberOfDatesBack - i - 1] = CO2CalculationTimespan(data, moment(now.toDate()).subtract(1, dateType), moment(now).toDate(), calType);
     console.log(now.toDate());
-    result[numberOfDatesBack - i - 1] = CO2CalculationTimespan(data, moment(now.toDate()).subtract(1, dateType), moment(now).toDate(), 'user');
     now.subtract(1, dateType);
+    console.log(now.toDate());
   }
   return result;
 };
 
-const data = {
-  labels: DayLabels('D/M'), // needs to be adjusted to the available date
-  datasets: [
-    {
-      label: 'Your Saved GHG',
-      data: [12, 19, 3, 5, 2, 0, 3], // needs to go over each date, can be 0
-      fill: true,
-      backgroundColor: 'rgb(255, 99, 132)',
-      borderColor: 'rgba(255, 99, 132, 0.2)',
-    },
-    {
-      label: 'Average Saved GHG',
-      data: [10, 32, 15, 23, 17, 36, 14],
-      fill: true,
-      backgroundColor: 'rgb(150, 99, 132)',
-      borderColor: 'rgba(255, 99, 132, 0.2)',
-    },
-  ],
+const GraphData = (data, format, dateType, numberOfDataPoints) => {
+  const dataObject = {
+    labels: DayLabels(format, dateType, numberOfDataPoints), // needs to be adjusted to the available date
+    datasets: [
+      {
+        label: 'Your Saved GHG',
+        data: DataPoints(data, dateType, numberOfDataPoints, 'user'), // needs to go over each date, can be 0
+        fill: true,
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 1)',
+      },
+      {
+        label: 'Community Saved GHG',
+        data: DataPoints(data, dateType, numberOfDataPoints, 'average'),
+        fill: true,
+        backgroundColor: 'rgba(150, 99, 132, 0.2)',
+        borderColor: 'rgba(150, 99, 132, 1)',
+      },
+    ],
+  };
+
+  return dataObject;
 };
 
 const options = {
@@ -84,18 +93,18 @@ const options = {
 // then parent component can change the time span; Week to Month to Year
 const CO2Graph = (props) => {
   const now = moment('23:59:59', 'hh:mm:ss');
-  console.log(now.format('DD/MM'));
-  now.subtract(1, 'days');
-  console.log(now.format('DD/MM'));
-  console.log(moment(now.toDate()).subtract(1,'days'));
-  console.log(CO2CalculationTimespan(props.data, moment().subtract(1, 'years'), moment().subtract(1, 'months'), 'user'));
-  console.log(DataPoints(props.data, 'days', 9));
+  // console.log(now.format('DD/MM'));
+  // now.subtract(1, 'days');
+  // console.log(now.format('DD/MM'));
+  // console.log(moment(now.toDate()).subtract(1,'days'));
+  // console.log(CO2CalculationTimespan(props.data, moment().subtract(1, 'years'), moment().subtract(1, 'months'), 'user'));
+  console.log(DataPoints(props.data, 'days', 7, 'average'));
   return (
       <Grid container>
         <Grid.Row>
           <Grid.Column>
             <Segment>
-              <Line data={data} options={options} />
+              <Line data={GraphData(props.data, 'D/M/YYYY', 'weeks', 7)} options={options} />
             </Segment>
           </Grid.Column>
         </Grid.Row>
