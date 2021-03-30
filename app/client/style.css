@@ -2,15 +2,38 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
 
 body, html, .table {
-  background-color: #5ac2e0!important;
+  background-color: #EFF1F6!important;
   color: white!important;
   font-family: 'Comfortaa', cursive!important;
 }
 
-.menu {
-  background-color: #41337A;
-  color: white!important;
-  font-family: 'Comfortaa', cursive!important;
+/*.menu {*/
+/*  background-color: #54678F;*/
+/*  color: white!important;*/
+/*  font-family: 'Comfortaa', cursive!important;*/
+/*}*/
+
+.menu.borderless.navbar {
+    background-color: transparent!important;
+    box-shadow: none;
+    border-bottom: none !important;
+    height: 80px;
+    display: flex;
+    position: sticky;
+    z-index: 999;
+    top: 0;
+    color: white;
+
+}
+
+/*#54678F {*/
+/*    transition: color 1s ease 0s;*/
+/*}*/
+
+.menu.borderless.navbar.solid {
+    background-color: #54678F;
+    box-shadow: none;
+    border-bottom: none !important;
 }
 
 .about-header {
@@ -117,16 +140,21 @@ body, html, .table {
   to {opacity: 1;}
 }
 
-#myVideo {
-  position: relative;
-  right: 0;
-  left: 0;
-  margin-left: -20px;
-  margin-top: 4px;
-  min-width: 110%;
-  min-height: 30%;
-}
+/*#myVideo {*/
+/*  position: relative;*/
+/*  right: 0;*/
+/*  left: 0;*/
+/*  margin-left: -20px;*/
+/*  margin-top: 4px;*/
+/*  min-width: 110%;*/
+/*  min-height: 30%;*/
+/*}*/
 
+#myVideo {
+    background: no-repeat center center fixed;
+    background-size: cover;
+    margin-top: -25px;
+}
 .signUp {
   font-size: 48px;
   margin-bottom: 15px;
@@ -142,14 +170,16 @@ body, html, .table {
 
 .description-section {
   font-size: 24px;
+  color: black;
   width: 100%;
   height: 15em;
-  margin-top: 50px!important;
+  margin-top: 7.0em!important;
 }
 
 .description-section .description-header {
   text-align: center;
   font-size: 40px;
+  color: black;
 }
 
 .trial-converter {
