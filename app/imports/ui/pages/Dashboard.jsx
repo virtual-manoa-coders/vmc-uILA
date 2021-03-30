@@ -7,6 +7,7 @@ import { UserTransportation } from '../../api/userData/UserTransportation';
 import TransportPieChartWithDates from '../components/Visualization/TransportPieChartWithDates';
 import { UserInfo } from '../../api/userData/UserInfo';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
+import TransportDataEntry from '../components/TransportDataEntry';
 
 /** A simple static component to render some text for the landing page. */
 class Dashboard extends React.Component {
@@ -79,6 +80,7 @@ class Dashboard extends React.Component {
               <Grid.Column>
                 <Segment>
                   <Header style={{ fontFamily: 'Comfortaa' }} textAlign='center' as='h2'>Log Your Commute</Header>
+                  <TransportDataEntry />
                 </Segment>
               </Grid.Column>
               <Grid.Column>
