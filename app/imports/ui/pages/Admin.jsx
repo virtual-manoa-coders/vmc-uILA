@@ -6,6 +6,9 @@ import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import UserManagement from '../components/admin/UserManagement';
 import VehicleManagement from '../components/admin/VehicleManagement';
+import { UserInfo } from '../../api/userData/UserInfo';
+import { UserTransportation } from '../../api/userData/UserTransportation';
+import { UserVehicles } from '../../api/userVehicles/UserVehicles';
 
 /** A simple static component to render some text for the landing page. */
 class Admin extends React.Component {
@@ -15,10 +18,13 @@ class Admin extends React.Component {
             currentPageView: 'overview',
         };
 
+        console.log(props);
+
         this.handleViewChange = this.handleViewChange.bind(this);
     }
 
     handleViewChange(view) {
+        console.log(this.props);
         this.setState({ currentPageView: view });
     }
 
@@ -65,12 +71,23 @@ class Admin extends React.Component {
 /** Declare the types of all properties. */
 Admin.propTypes = {
     currentUser: PropTypes.string,
+    userTransportation: PropTypes.array.isRequired,
+    userVehicles: PropTypes.array.isRequired,
+    users: PropTypes.array.isRequired,
+    ready: PropTypes.bool.isRequired,
 };
 
 /** withTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker */
-const AdminContainer = withTracker(() => ({
-    currentUser: Meteor.user() ? Meteor.user().username : '',
-}))(Admin);
-
-/** Enable ReactRouter for this component. https://reacttraining.com/react-router/web/api/withRouter */
-export default withRouter(AdminContainer);
+export default withTracker(() => {
+    // Get access to UserInfo documents.
+    const sub1 = Meteor.subscribe(UserInfo.adminPublicationName);
+    const sub2 = Meteor.subscribe(UserTransportation.adminPublicationName);
+    const sub3 = Meteor.subscribe(UserVehicles.adminPublicationName);
+    return {
+        currentUser: Meteor.user() ? Meteor.user().username : '',
+        userVehicles: UserVehicles.collection.find({}).fetch(),
+        userTransportation: UserTransportation.collection.find({}).fetch(),
+        users: UserInfo.collection.find({}).fetch(),
+        ready: sub1.ready() && sub2.ready() && sub3.ready(),
+    };
+})(Admin);
