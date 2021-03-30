@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import { UserInfo } from '../../api/userData/UserInfo';
 import { UserTransportation } from '../../api/userData/UserTransportation';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
-import TransportDataEntry from '../components/TransportDataEntry';
+import TravelPatterns from '../components/Visualization/TravelPatterns';
 
 /** Create a schema to specify the structure of the data to appear in the form. */
 const formSchema = new SimpleSchema({
@@ -22,7 +22,10 @@ const formSchema = new SimpleSchema({
       '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'] },
   carMPG: { type: Number, label: 'Average miles per gallon', optional: true },
 });
-
+/*
+TODO:
+-add the function to calculate what modes of transportation the user has taken
+ */
 /** Renders the Profile page */
 class UserProfile extends React.Component {
 
@@ -86,7 +89,11 @@ class UserProfile extends React.Component {
               </Card>
             </Grid.Column>
             <Grid.Column verticalAlign='middle'>
-              <TransportDataEntry carMPG={userCar.carMPG} userTransportation={this.props.userTransportation}/>
+              <Card fluid>
+                <Card.Content>
+                  <TravelPatterns />
+                </Card.Content>
+              </Card>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
