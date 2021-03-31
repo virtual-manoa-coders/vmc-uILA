@@ -1,71 +1,63 @@
 import React from 'react';
-import { Header, Table, Card } from 'semantic-ui-react';
+import { Grid, Card } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
+import { UserInfo } from '../../../api/userData/UserInfo';
 
 /** A simple static component to render some text for the landing page. */
 class UserManagement extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+        };
+
+        console.log(props);
+    }
+
+    deleteUser(user) {
+        UserInfo.collection.remove({ _id: user._id });
+    }
+
     render() {
         return (
-            <Card>
+            <Card className={'user-management'} fluid>
                 <Card.Content>
-                    <Table basic='very' celled collapsing>
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell>Employee</Table.HeaderCell>
-                                <Table.HeaderCell>Correct Guesses</Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
-
-                        <Table.Body>
-                            <Table.Row>
-                                <Table.Cell>
-                                    <Header as='h4' image>
-                                        <Header.Content>
-                                            Lena
-                                            <Header.Subheader>Human Resources</Header.Subheader>
-                                        </Header.Content>
-                                    </Header>
-                                </Table.Cell>
-                                <Table.Cell>22</Table.Cell>
-                            </Table.Row>
-                            <Table.Row>
-                                <Table.Cell>
-                                    <Header as='h4' image>
-                                        <Header.Content>
-                                            Matthew
-                                            <Header.Subheader>Fabric Design</Header.Subheader>
-                                        </Header.Content>
-                                    </Header>
-                                </Table.Cell>
-                                <Table.Cell>15</Table.Cell>
-                            </Table.Row>
-                            <Table.Row>
-                                <Table.Cell>
-                                    <Header as='h4' image>
-                                        <Header.Content>
-                                            Lindsay
-                                            <Header.Subheader>Entertainment</Header.Subheader>
-                                        </Header.Content>
-                                    </Header>
-                                </Table.Cell>
-                                <Table.Cell>12</Table.Cell>
-                            </Table.Row>
-                            <Table.Row>
-                                <Table.Cell>
-                                    <Header as='h4' image>
-                                        <Header.Content>
-                                            Mark
-                                            <Header.Subheader>Executive</Header.Subheader>
-                                        </Header.Content>
-                                    </Header>
-                                </Table.Cell>
-                                <Table.Cell>11</Table.Cell>
-                            </Table.Row>
-                        </Table.Body>
-                    </Table>
+                    <Grid>
+                        <Grid.Row columns={'equal'}>
+                            <Grid.Column>Name</Grid.Column>
+                            <Grid.Column>Email</Grid.Column>
+                            <Grid.Column>CO2 Reduced</Grid.Column>
+                            <Grid.Column>VMT Reduced</Grid.Column>
+                            <Grid.Column>Fuel Saved</Grid.Column>
+                            <Grid.Column>Action</Grid.Column>
+                        </Grid.Row>
+                        {
+                            this.props.userList.map((user, index) => (
+                                <Grid.Row columns={'equal'} key={index}>
+                                    <Grid.Column>
+                                        {user.name}
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        {user.email}
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        {user.CO2Reduced}
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        {user.VMTReduced}
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        {user.fuelSaved}
+                                    </Grid.Column>
+                                    <Grid.Column onClick={() => this.deleteUser(user)}>
+                                        x
+                                    </Grid.Column>
+                                </Grid.Row>
+                            ))
+                        }
+                    </Grid>
                 </Card.Content>
             </Card>
         );
@@ -75,6 +67,7 @@ class UserManagement extends React.Component {
 /** Declare the types of all properties. */
 UserManagement.propTypes = {
     currentUser: PropTypes.string,
+    userList: PropTypes.array.isRequired,
 };
 
 /** withTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker */

@@ -30,7 +30,7 @@ class Admin extends React.Component {
 
     renderOverview() {
         return (
-            <Grid id='landing-page' verticalAlign='middle' textAlign='center' container>
+            <Grid id='admin-page' verticalAlign='middle' textAlign='center' container>
                 <Grid.Row>
                     Welcome Administrator {this.props.currentUser} <br/>
                 </Grid.Row>
@@ -57,7 +57,7 @@ class Admin extends React.Component {
                 }
                 {
                     this.state.currentPageView === 'user' &&
-                    <UserManagement/>
+                    <UserManagement userList={this.props.users}/>
                 }
                 {
                     this.state.currentPageView === 'vehicle' &&
