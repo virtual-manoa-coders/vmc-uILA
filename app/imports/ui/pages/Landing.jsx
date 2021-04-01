@@ -45,39 +45,40 @@ class Landing extends React.Component {
               <Grid.Row id="text4">
                 What is your contribution?
               </Grid.Row>
+              <Grid.Row>
+                {
+                  this.props.currentUser &&
+                  <Grid.Column centered verticalAlign='middle' className='get-started'>
+                      <Header as='h2' inverted>GET STARTED</Header>
+                      <Button className='landingButton' inverted as={NavLink} exact to="/dashboard" key='dashboard'>Go to Dashboard</Button>
+                  </Grid.Column>
+                    }
+                  {
+                    !this.props.currentUser &&
+                    <div>
+                      <Grid className='signUp' centered columns={4}>
+                        <Grid.Column textAlign='center'>
+                          <div>
+                            Already a Member?
+                          </div>
+                          <Button className='landingButton' inverted as={NavLink} exact to="/signin" key='login'>Login</Button>
+                        </Grid.Column>
+                        <Grid.Column textAlign='center'>
+                          <div>
+                            Not a Member?
+                          </div>
+                          <Button className='landingButton' inverted as={NavLink} exact to="/signup" key='signup'>Sign up</Button>
+                        </Grid.Column>
+                      </Grid>
+                    </div>
+                  }
+              </Grid.Row>
             </Grid>
           </div>
-             {
-                !this.props.currentUser &&
-                <div>
-                  <Grid className='signUp' centered columns={4}>
-                    <Grid.Column textAlign='center'>
-                      <div>
-                        Already a Member?
-                      </div>
-                      <Button inverted as={NavLink} exact to="/signin" key='login'>Login</Button>
-                    </Grid.Column>
-                    <Grid.Column textAlign='center'>
-                      <div>
-                        Not a Member?
-                      </div>
-                      <Button inverted as={NavLink} exact to="/signup" key='signup'>Sign up</Button>
-                    </Grid.Column>
-                  </Grid>
-                </div>
-              }
-              {
-                this.props.currentUser &&
-                <div className='get-started'>
-                  <div>
-                    <Header as='h2' inverted>GET STARTED</Header>
-                    </div>
-                      <Button className='landingButton' inverted as={NavLink} exact to="/dashboard" key='dashboard'>Go to Dashboard</Button>
-                </div>
-              }
+
           <Grid className='description-section' textAlign='left'>
             <Grid.Row className='description-header'>
-              What does Project Malama offer
+              What does Project Malama offer?
             </Grid.Row>
             <Grid.Row>
               <Grid.Column width={2}>
