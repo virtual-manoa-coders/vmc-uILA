@@ -2,13 +2,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
 
 body, html, .table {
-  background-color: #5ac2e0!important;
-  color: white!important;
+  color: #2E303E!important;
   font-family: 'Comfortaa', cursive!important;
 }
 
 .menu {
-  background-color: #41337A;
+  background-color: #54678F;
   color: white!important;
   font-family: 'Comfortaa', cursive!important;
 }
@@ -28,21 +27,21 @@ body, html, .table {
 .about-font {
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
-  color: white;
+  color: #2E303E;
   text-align: center;
 }
 
 .team {
   text-align: center;
   font-family: 'Comfortaa', sans-serif;
-  color: white;
+  color: #2E303E;
 }
 
 /* Landing Page CSS */
 
 #landing-page {
   width: 100%!important;
-  color: white;
+  color: #54678F;
 }
 
 .banner-image-row button {
@@ -183,11 +182,11 @@ body, html, .table {
 }
 
 #community-table {
-  border: 5px solid #fff;
+  border: 5px solid #54678F;
 }
 
 #community-table th, #community-table td {
-  color: #fff!important;
+  color: #2E303E!important;
   font-size: 25px;
 }
 
@@ -198,8 +197,6 @@ body, html, .table {
 #space-row {
   padding-top:100px;
 }
-
-
 
 .header {
     padding-top: 400px;
@@ -237,7 +234,7 @@ body, html, .table {
     padding-bottom: 50px;
     font-size: 1em;
     font-weight: bold;
-    color: #41337A;
+    color: #54678F;
     text-align: center;
 }
 
@@ -248,11 +245,76 @@ body, html, .table {
 }
 
 footer {
-    background-color: #41337A;
+    background-color: #54678F;
+    color: white!important;
 }
 
 .entry-table {
     background-color: white;
     color: black;
 }
+
+.edit {
+    color: black;
+}
+
+#view-trips {
+    border: none;
+    background: white;
+    float: right;
+}
+
+/* Admin Page CSS */
+#admin-page button {
+    height: 16em;
+    margin-top: 0.5em;
+}
+
+.user-management {
+    color: black;
+}
+
+.user-management .row {
+    border-bottom: 1px solid #efefef;
+}
+
+.user-management .row:last-child {
+    border-bottom: none;
+}
+
+.user-management .column {
+    word-break: break-word;
+}
+
+.auto-margin {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.comparator-text {
+    font-size: 36px;
+    height: auto;
+    line-height: 36px;
+    color: white;
+    margin-bottom: 10px;
+    font-family: 'Comfortaa', sans-serif;
+}
+
+/**
+ * Styling for the Sign Up Page
+ */
+
+/**Background Image**/
+#background-sign-up {
+  background-image: url("/images/hawaii.png");
+  height: 100% !important;
+  width: 100%!important;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+
+
+
 

@@ -23,7 +23,6 @@ class ListTransportEntry extends React.Component {
   }
 
   render() {
-
     const date = ` ${this.props.entry.date} `;
     const shortenedDate = moment(date).format('DD MMMM, YYYY');
     return (
@@ -35,22 +34,22 @@ class ListTransportEntry extends React.Component {
             <Modal
                 closeIcon
                 open={this.state.open}
-                trigger={<Button basic size='tiny' color='red' icon='trash alternate' />}
+                trigger={<Button basic size='tiny' color='black' icon='trash alternate' />}
                 onClose={() => this.setOpen(false)}
                 onOpen={() => this.setOpen(true)}
             >
-              <Header icon="trash alternate" content="Delete Entry" />
+              <Header icon='trash alternate' content='Delete Entry' />
               <Modal.Content>
                 <p style={{ color: 'black' }}>
                   Are you sure you want to delete this entry?
                 </p>
               </Modal.Content>
               <Modal.Actions>
-                <Button color="red" onClick={() => this.setOpen(false)}>
-                  <Icon name="x" /> No
+                <Button color='red' onClick={() => this.setOpen(false)}>
+                  <Icon name='x' /> No
                 </Button>
-                <Button color="green" onClick={() => this.removeEntry(this.props.entry._id)}>
-                  <Icon name="checkmark" /> Yes
+                <Button color='green' onClick={() => this.removeEntry(this.props.entry._id)}>
+                  <Icon name='checkmark' /> Yes
                 </Button>
               </Modal.Actions>
             </Modal>
