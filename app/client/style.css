@@ -6,10 +6,17 @@ body, html, .table {
   font-family: 'Comfortaa', cursive!important;
 }
 
-.menu {
-  background-color: #54678F;
-  color: white!important;
-  font-family: 'Comfortaa', cursive!important;
+.menu.borderless.navbar {
+    background-color: transparent!important;
+    box-shadow: none;
+    border-bottom: none !important;
+    height: 80px;
+    display: flex;
+    position: sticky;
+    z-index: 999;
+    top: 0;
+    color: white;
+
 }
 
 .about-header {
