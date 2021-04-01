@@ -20,6 +20,7 @@ import Dashboard from '../pages/Dashboard';
 import Login from '../pages/Login';
 import ListTransportEntries from '../pages/ListTransportEntries';
 import EditTransportEntry from '../pages/EditTransportEntry';
+import ResetPassword from '../pages/ResetPassword';
 
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 class App extends React.Component {
@@ -32,7 +33,8 @@ class App extends React.Component {
                 <Route path="/login" component={Login}/>
                 <Route exact path="/" component={Landing}/>
               <Route path="/signin" component={Signin}/>
-              <Route path="/signup" component={Signup}/>
+                <Route path="/resetpassword" component={ResetPassword}/>
+                <Route path="/signup" component={Signup}/>
               <Route path="/signout" component={Signout}/>
               <ProtectedRoute path="/user-profile" component={UserProfile}/>
               <ProtectedRoute path="/about" component={About}/>
