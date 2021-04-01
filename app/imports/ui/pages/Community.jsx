@@ -33,7 +33,7 @@ class Community extends React.Component {
                   childMargin='5vh'>
                 <Grid container verticalAlign='middle'>
                   <Grid.Row>
-                    <Grid.Column width={3} verticalAlign='middle'>
+                    <Grid.Column className='comparator-text' width={5} verticalAlign='middle'>
                       <Grid.Row>
                         This is you vs. the average person in your city.
                       </Grid.Row>
@@ -42,7 +42,7 @@ class Community extends React.Component {
                         You are doing x% better than the average person in your city.
                       </Grid.Row>
                     </Grid.Column>
-                    <Grid.Column width={13}>
+                    <Grid.Column width={10}>
                       <Header style={textStyle} textAlign='center' as='h2' inverted>CO2 Saved by Alternative Transport</Header>
                       <CO2GraphWithTimeRange data={data}/>
                     </Grid.Column>

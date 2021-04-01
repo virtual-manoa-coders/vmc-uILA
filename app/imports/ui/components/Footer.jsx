@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 /** The Footer appears at the bottom of every page. Rendered by the App Layout component. */
 export default class Footer extends React.Component {
   render() {
-    const menuStyle = { marginBottom: '10px', backgroundColor: '#41337A', padding: '5em 0em' };
+    const menuStyle = { marginBottom: '10px', backgroundColor: '#54678F', padding: '5em 0em', color: 'white' };
    return (
         <Segment style={menuStyle}>
         <Container >
