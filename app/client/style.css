@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&Merriweather:wght@500&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
 
 body, html, .table {
   color: #2E303E!important;
-  font-family: 'Comfortaa', cursive!important;
+  font-family: 'Merriweather';
 }
 
 .menu.borderless.navbar {
@@ -22,7 +22,7 @@ body, html, .table {
 .about-header {
   font-size: 2.0em;
   font-weight: 900;
-  font-family: 'Comfortaa', sans-serif;
+  font-family: 'Merriweather', sans-serif;
 }
 
 
@@ -208,7 +208,7 @@ body, html, .table {
 .header {
     padding-top: 400px;
     padding-bottom: 400px;
-    font-family: 'Comfortaa', sans-serif;
+    font-family: 'Merriweather', sans-serif;
     color: white;
 }
 
@@ -218,11 +218,11 @@ body, html, .table {
 }
 
 .h2 {
-    font-family: 'Comfortaa', sans-serif;
+    font-family: 'Merriweather', sans-serif;
 }
 
 .profile-card {
-    font-family: 'Comfortaa', sans-serif;
+    font-family: 'Merriweather', sans-serif;
     font-size: 0.85em;
     font-weight: 700;
     text-align: left;
@@ -304,6 +304,9 @@ footer {
     line-height: 36px;
     color: white;
     margin-bottom: 10px;
-    font-family: 'Comfortaa', sans-serif;
+    font-family: 'Merriweather', sans-serif;
 }
 
+#page-style {
+    padding-top: 60px;
+}

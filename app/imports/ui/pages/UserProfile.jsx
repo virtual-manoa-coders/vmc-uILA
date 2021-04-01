@@ -62,8 +62,8 @@ class UserProfile extends React.Component {
     // operate under assumption that the car exists, error otherwise (WIP)
     const userCar = this.props.userVehicles.filter(car => car._id === profile.carID)[0];
     return (
-        <Grid container stackable centered verticalAlign='middle' style={pageStyle}>
-          <Header style={{ fontFamily: 'Comfortaa', fontSize: '2.0em' }} as="h2" textAlign="center" inverted>Aloha, {profile.name} </Header>
+        <Grid id='page-style' container stackable centered verticalAlign='middle' style={pageStyle}>
+          <Header style={{ fontFamily: 'Merriweather', fontSize: '2.0em' }} as="h2" textAlign="center" inverted>Aloha, {profile.name} </Header>
           <Grid.Row columns={2} height='equal' width='equal'>
             <Grid.Column verticalAlign='middle'>
               <Card fluid>
@@ -103,7 +103,7 @@ class UserProfile extends React.Component {
               }
               <AutoForm model={profile} schema={bridge} onSubmit={data => this.submit(data)}>
                 <Segment>
-                  <Header style={{ fontFamily: 'Comfortaa', color: '#2292b3' }} textAlign='center' as='h4'>Edit Your Information</Header>
+                  <Header style={{ color: '#2292b3' }} textAlign='center' as='h3'>Edit Your Information</Header>
                   <Form.Group widths='equal'>
                     <TextField id='name' name='name' showInlineError={true} placeholder={'Your name'}/>
                     <TextField id='image' name='image' showInlineError={true} placeholder={'Image URL'}/>

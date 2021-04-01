@@ -15,7 +15,7 @@ import CO2Table from '../components/Visualization/CO2Table';
 import { CO2CalculationTimespan, userTransportDataFilter, moneySavedCalculator, CO2CalculationTypeEnum } from '../components/Visualization/Functions';
 import CommunityWhatIfCO2 from '../components/Visualization/CommunityWhatIfCO2';
 
-const textStyle = { fontFamily: 'Comfortaa' };
+const textStyle = { fontFamily: 'Merriweather' };
 
 /** A simple static component to render some text for the landing page. */
 class Community extends React.Component {
@@ -24,12 +24,12 @@ class Community extends React.Component {
     const data = this.props.userTransportation;
 
     return (
-        <Grid verticalAlign='middle' textAlign='center'>
+        <Grid id='page-style' verticalAlign='middle' textAlign='center'>
           <Grid.Row>
             <Grid.Column>
               <Section
                   background='/images/honolulu.jpg'
-                  topMargin='4px'
+                  topMargin='15px'
                   childMargin='5vh'>
                 <Grid container verticalAlign='middle'>
                   <Grid.Row>

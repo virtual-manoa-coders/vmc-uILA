@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Header, Image } from 'semantic-ui-react';
+import { Container, Grid, Header, Image } from 'semantic-ui-react';
 import Tilt from 'react-parallax-tilt';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -28,7 +28,7 @@ export default class CarComparator extends React.Component {
     };
 
     return (
-        <div>
+        <Container id='page-style'>
           <Header as="h1" textAlign='center'>Gasoline vs Electric/Hybrid</Header>
           <Grid style={gridStyle} textAlign='center' container columns={2} padded='vertically'>
             <Grid.Column floated='left' width='7' >
@@ -117,7 +117,7 @@ export default class CarComparator extends React.Component {
             {/*  </div> */}
             {/* </Grid.Column> */}
           </Grid>
-        </div>
+        </Container>
     );
   }
 }
