@@ -1,14 +1,14 @@
 import { Meteor } from 'meteor/meteor';
 
-const GHGperGallon = 19.59;
-
 /*
- * Litte note on making a standalone function:
+ * A little note on making a standalone function:
  * - Export all functions (Even the internal ones)
  * - Don't use this.function()
  * - Var name can't be the same as the another function in the file
- *
  */
+
+export const GHGperGallon = 19.59;
+export const gasPrice = 3.57;
 
 /**
  * Calculate the fuel saved
@@ -83,6 +83,13 @@ export const CO2CalculationTypeEnum = {
   user: 'user',
 };
 
+/**
+ * Calculate the number of CO2 reduced either from one user or the averaged of the community
+ * @param data The fetched userTransport collection; i.e. data = this.props.userTransportation
+ * @param timeSpan A Date object to specify the time span for calculation; i.e. timespan = moment().subtract(1, 'y')
+ * @param type The types are: user (for one user) or average (the community average)
+ * @returns a number pounds of CO2 reduced
+ */
 export const CO2CalculationTimespan = (data, timeStart, timeEnd, type) => {
   const timeNow = timeEnd || Date.now();
   const afterDateAndCar = data.filter(doc => doc.date > timeStart && doc.date < timeNow && doc.transport !== 'Car');
@@ -107,3 +114,26 @@ export const CO2CalculationTimespan = (data, timeStart, timeEnd, type) => {
   }
   return result;
 };
+
+export const moneySavedCalculator = (data, timeSpan, type) => {
+  let result;
+  const afterDateAndCar = data.filter(doc => doc.date > timeSpan && doc.transport !== 'Car');
+  if (afterDateAndCar.length === 0) {
+    return 'No Data';
+  }
+  const fuelSavedVar = calculateFuelSavedForAllUsers(afterDateAndCar);
+  const aggregateFuelSaved = aggregateIndividualFuelSaved(fuelSavedVar);
+  if (type === CO2CalculationTypeEnum.user) {
+    const userData = userTransportDataFilter(aggregateFuelSaved);
+    if (userData.length === 0) {
+      return 'No Data';
+    }
+    result = userData[0].fuelSaved;
+  } else if (type === CO2CalculationTypeEnum.average) {
+    const combinedFuelSaved = aggregateFuelSaved.map(doc => doc.fuelSaved).reduce((accumulator, currentValue) => accumulator + currentValue);
+    const averageFuelSaved = combinedFuelSaved / aggregateFuelSaved.length;
+    result = averageFuelSaved;
+  }
+
+  return (result * gasPrice).toFixed(2);
+}
