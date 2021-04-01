@@ -78,6 +78,11 @@ export const aggregateIndividualFuelSaved = (data) => {
   return result;
 };
 
+export const CO2CalculationTypeEnum = {
+  average: 'average',
+  user: 'user',
+};
+
 export const CO2CalculationTimespan = (data, timeStart, timeEnd, type) => {
   const timeNow = timeEnd || Date.now();
   const afterDateAndCar = data.filter(doc => doc.date > timeStart && doc.date < timeNow && doc.transport !== 'Car');
@@ -85,7 +90,7 @@ export const CO2CalculationTimespan = (data, timeStart, timeEnd, type) => {
     return 0;
   }
   let result = 0;
-  if (type === 'average') {
+  if (type === CO2CalculationTypeEnum.average) {
     const fuelSavedVar = calculateFuelSavedForAllUsers(afterDateAndCar);
     const aggregateFuelSaved = aggregateIndividualFuelSaved(fuelSavedVar);
     const combinedFuelSaved = aggregateFuelSaved.map(doc => doc.fuelSaved).reduce((accumulator, currentValue) => accumulator + currentValue);
@@ -93,7 +98,7 @@ export const CO2CalculationTimespan = (data, timeStart, timeEnd, type) => {
     const averageCO2Reduced = (averageFuelSaved * GHGperGallon).toFixed(2);
 
     result = averageCO2Reduced;
-  } else if (type === 'user') {
+  } else if (type === CO2CalculationTypeEnum.user) {
     const userData = userTransportDataFilter(afterDateAndCar);
     if (userData.length === 0) {
       return 0;
