@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Grid, Button, Icon } from 'semantic-ui-react';
+import { Grid, Button, Icon } from 'semantic-ui-react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
@@ -22,40 +22,36 @@ class Landing extends React.Component {
                 {/*<Grid.Column id="text3" width={5}>1,000,000lb of CO2 this year</Grid.Column>*/}
               </Grid.Row>
               <Grid.Row id="text4">
-
+                What is your contribution?
               </Grid.Row>
             </Grid>
           </div>
-          {
-            !this.props.currentUser &&
-            <div>
-              <Grid className='signUp' centered columns={4}>
-                <Grid.Column textAlign='center'>
-                  <div>
-                    Already a Member?
-                  </div>
-                  <Button inverted as={NavLink} exact to="/signin" key='login'>Login</Button>
-                </Grid.Column>
-                <Grid.Column textAlign='center'>
-                  <div>
-                    Not a Member?
-                  </div>
-                  <Button inverted as={NavLink} exact to="/signup" key='signup'>Sign up</Button>
-                </Grid.Column>
-              </Grid>
-            </div>
-          }
-          {
-            this.props.currentUser &&
-            <Container className='get-started'>
-              <Grid>
-                <Grid.Column centered verticalAlign='middle'>GET STARTED<br/>
-                  <Button className='landingButton' inverted as={NavLink} exact to="/dashboard" key='dashboard'>Go to
-                    Dashboard</Button>
-                </Grid.Column>
-              </Grid>
-            </Container>
-          }
+             {
+                !this.props.currentUser &&
+                <div>
+                  <Grid className='signUp' centered columns={4}>
+                    <Grid.Column textAlign='center'>
+                      <div>
+                        Already a Member?
+                      </div>
+                      <Button inverted as={NavLink} exact to="/signin" key='login'>Login</Button>
+                    </Grid.Column>
+                    <Grid.Column textAlign='center'>
+                      <div>
+                        Not a Member?
+                      </div>
+                      <Button inverted as={NavLink} exact to="/signup" key='signup'>Sign up</Button>
+                    </Grid.Column>
+                  </Grid>
+                </div>
+              }
+              {
+                this.props.currentUser &&
+                <div className='get-started'>
+                  <div>Get started</div>
+                      <Button className='landingButton' inverted as={NavLink} exact to="/dashboard" key='dashboard'>Go to Dashboard</Button>
+                </div>
+              }
           <Grid className='description-section' textAlign='left'>
             <Grid.Row className='description-header'>
               What does Project Malama offer?

@@ -72,7 +72,7 @@ class EditTransportEntry extends React.Component {
   /** Render the form. Use Uniforms: https://github.com/vazco/uniforms */
   renderPage() {
     return (
-        <Grid id='page-style' container centered>
+        <Grid container centered>
           <Grid.Column>
             <AutoForm schema={bridge} onSubmit={data => this.submit(data)} model={this.props.doc}>
               <Segment>

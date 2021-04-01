@@ -16,7 +16,7 @@ class ListTransportEntries extends React.Component {
   /** Render the page once subscriptions have been received. */
   renderPage() {
     return (
-        <Container id='page-style'>
+        <Container>
           <Header inverted as="h2" textAlign="center">Your Trips</Header>
           <Table celled>
             <Table.Header>
