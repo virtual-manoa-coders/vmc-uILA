@@ -1,6 +1,5 @@
 import React from 'react';
 import { Grid, Button, Icon, Container } from 'semantic-ui-react';
-import { withRouter } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
@@ -18,21 +17,19 @@ class Admin extends React.Component {
             currentPageView: 'overview',
         };
 
-        console.log(props);
-
         this.handleViewChange = this.handleViewChange.bind(this);
     }
 
     handleViewChange(view) {
-        console.log(this.props);
         this.setState({ currentPageView: view });
     }
 
     renderOverview() {
         return (
-            <Grid id='admin-page' verticalAlign='middle' textAlign='center' container>
+            <Grid id='admin-page' verticalAlign='middle' textAlign='center' container stackable>
                 <Grid.Row>
-                    Welcome Administrator {this.props.currentUser} <br/>
+                    <h3>Welcome Administrator {this.props.currentUser}</h3>
+                    <br/>
                 </Grid.Row>
                 <Grid.Row>
                     <Grid columns={'equal'} style={{ width: '100%' }}>
@@ -57,11 +54,11 @@ class Admin extends React.Component {
                 }
                 {
                     this.state.currentPageView === 'user' &&
-                    <UserManagement userList={this.props.users}/>
+                    <UserManagement userList={this.props.users} handleViewChange={this.handleViewChange}/>
                 }
                 {
                     this.state.currentPageView === 'vehicle' &&
-                    <VehicleManagement/>
+                    <VehicleManagement vehicleList={this.props.userVehicles} handleViewChange={this.handleViewChange}/>
                 }
             </Container>
         );

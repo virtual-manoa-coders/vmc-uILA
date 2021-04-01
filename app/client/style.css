@@ -267,6 +267,28 @@ footer {
 }
 
 /* Admin Page CSS */
-#admin-page .user-management {
+#admin-page button {
+    height: 16em;
+    margin-top: 0.5em;
+}
+
+.user-management {
     color: black;
+}
+
+.user-management .row {
+    border-bottom: 1px solid #efefef;
+}
+
+.user-management .row:last-child {
+    border-bottom: none;
+}
+
+.user-management .column {
+    word-break: break-word;
+}
+
+.auto-margin {
+    margin-left: auto;
+    margin-right: auto;
 }
