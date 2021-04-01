@@ -2,13 +2,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
 
 body, html, .table {
-  background-color: #5ac2e0!important;
-  color: white!important;
-  font-family: 'Comfortaa', cursive!important;
+  color: #2E303E!important;
+  font-famwily: 'Comfortaa', cursive!important;
 }
 
 .menu {
-  background-color: #41337A;
+  background-color: #54678F;
   color: white!important;
   font-family: 'Comfortaa', cursive!important;
 }
@@ -183,11 +182,11 @@ body, html, .table {
 }
 
 #community-table {
-  border: 5px solid #fff;
+  border: 5px solid #54678F;
 }
 
 #community-table th, #community-table td {
-  color: #fff!important;
+  color: #2E303E!important;
   font-size: 25px;
 }
 
@@ -237,7 +236,7 @@ body, html, .table {
     padding-bottom: 50px;
     font-size: 1em;
     font-weight: bold;
-    color: #41337A;
+    color: #54678F;
     text-align: center;
 }
 
@@ -248,7 +247,8 @@ body, html, .table {
 }
 
 footer {
-    background-color: #41337A;
+    background-color: #54678F;
+    color: white!important;
 }
 
 .entry-table {
@@ -266,3 +266,11 @@ footer {
     float: right;
 }
 
+.comparator-text {
+    font-size: 36px;
+    height: auto;
+    line-height: 36px;
+    color: white;
+    margin-bottom: 10px;
+    font-family: 'Comfortaa', sans-serif;
+}
