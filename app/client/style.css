@@ -27,21 +27,21 @@ body, html, .table {
 .about-font {
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
-  color: white;
+  color: #2E303E;
   text-align: center;
 }
 
 .team {
   text-align: center;
   font-family: 'Comfortaa', sans-serif;
-  color: white;
+  color: #2E303E;
 }
 
 /* Landing Page CSS */
 
 #landing-page {
   width: 100%!important;
-  color: white;
+  color: #54678F;
 }
 
 .banner-image-row button {
@@ -197,8 +197,6 @@ body, html, .table {
 #space-row {
   padding-top:100px;
 }
-
-
 
 .header {
     padding-top: 400px;
