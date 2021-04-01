@@ -115,6 +115,23 @@ export const CO2CalculationTimespan = (data, timeStart, timeEnd, type) => {
   return result;
 };
 
+export const FilterOutTransportType = (data, exclude, timeStart, timeEnd) => {
+  const timeNow = timeEnd || Date.now();
+  const start = timeStart || 0;
+  const afterDate = data.filter(doc => doc.date > start && doc.date < timeNow);
+  if (afterDate.length === 0) {
+    return afterDate;
+  }
+  let array = data;
+  exclude.forEach(transportType => {
+    array = array.filter(doc => doc.transport !== transportType);
+  });
+  if (array.length === 0) {
+    return array;
+  }
+  return array;
+};
+
 export const moneySavedCalculator = (data, timeSpan, type) => {
   let result;
   const afterDateAndCar = data.filter(doc => doc.date > timeSpan && doc.transport !== 'Car');

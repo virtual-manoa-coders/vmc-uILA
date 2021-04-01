@@ -44,7 +44,7 @@ class Community extends React.Component {
                     </Grid.Column>
                     <Grid.Column width={13}>
                       <Header style={textStyle} textAlign='center' as='h2' inverted>CO2 Saved by Alternative Transport</Header>
-                      <CO2GraphWithTimeRange data={data} textStyle={textStyle}/>
+                      <CO2GraphWithTimeRange data={data}/>
                     </Grid.Column>
                   </Grid.Row>
                 </Grid>
@@ -58,11 +58,6 @@ class Community extends React.Component {
             </Grid.Column>
           </Grid.Row>
           <Divider horizontal/>
-          <Grid.Row>
-            <Grid.Column>
-              <CommunityWhatIfCO2 transportData={data}/>
-            </Grid.Column>
-          </Grid.Row>
           <Grid.Row>
             <Grid.Column>
               <Grid container>
