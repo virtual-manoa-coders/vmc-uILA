@@ -74,7 +74,7 @@ class Signup extends React.Component {
     }
     return (
         <Container id="signup-page">
-          <Grid textAlign="center" verticalAlign="middle" centered columns={2}>
+          <Grid id='page-style' textAlign="center" verticalAlign="middle" centered columns={2}>
             <Grid.Column>
               <Header as="h2" textAlign="center">
                 Register your account

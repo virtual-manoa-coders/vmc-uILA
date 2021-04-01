@@ -8,23 +8,6 @@ import { Roles } from 'meteor/alanning:roles';
 
 /** The NavBar appears at the top of every page. Rendered by the App Layout component. */
 class NavBar extends React.Component {
-  // state ={ classname: '' };
-  //
-  // componentDidMount() {
-  //   window.addEventListener('scroll', this.handleScroll, { passive: true });
-  // }
-  //
-  // // componentWillUnmount() {
-  // //   window.removeEventListener('scroll', this.handleScroll);
-  // // }
-  //
-  // handleScroll = () => {
-  //   if (window.scrollY > 80) {
-  //       this.setState({ className: '#54678F' });
-  //   } else {
-  //       this.setState({ className: '' });
-  //   }
-  // };
 
   state = {
     navbarColor: 'transparent',
@@ -52,8 +35,10 @@ class NavBar extends React.Component {
 
     return (
         <div className='navbar'>
-          <Sticky>
-          <Menu stackable fixed="top" borderless style={{ backgroundColor: navbarColor, boxShadow: 'none', borderBottom: 'none' }}>
+          {/*<Sticky>*/}
+          <Menu secondary stackable fixed='top' borderless inverted
+                style={{ backgroundColor: navbarColor, boxShadow: 'none', borderBottom: 'none', fontFamily: 'Merriweather' }}
+          >
             <Menu.Item as={NavLink} activeClassName="" exact to="/">
               <Image size='small' src='images/logo2.png'/>
             </Menu.Item>
@@ -90,7 +75,7 @@ class NavBar extends React.Component {
               )}
             </Menu.Item>
           </Menu>
-          </Sticky>
+          {/*</Sticky>*/}
         </div>
     );
   }

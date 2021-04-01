@@ -52,14 +52,14 @@ class UserProfile extends React.Component {
 
   /** Render the page once subscriptions have been received. */
   renderPage() {
-    const pageStyle = { marginTop: '10px' };
+    // const pageStyle = { marginTop: '10px' };
     const email = Meteor.user().username;
     const bridge = new SimpleSchema2Bridge(formSchema);
     const profile = UserInfo.collection.findOne({ email });
     // operate under assumption that the car exists, error otherwise (WIP)
     const userCar = this.props.userVehicles.filter(car => car._id === profile.carID)[0];
     return (
-        <Grid container stackable centered verticalAlign='middle' style={pageStyle}>
+        <Grid id='page-style' container stackable centered verticalAlign='middle'>
           <Header style={{ fontFamily: 'Comfortaa', fontSize: '2.0em' }} as="h2" textAlign="center" inverted>Aloha, {profile.name} </Header>
           <Grid.Row columns={2} height='equal' width='equal'>
             <Grid.Column verticalAlign='middle'>

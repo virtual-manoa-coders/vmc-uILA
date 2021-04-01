@@ -152,7 +152,7 @@ class Community extends React.Component {
                   background='/images/honolulu.jpg'
                   topMargin='4px'
                   childMargin='5vh'>
-                <Grid container verticalAlign='middle'>
+                <Grid id='page-style' container verticalAlign='middle'>
                   <Grid.Row>
                     <Grid.Column width={3} verticalAlign='middle'>
                       <Grid.Row>
