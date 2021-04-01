@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Button, Icon } from 'semantic-ui-react';
+import { Header, Grid, Button, Icon, Divider } from 'semantic-ui-react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
@@ -15,12 +15,33 @@ class Landing extends React.Component {
             <source src="/images/traffic.mp4" type="video/mp4"/>
           </video>
           <div className='welcome-text'>
-            <Grid fluid centered padded column={3}>
+            <Grid fluid verticalAlign='middle' centered padded columns='equal'>
               {/*<Grid.Row>*/}
               {/*  <Grid.Column id="text1" width={5}>24,000lb of CO2 today</Grid.Column>*/}
               {/*  <Grid.Column id="text2" width={5}>75,500lb of CO2 this week</Grid.Column>*/}
               {/*  <Grid.Column id="text3" width={5}>1,000,000lb of CO2 this year</Grid.Column>*/}
               {/*</Grid.Row>*/}
+
+              <Grid.Row style={{ color: 'white' }}>
+                <Grid.Column verticalAlign='middle'>
+                  <Icon name='small arrow circle down'/>
+                  <br/>
+                  <h3>205,721lb of CO2 reduced</h3>
+                </Grid.Column>
+              <Divider hidden/>
+                <Grid.Column verticalAlign='middle'>
+                  <Icon name='small road'/>
+                  <br/>
+                  <h3>10,500 gallons of gas saved</h3>
+                </Grid.Column>
+              <Divider hidden/>
+                <Grid.Column verticalAlign='middle'>
+                  <Icon name='small taxi'/>
+                  <br/>
+                  <h3>231,547 VMT reduced</h3>
+                </Grid.Column>
+              </Grid.Row>
+
               <Grid.Row id="text4">
                 What is your contribution?
               </Grid.Row>
@@ -48,7 +69,9 @@ class Landing extends React.Component {
               {
                 this.props.currentUser &&
                 <div className='get-started'>
-                  <div>Get started</div>
+                  <div>
+                    <Header as='h2' inverted>GET STARTED</Header>
+                    </div>
                       <Button className='landingButton' inverted as={NavLink} exact to="/dashboard" key='dashboard'>Go to Dashboard</Button>
                 </div>
               }

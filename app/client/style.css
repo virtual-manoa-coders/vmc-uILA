@@ -69,17 +69,17 @@ body, html, .table {
 }
 
 .welcome-text {
-  font-size: 72px;
+  font-size: 48px;
   font-family: 'Roboto', sans-serif;
   font-weight: bold;
   text-align: center;
   height: 90vh;
   width: 100%;
   color: white;
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: black;
+  /*-webkit-text-stroke-width: 1px;*/
+  /*-webkit-text-stroke-color: black;*/
   line-height: 1.5;
-  /*margin-top: -600px;*/
+  margin-top: 140px;
 }
 
 #text1 {
@@ -113,7 +113,7 @@ body, html, .table {
   animation-name: introAni;
   animation-duration: 1.5s;
   animation-iteration-count: 1;
-  animation-delay: 4s;
+  animation-delay: 2s;
   opacity: 0;
   animation-fill-mode: forwards;
 }
@@ -310,3 +310,8 @@ footer {
 #page-style {
     padding-top: 60px;
 }
+
+.landingButton {
+    padding-top: 1em;
+}
+
