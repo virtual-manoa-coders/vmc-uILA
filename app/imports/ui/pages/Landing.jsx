@@ -16,11 +16,6 @@ class Landing extends React.Component {
           </video>
           <div className='welcome-text'>
             <Grid fluid verticalAlign='middle' centered padded columns='equal'>
-              {/*<Grid.Row>*/}
-              {/*  <Grid.Column id="text1" width={5}>24,000lb of CO2 today</Grid.Column>*/}
-              {/*  <Grid.Column id="text2" width={5}>75,500lb of CO2 this week</Grid.Column>*/}
-              {/*  <Grid.Column id="text3" width={5}>1,000,000lb of CO2 this year</Grid.Column>*/}
-              {/*</Grid.Row>*/}
 
               <Grid.Row style={{ color: '#425170' }}>
                 <Grid.Column verticalAlign='middle'>

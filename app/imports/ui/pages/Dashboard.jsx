@@ -13,65 +13,44 @@ import TransportDataEntry from '../components/TransportDataEntry';
 class Dashboard extends React.Component {
   render() {
     return (
-        <Grid id='dash' padded verticalAlign='middle' container>
-          <Grid textAlign='center' padded columns={4}>
+        <Grid id='dash' padded verticalAlign='middle' container
+          textAlign='center' columns='equal'>
             <Grid.Row>
               <Grid.Column>
                 <Divider hidden/>
-                <h1>Environmental Impact</h1>
+                <h1></h1>
               </Grid.Column>
             </Grid.Row>
 
             <Grid.Row>
               <Grid.Column verticalAlign='middle'>
-                <Icon name='huge arrow circle down'/>
+                <Icon name='big arrow circle down'/><br/>
+                GHG Reduced<br/>
+                <h2>205,721 lbs</h2>
               </Grid.Column>
-              <Grid.Column textAlign='left'>
-                Green House Gas (GHG) Reduced<br/>
-                <h2># lbs</h2>
-              </Grid.Column>
-            </Grid.Row>
             <Divider hidden/>
-
-            <Grid.Row>
               <Grid.Column verticalAlign='middle'>
-                <Icon name='huge taxi'/>
+                <Icon name='big taxi'/><br/>
+                VMT Reduced<br/>
+                <h2>231,547 miles</h2>
               </Grid.Column>
-              <Grid.Column textAlign='left'>
-                Vehicle Miles Traveled (VMT) Reduced<br/>
-                <h2># miles</h2>
-              </Grid.Column>
-            </Grid.Row>
             <Divider hidden/>
-
-            <Grid.Row>
               <Grid.Column verticalAlign='middle'>
-                <Icon name='huge road'/>
+                <Icon name='big road'/><br/>
+                Gas Saved<br/>
+                <h2>10,500 gallons</h2>
               </Grid.Column>
-              <Grid.Column textAlign='left'>
-                Gallons of Gas Saved<br/>
-                <h2># gallons</h2>
-              </Grid.Column>
-            </Grid.Row>
             <Divider hidden/>
-
-            <Grid.Row>
               <Grid.Column verticalAlign='middle' >
-                <Icon name='huge home'/>
+                <Icon name='big home'/><br/>
+                Telecommute<br/>
+                <h2>32 days</h2>
               </Grid.Column>
-              <Grid.Column textAlign='left'>
-                Days worked at home<br/>
-                <h2># days</h2>
-              </Grid.Column>
-            </Grid.Row>
             <Divider hidden/>
-            <Grid.Row>
               <Grid.Column verticalAlign='middle'>
-                <Icon name='huge bicycle'/>
-              </Grid.Column>
-              <Grid.Column textAlign='left'>
-                Days biked to work<br/>
-                <h2># days</h2>
+                <Icon name='big bicycle'/><br/>
+                Biked to Work<br/>
+                <h2>3 days</h2>
               </Grid.Column>
             </Grid.Row>
             <Grid.Row id='space-row'>
@@ -91,7 +70,6 @@ class Dashboard extends React.Component {
               </Grid.Column>
             </Grid.Row>
           </Grid>
-        </Grid>
 
     );
   }
