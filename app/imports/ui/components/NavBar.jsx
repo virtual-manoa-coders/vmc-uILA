@@ -3,28 +3,11 @@ import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { withRouter, NavLink } from 'react-router-dom';
-import { Menu, Dropdown, Image, Sticky } from 'semantic-ui-react';
+import { Menu, Dropdown, Image } from 'semantic-ui-react';
 import { Roles } from 'meteor/alanning:roles';
 
 /** The NavBar appears at the top of every page. Rendered by the App Layout component. */
 class NavBar extends React.Component {
-  // state ={ classname: '' };
-  //
-  // componentDidMount() {
-  //   window.addEventListener('scroll', this.handleScroll, { passive: true });
-  // }
-  //
-  // // componentWillUnmount() {
-  // //   window.removeEventListener('scroll', this.handleScroll);
-  // // }
-  //
-  // handleScroll = () => {
-  //   if (window.scrollY > 80) {
-  //       this.setState({ className: '#54678F' });
-  //   } else {
-  //       this.setState({ className: '' });
-  //   }
-  // };
 
   state = {
     navbarColor: 'transparent',
@@ -38,7 +21,7 @@ class NavBar extends React.Component {
     window.removeEventListener('scroll', this.handleScroll);
   }
 
-  handleScroll= () => {
+  handleScroll = () => {
     if (window.scrollY > 80) {
       this.setState({ navbarColor: '#54678F' });
     } else {
@@ -49,11 +32,9 @@ class NavBar extends React.Component {
   render() {
     const { navbarColor } = this.state;
     // const menuStyle = { marginBottom: '10px', backgroundColor: '#54678F' };
-
     return (
         <div className='navbar'>
-          <Sticky>
-          <Menu stackable fixed="top" borderless style={{ backgroundColor: navbarColor, boxShadow: 'none', borderBottom: 'none' }}>
+          <Menu fixed="top" borderless style={{ backgroundColor: navbarColor, boxShadow: 'none', borderBottom: 'none' }}>
             <Menu.Item as={NavLink} activeClassName="" exact to="/">
               <Image size='small' src='images/logo2.png'/>
             </Menu.Item>
@@ -63,7 +44,7 @@ class NavBar extends React.Component {
                   <Menu.Item as={NavLink} activeClassName="active" exact to="/community"
                              key='community'>Community</Menu.Item>,
                   <Menu.Item as={NavLink} activeClassName="active" exact to="/dashboard"
-                             key='dashboard'>Dashboard</Menu.Item>]
+                             key='dashboard'>Dashboard</Menu.Item>,]
             ) : ''}
             {Roles.userIsInRole(Meteor.userId(), 'admin') ? (
                 <Menu.Item as={NavLink} activeClassName="active" exact to="/admin" key='admin'>Admin</Menu.Item>
@@ -90,7 +71,6 @@ class NavBar extends React.Component {
               )}
             </Menu.Item>
           </Menu>
-          </Sticky>
         </div>
     );
   }

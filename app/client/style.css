@@ -1,17 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&Merriweather:wght@500&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
 
 body, html, .table {
-  background-color: #EFF1F6!important;
-  color: white!important;
-  font-family: 'Comfortaa', cursive!important;
+  color: #2E303E!important;
+  font-family: 'Merriweather';
 }
-
-/*.menu {*/
-/*  background-color: #54678F;*/
-/*  color: white!important;*/
-/*  font-family: 'Comfortaa', cursive!important;*/
-/*}*/
 
 .menu.borderless.navbar {
     background-color: transparent!important;
@@ -26,20 +19,10 @@ body, html, .table {
 
 }
 
-/*#54678F {*/
-/*    transition: color 1s ease 0s;*/
-/*}*/
-
-.menu.borderless.navbar.solid {
-    background-color: #54678F;
-    box-shadow: none;
-    border-bottom: none !important;
-}
-
 .about-header {
   font-size: 2.0em;
   font-weight: 900;
-  font-family: 'Comfortaa', sans-serif;
+  font-family: 'Merriweather', sans-serif;
 }
 
 
@@ -51,21 +34,21 @@ body, html, .table {
 .about-font {
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
-  color: white;
+  color: #2E303E;
   text-align: center;
 }
 
 .team {
   text-align: center;
   font-family: 'Comfortaa', sans-serif;
-  color: white;
+  color: #2E303E;
 }
 
 /* Landing Page CSS */
 
 #landing-page {
   width: 100%!important;
-  color: white;
+  color: #54678F;
 }
 
 .banner-image-row button {
@@ -140,21 +123,16 @@ body, html, .table {
   to {opacity: 1;}
 }
 
-/*#myVideo {*/
-/*  position: relative;*/
-/*  right: 0;*/
-/*  left: 0;*/
-/*  margin-left: -20px;*/
-/*  margin-top: 4px;*/
-/*  min-width: 110%;*/
-/*  min-height: 30%;*/
-/*}*/
-
 #myVideo {
-    background: no-repeat center center fixed;
-    background-size: cover;
-    margin-top: -25px;
+  position: relative;
+  right: 0;
+  left: 0;
+  margin-left: -20px;
+  margin-top: 4px;
+  min-width: 110%;
+  min-height: 30%;
 }
+
 .signUp {
   font-size: 48px;
   margin-bottom: 15px;
@@ -170,16 +148,14 @@ body, html, .table {
 
 .description-section {
   font-size: 24px;
-  color: black;
   width: 100%;
   height: 15em;
-  margin-top: 7.0em!important;
+  margin-top: 50px!important;
 }
 
 .description-section .description-header {
   text-align: center;
   font-size: 40px;
-  color: black;
 }
 
 .trial-converter {
@@ -213,11 +189,11 @@ body, html, .table {
 }
 
 #community-table {
-  border: 5px solid #fff;
+  border: 5px solid #54678F;
 }
 
 #community-table th, #community-table td {
-  color: #fff!important;
+  color: #2E303E!important;
   font-size: 25px;
 }
 
@@ -229,12 +205,10 @@ body, html, .table {
   padding-top:100px;
 }
 
-
-
 .header {
     padding-top: 400px;
     padding-bottom: 400px;
-    font-family: 'Comfortaa', sans-serif;
+    font-family: 'Merriweather', sans-serif;
     color: white;
 }
 
@@ -244,11 +218,11 @@ body, html, .table {
 }
 
 .h2 {
-    font-family: 'Comfortaa', sans-serif;
+    font-family: 'Merriweather', sans-serif;
 }
 
 .profile-card {
-    font-family: 'Comfortaa', sans-serif;
+    font-family: 'Merriweather', sans-serif;
     font-size: 0.85em;
     font-weight: 700;
     text-align: left;
@@ -267,7 +241,7 @@ body, html, .table {
     padding-bottom: 50px;
     font-size: 1em;
     font-weight: bold;
-    color: #41337A;
+    color: #54678F;
     text-align: center;
 }
 
@@ -278,7 +252,8 @@ body, html, .table {
 }
 
 footer {
-    background-color: #41337A;
+    background-color: #54678F;
+    color: white!important;
 }
 
 .entry-table {
@@ -296,3 +271,42 @@ footer {
     float: right;
 }
 
+/* Admin Page CSS */
+#admin-page button {
+    height: 16em;
+    margin-top: 0.5em;
+}
+
+.user-management {
+    color: black;
+}
+
+.user-management .row {
+    border-bottom: 1px solid #efefef;
+}
+
+.user-management .row:last-child {
+    border-bottom: none;
+}
+
+.user-management .column {
+    word-break: break-word;
+}
+
+.auto-margin {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.comparator-text {
+    font-size: 36px;
+    height: auto;
+    line-height: 36px;
+    color: white;
+    margin-bottom: 10px;
+    font-family: 'Merriweather', sans-serif;
+}
+
+#page-style {
+    padding-top: 60px;
+}

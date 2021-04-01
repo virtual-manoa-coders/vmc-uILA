@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import { UserInfo } from '../../api/userData/UserInfo';
 import { UserTransportation } from '../../api/userData/UserTransportation';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
-import TransportDataEntry from '../components/TransportDataEntry';
+import TravelPatterns from '../components/Visualization/TravelPatterns';
 
 /** Create a schema to specify the structure of the data to appear in the form. */
 const formSchema = new SimpleSchema({
@@ -22,7 +22,10 @@ const formSchema = new SimpleSchema({
       '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'] },
   carMPG: { type: Number, label: 'Average miles per gallon', optional: true },
 });
-
+/*
+TODO:
+-add the function to calculate what modes of transportation the user has taken
+ */
 /** Renders the Profile page */
 class UserProfile extends React.Component {
 
@@ -59,8 +62,8 @@ class UserProfile extends React.Component {
     // operate under assumption that the car exists, error otherwise (WIP)
     const userCar = this.props.userVehicles.filter(car => car._id === profile.carID)[0];
     return (
-        <Grid container stackable centered verticalAlign='middle' style={pageStyle}>
-          <Header style={{ fontFamily: 'Comfortaa', fontSize: '2.0em' }} as="h2" textAlign="center" inverted>Aloha, {profile.name} </Header>
+        <Grid id='page-style' container stackable centered verticalAlign='middle' style={pageStyle}>
+          <Header style={{ fontFamily: 'Merriweather', fontSize: '2.0em' }} as="h2" textAlign="center" inverted>Aloha, {profile.name} </Header>
           <Grid.Row columns={2} height='equal' width='equal'>
             <Grid.Column verticalAlign='middle'>
               <Card fluid>
@@ -86,7 +89,11 @@ class UserProfile extends React.Component {
               </Card>
             </Grid.Column>
             <Grid.Column verticalAlign='middle'>
-              <TransportDataEntry carMPG={userCar.carMPG} userTransportation={this.props.userTransportation}/>
+              <Card fluid>
+                <Card.Content>
+                  <TravelPatterns />
+                </Card.Content>
+              </Card>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
@@ -96,7 +103,7 @@ class UserProfile extends React.Component {
               }
               <AutoForm model={profile} schema={bridge} onSubmit={data => this.submit(data)}>
                 <Segment>
-                  <Header style={{ fontFamily: 'Comfortaa', color: '#2292b3' }} textAlign='center' as='h4'>Edit Your Information</Header>
+                  <Header style={{ color: '#2292b3' }} textAlign='center' as='h3'>Edit Your Information</Header>
                   <Form.Group widths='equal'>
                     <TextField id='name' name='name' showInlineError={true} placeholder={'Your name'}/>
                     <TextField id='image' name='image' showInlineError={true} placeholder={'Image URL'}/>

@@ -16,11 +16,11 @@ class Landing extends React.Component {
           </video>
           <div className='welcome-text'>
             <Grid fluid centered padded column={3}>
-              <Grid.Row>
-                {/*<Grid.Column id="text1" width={5}>24,000lb of CO2 today</Grid.Column>*/}
-                {/*<Grid.Column id="text2" width={5}>75,500lb of CO2 this week</Grid.Column>*/}
-                {/*<Grid.Column id="text3" width={5}>1,000,000lb of CO2 this year</Grid.Column>*/}
-              </Grid.Row>
+              {/*<Grid.Row>*/}
+              {/*  <Grid.Column id="text1" width={5}>24,000lb of CO2 today</Grid.Column>*/}
+              {/*  <Grid.Column id="text2" width={5}>75,500lb of CO2 this week</Grid.Column>*/}
+              {/*  <Grid.Column id="text3" width={5}>1,000,000lb of CO2 this year</Grid.Column>*/}
+              {/*</Grid.Row>*/}
               <Grid.Row id="text4">
                 What is your contribution?
               </Grid.Row>
@@ -54,7 +54,7 @@ class Landing extends React.Component {
               }
           <Grid className='description-section' textAlign='left'>
             <Grid.Row className='description-header'>
-              What does Project Malama offer?
+              What does Project Malama offer
             </Grid.Row>
             <Grid.Row>
               <Grid.Column width={2}>
