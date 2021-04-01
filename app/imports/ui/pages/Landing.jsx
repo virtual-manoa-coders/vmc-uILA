@@ -56,20 +56,13 @@ class Landing extends React.Component {
                   {
                     !this.props.currentUser &&
                     <div>
-                      <Grid className='signUp' centered columns={4}>
-                        <Grid.Column textAlign='center'>
-                          <div>
-                            Already a Member?
-                          </div>
+                        <Grid.Column centered verticalAlign='middle' textAlign='center'>
+                          <Button.Group size='huge'>
                           <Button className='landingButton' inverted as={NavLink} exact to="/signin" key='login'>Login</Button>
-                        </Grid.Column>
-                        <Grid.Column textAlign='center'>
-                          <div>
-                            Not a Member?
-                          </div>
+                          <Button.Or/>
                           <Button className='landingButton' inverted as={NavLink} exact to="/signup" key='signup'>Sign up</Button>
+                        </Button.Group>
                         </Grid.Column>
-                      </Grid>
                     </div>
                   }
               </Grid.Row>
