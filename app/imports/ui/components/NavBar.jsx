@@ -8,8 +8,30 @@ import { Roles } from 'meteor/alanning:roles';
 
 /** The NavBar appears at the top of every page. Rendered by the App Layout component. */
 class NavBar extends React.Component {
+
+  state = {
+    navbarColor: 'transparent',
+  };
+
+  componentDidMount() {
+    window.addEventListener('scroll', this.handleScroll, { passive: true });
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  }
+
+  handleScroll= () => {
+    if (window.scrollY > 80) {
+      this.setState({ navbarColor: '#54678F' });
+    } else {
+      this.setState({ navbarColor: 'transparent' });
+    }
+  };
+
   render() {
-    const menuStyle = { marginBottom: '10px', backgroundColor: '#54678F' };
+    const 
+    // const menuStyle = { marginBottom: '10px', backgroundColor: '#54678F' };
     return (
       <Menu style={menuStyle} attached="top" borderless inverted>
         <Menu.Item as={NavLink} activeClassName="" exact to="/">
