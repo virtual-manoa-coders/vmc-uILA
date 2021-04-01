@@ -116,6 +116,7 @@ body, html, .table {
   animation-delay: 2s;
   opacity: 0;
   animation-fill-mode: forwards;
+  color: white;
 }
 
 @keyframes introAni {
@@ -125,12 +126,24 @@ body, html, .table {
 
 #myVideo {
   position: relative;
+  background-size: cover;
   right: 0;
   left: 0;
   margin-left: -20px;
   margin-top: 4px;
   min-width: 110%;
   min-height: 30%;
+  opacity: 0.65;
+}
+
+#dash {
+    background-image: url("/images/dash-img.jpg");
+    /* background-color: rgba(255, 255, 255, 0.5); */
+    background-size: cover;
+    width: 100%!important;
+    color: white;
+    margin-top: -10px!important;
+    font-size:20px;
 }
 
 .signUp {
@@ -306,6 +319,19 @@ footer {
     color: white;
     margin-bottom: 10px;
     font-family: 'Merriweather', sans-serif;
+}
+
+.community-text {
+    font-size: 20px;
+    height: auto;
+    line-height: 30px;
+    color: white;
+    margin-top: 10px;
+    font-family: 'Merriweather', sans-serif;
+}
+
+#community {
+    margin-top: 40px;
 }
 
 #page-style {

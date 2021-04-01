@@ -29,11 +29,11 @@ class Community extends React.Component {
             <Grid.Column>
               <Section
                   background='/images/honolulu.jpg'
-                  topMargin='15px'
+                  topMargin='-60px'
                   childMargin='5vh'>
-                <Grid container verticalAlign='middle'>
+                <Grid id='community' container verticalAlign='middle'>
                   <Grid.Row>
-                    <Grid.Column className='comparator-text' width={5} verticalAlign='middle'>
+                    <Grid.Column className='community-text' width={5} verticalAlign='middle'>
                       <Grid.Row>
                         This is you vs. the average person in your city.
                       </Grid.Row>

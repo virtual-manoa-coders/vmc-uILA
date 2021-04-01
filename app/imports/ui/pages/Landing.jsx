@@ -22,7 +22,7 @@ class Landing extends React.Component {
               {/*  <Grid.Column id="text3" width={5}>1,000,000lb of CO2 this year</Grid.Column>*/}
               {/*</Grid.Row>*/}
 
-              <Grid.Row style={{ color: 'white' }}>
+              <Grid.Row style={{ color: '#425170' }}>
                 <Grid.Column verticalAlign='middle'>
                   <Icon name='small arrow circle down'/>
                   <br/>
