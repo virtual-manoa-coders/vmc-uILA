@@ -13,9 +13,8 @@ import { SectionHeader } from '../components/Visualization/SectionHeader';
 import CO2GraphWithTimeRange from '../components/Visualization/CO2GraphWithTimeRange';
 import CO2Table from '../components/Visualization/CO2Table';
 import { CO2CalculationTimespan, userTransportDataFilter, moneySavedCalculator, CO2CalculationTypeEnum } from '../components/Visualization/Functions';
+import CommunityWhatIfCO2 from '../components/Visualization/CommunityWhatIfCO2';
 
-const GHGperGallon = 19.59; // pounds per gallon
-const gasPrice = 3.57;
 const textStyle = { fontFamily: 'Comfortaa' };
 
 /** A simple static component to render some text for the landing page. */
@@ -56,6 +55,12 @@ class Community extends React.Component {
           <Grid.Row>
             <Grid.Column>
               <CO2Table data={data}/>
+            </Grid.Column>
+          </Grid.Row>
+          <Divider horizontal/>
+          <Grid.Row>
+            <Grid.Column>
+              <CommunityWhatIfCO2 transportData={data}/>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
