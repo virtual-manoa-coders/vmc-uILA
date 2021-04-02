@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Header, Loader, Image, Grid, Segment, Form } from 'semantic-ui-react';
+import { Card, Header, Loader, Image, Grid, Segment, Form, Menu, Container, Tab } from 'semantic-ui-react';
 import { AutoForm, SubmitField, TextField, SelectField, NumField } from 'uniforms-semantic';
 import swal from 'sweetalert';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
@@ -27,6 +27,21 @@ const formSchema = new SimpleSchema({
   },
   carMPG: { type: Number, label: 'Average miles per gallon', optional: true },
 });
+
+// const panes = [
+//   {
+//     menuItem: 'Log Your Commute',
+//     render: () => <Tab.Pane attached={false}>
+//       Tab 1 Content
+// </Tab.Pane>,
+//   },
+//   {
+//     menuItem: 'Edit Your Info',
+//     render: () => <Tab.Pane attached={false}>
+//       Tab 2 Content
+//     </Tab.Pane>,
+//   },
+// ];
 
 /*
 TODO:
@@ -67,6 +82,37 @@ class UserProfile extends React.Component {
     const profile = UserInfo.collection.findOne({ email });
     // operate under assumption that the car exists, error otherwise (WIP)
     const userCar = this.props.userVehicles.filter(car => car._id === profile.carID)[0];
+
+    const panes = [
+      {
+        menuItem: 'Log Your Commute',
+        render: () => <Tab.Pane attached={false}>
+              <TransportDataEntry carMPG={userCar.carMPG} userTransportation={this.props.userTransportation}/>
+        </Tab.Pane>,
+      },
+      {
+        menuItem: 'Edit Your Info',
+        render: () => <Tab.Pane attached={false}>
+          <AutoForm model={profile} schema={bridge} onSubmit={data => this.submit(data)}>
+            <Segment>
+              <Header style={{ color: '#2292b3' }} textAlign='center' as='h3'>Edit Your Information</Header>
+              <Form.Group widths='equal'>
+                <TextField id='name' name='name' showInlineError={true} placeholder={'Your name'}/>
+                <TextField id='image' name='image' showInlineError={true} placeholder={'Image URL'}/>
+              </Form.Group>
+              <Form.Group widths='equal'>
+                <TextField id='carMake' name='carMake' showInlineError={true} placeholder={'Car make'}/>
+                <TextField id='carModel' name='carModel' showInlineError={true} placeholder={'Car model'}/>
+                <SelectField id='carYear' name='carYear' showInlineError={true} placeholder={'Year'}/>
+              </Form.Group>
+              <NumField id='carMPG' name='carMPG' decimal={false} showInlineError={true}
+                        placeholder={'Miles per gallon'}/>
+              <SubmitField id='update-profile' value='Update Profile'/>
+            </Segment>
+          </AutoForm>
+        </Tab.Pane>,
+      },
+    ];
     return (
         <Grid id='page-style' container stackable centered verticalAlign='middle' style={pageStyle}>
           <Header style={{ fontFamily: 'Merriweather', fontSize: '2.0em' }} as="h2" textAlign="center"
@@ -103,17 +149,20 @@ class UserProfile extends React.Component {
               </Card>
             </Grid.Column>
           </Grid.Row>
+
           <Grid.Row>
-            <Grid.Column verticalAlign='middle' width={16}>
+            <Grid.Column>
+                <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
+            </Grid.Column>
+          </Grid.Row>
+
+          <Grid.Row>
+            <Grid.Column>
               <Card fluid>
                 <Card.Content>
                   <TransportDataEntry carMPG={userCar.carMPG} userTransportation={this.props.userTransportation}/>
                 </Card.Content>
               </Card>
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Column verticalAlign='middle' centered>
               {
                 // TODO: Add a widget that allows the user to use cars from the UserVehicles database
               }
