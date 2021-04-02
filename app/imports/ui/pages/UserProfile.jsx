@@ -70,7 +70,7 @@ class UserProfile extends React.Component {
 
     const panes = [
       {
-        menuItem: 'Log Your Commute',
+        menuItem: 'Log a Trip',
         render: () => <Tab.Pane attached={false}>
               <TransportDataEntry carMPG={userCar.carMPG} userTransportation={this.props.userTransportation}/>
         </Tab.Pane>,

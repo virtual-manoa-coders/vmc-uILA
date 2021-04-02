@@ -64,7 +64,7 @@ class TransportDataEntry extends React.Component {
               fRef = ref;
             }} schema={bridge} onSubmit={data => this.submit(data, fRef)}>
               <Segment>
-              <Header style={{ color: '#2292b3' }} textAlign='center' as='h3'>Log Your Commute</Header>
+              <Header style={{ color: '#2292b3' }} textAlign='center' as='h3'>Log a Trip</Header>
                 <DateField name='date'
                            max={new Date()}
                            min={new Date(2017, 1, 1)}

@@ -24,7 +24,7 @@ class ListTransportEntry extends React.Component {
 
   render() {
     const date = ` ${this.props.entry.date} `;
-    const shortenedDate = moment(date).format('DD MMMM, YYYY');
+    const shortenedDate = moment(date).format('L');
     return (
         <Table.Row className='entry-table'>
           <Table.Cell>{shortenedDate}</Table.Cell>

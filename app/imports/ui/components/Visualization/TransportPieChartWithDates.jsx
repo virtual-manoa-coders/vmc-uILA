@@ -30,7 +30,7 @@ class TransportPieChartWithDates extends React.Component {
                 <Button onClick={() => this.onClick('days')}>Day</Button>
                 <Button onClick={() => this.onClick('w')}>Week</Button>
                 <Button onClick={() => this.onClick('months')}>Month</Button>
-                <Button onClick={() => this.onClick('years')}>Month</Button>
+                <Button onClick={() => this.onClick('years')}>Year</Button>
               </Grid.Column>
             </Grid.Row>
           </Grid>
