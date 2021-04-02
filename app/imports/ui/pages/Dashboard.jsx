@@ -1,17 +1,26 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { Grid, Icon, Divider, Image, Segment, Header } from 'semantic-ui-react';
+import { Grid, Icon, Divider, Segment, Header, Loader } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { withTracker } from 'meteor/react-meteor-data';
-import { UserTransportation } from '../../api/userData/UserTransportation';
 import TransportPieChartWithDates from '../components/Visualization/TransportPieChartWithDates';
 import { UserInfo } from '../../api/userData/UserInfo';
+import { UserTransportation } from '../../api/userData/UserTransportation';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
 import TransportDataEntry from '../components/TransportDataEntry';
 
-/** A simple static component to render some text for the landing page. */
 class Dashboard extends React.Component {
+
+  /** If the subscription(s) have been received, render the page, otherwise show a loading icon. */
   render() {
+    return (this.props.ready) ? this.renderPage() : <Loader active>Getting data</Loader>;
+  }
+
+  renderPage() {
+    const email = Meteor.user().username;
+    const userInfo = UserInfo.collection.findOne({ email });
+    const userCar = this.props.userVehicles.filter(car => car._id === userInfo.carID)[0];
+
     return (
         <Grid id='dash' padded verticalAlign='middle' container
           textAlign='center' columns='equal'>
@@ -58,8 +67,8 @@ class Dashboard extends React.Component {
             <Grid.Row columns={2} height='equal' width='equal'>
               <Grid.Column>
                 <Segment>
-                  <Header style={{ fontFamily: 'Comfortaa' }} textAlign='center' as='h2'>Log Your Commute</Header>
-                  <TransportDataEntry />
+                  {/*<TransportDataEntry/>*/}
+                  <TransportDataEntry carMPG={userCar.carMPG} userTransportation={this.props.userTransportation}/>
                 </Segment>
               </Grid.Column>
               <Grid.Column>
@@ -77,7 +86,9 @@ class Dashboard extends React.Component {
 
 /** Require an array of Stuff documents in the props. */
 Dashboard.propTypes = {
+  userInfo: PropTypes.array,
   userTransportation: PropTypes.array.isRequired,
+  userVehicles: PropTypes.array.isRequired,
   ready: PropTypes.bool.isRequired,
 };
 
@@ -88,6 +99,7 @@ export default withTracker(() => {
   const sub2 = Meteor.subscribe(UserTransportation.userPublicationName);
   const sub3 = Meteor.subscribe(UserVehicles.userPublicationName);
   return {
+    userInfo: UserInfo.collection.find({}).fetch(),
     userVehicles: UserVehicles.collection.find({}).fetch(),
     userTransportation: UserTransportation.collection.find({}).fetch(),
     ready: sub1.ready() && sub2.ready() && sub3.ready(),
