@@ -11,6 +11,7 @@ import { UserInfo } from '../../api/userData/UserInfo';
 import { UserTransportation } from '../../api/userData/UserTransportation';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
 import TravelPatterns from '../components/Visualization/TravelPatterns';
+import TransportDataEntry from '../components/TransportDataEntry';
 
 /** Create a schema to specify the structure of the data to appear in the form. */
 const formSchema = new SimpleSchema({
@@ -18,10 +19,15 @@ const formSchema = new SimpleSchema({
   image: { type: String, label: 'Profile picture', optional: true },
   carMake: { type: String, label: 'Car make', optional: true },
   carModel: { type: String, label: 'Car model', optional: true },
-  carYear: { type: String, optional: true, allowedValues: ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008',
-      '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'] },
+  carYear: {
+    type: String,
+    optional: true,
+    allowedValues: ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008',
+      '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'],
+  },
   carMPG: { type: Number, label: 'Average miles per gallon', optional: true },
 });
+
 /*
 TODO:
 -add the function to calculate what modes of transportation the user has taken
@@ -63,9 +69,10 @@ class UserProfile extends React.Component {
     const userCar = this.props.userVehicles.filter(car => car._id === profile.carID)[0];
     return (
         <Grid id='page-style' container stackable centered verticalAlign='middle' style={pageStyle}>
-          <Header style={{ fontFamily: 'Merriweather', fontSize: '2.0em' }} as="h2" textAlign="center" inverted>Aloha, {profile.name} </Header>
-          <Grid.Row columns={2} height='equal' width='equal'>
-            <Grid.Column verticalAlign='middle'>
+          <Header style={{ fontFamily: 'Merriweather', fontSize: '2.0em' }} as="h2" textAlign="center"
+                  inverted>Aloha, {profile.name} </Header>
+          <Grid.Row columns={2}>
+            <Grid.Column verticalAlign='middle' width={5}>
               <Card fluid>
                 <Card.Content>
                   <Image src={profile.image}
@@ -88,16 +95,25 @@ class UserProfile extends React.Component {
                 </Card.Content>
               </Card>
             </Grid.Column>
-            <Grid.Column verticalAlign='middle'>
+            <Grid.Column verticalAlign='middle' width={11}>
               <Card fluid>
                 <Card.Content>
-                  <TravelPatterns />
+                  <TravelPatterns/>
                 </Card.Content>
               </Card>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column centered>
+            <Grid.Column verticalAlign='middle' width={16}>
+              <Card fluid>
+                <Card.Content>
+                  <TransportDataEntry carMPG={userCar.carMPG} userTransportation={this.props.userTransportation}/>
+                </Card.Content>
+              </Card>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column verticalAlign='middle' centered>
               {
                 // TODO: Add a widget that allows the user to use cars from the UserVehicles database
               }
@@ -113,8 +129,8 @@ class UserProfile extends React.Component {
                     <TextField id='carModel' name='carModel' showInlineError={true} placeholder={'Car model'}/>
                     <SelectField id='carYear' name='carYear' showInlineError={true} placeholder={'Year'}/>
                   </Form.Group>
-                    <NumField id='carMPG' name='carMPG' decimal={false} showInlineError={true}
-                              placeholder={'Miles per gallon'}/>
+                  <NumField id='carMPG' name='carMPG' decimal={false} showInlineError={true}
+                            placeholder={'Miles per gallon'}/>
                   <SubmitField id='update-profile' value='Update Profile'/>
                 </Segment>
               </AutoForm>
