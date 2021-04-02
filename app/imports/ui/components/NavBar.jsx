@@ -34,13 +34,21 @@ class NavBar extends React.Component {
     // const menuStyle = { marginBottom: '10px', backgroundColor: '#54678F' };
     return (
         <div className='navbar'>
-          <Menu fixed="top" borderless style={{ backgroundColor: navbarColor, boxShadow: 'none', borderBottom: 'none', fontFamily: 'Comfortaa', fontWeight: '800' }}>
+          <Menu fixed="top" borderless style={{
+            backgroundColor: navbarColor,
+            boxShadow: 'none',
+            borderBottom: 'none',
+            fontFamily: 'Comfortaa',
+            fontWeight: '800'
+          }}>
             <Menu.Item as={NavLink} activeClassName="" exact to="/">
               <Image size='small' src='images/logo2.png'/>
             </Menu.Item>
             {this.props.currentUser ? (
-                [<Menu.Item as={NavLink} activeClassName="active" exact to="/comparator"
-                            key='comparator'>Comparator</Menu.Item>,
+                [<Menu.Item as={NavLink} activeClassName="active" exact to="/add-vehicle"
+                            key='add-vehicle'>Add a Vehicle</Menu.Item>,
+                  <Menu.Item as={NavLink} activeClassName="active" exact to="/comparator"
+                             key='comparator'>Comparator</Menu.Item>,
                   <Menu.Item as={NavLink} activeClassName="active" exact to="/community"
                              key='community'>Community</Menu.Item>,
                   <Menu.Item as={NavLink} activeClassName="active" exact to="/dashboard"

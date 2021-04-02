@@ -14,6 +14,7 @@ class UserVehiclesCollection {
      * Car Make, Model, MPG, Price, Subsidiary
      */
     // List of all of the car make (Dropdown for model will depend on selection of make)
+    carName: String,
     carMake: {
       type: String,
       allowedValues: this.cmAllowedValues,
@@ -21,7 +22,7 @@ class UserVehiclesCollection {
       defaultValue: '...',
     },
       carModel: String,
-      carYear: { type: String, optional: true, allowedValues: this.cyAllowedValues}, 
+      carYear: { type: String, optional: true, allowedValues: this.cyAllowedValues },
       // Car miles per gallon
       carMPG: Number,
       // Price of car

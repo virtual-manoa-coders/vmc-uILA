@@ -25,9 +25,9 @@ function addProfile({ name, email, image, carMake, carModel, carYear, carMPG, CO
   }
 }
 
-function addCar({ carMake, carModel, carYear, carMPG, carPrice }) {
+function addCar({ carName, carMake, carModel, carYear, carMPG, carPrice }) {
   console.log(` Defining car: ${carModel}`);
-  UserVehicles.collection.insert({ carMake, carModel, carYear, carMPG, carPrice });
+  UserVehicles.collection.insert({ carName, carMake, carModel, carYear, carMPG, carPrice });
   // console.log(UserVehicles.collection.find().fetch());
 }
 
