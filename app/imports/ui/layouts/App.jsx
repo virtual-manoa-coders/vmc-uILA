@@ -22,7 +22,9 @@ import ListTransportEntries from '../pages/ListTransportEntries';
 import EditTransportEntry from '../pages/EditTransportEntry';
 import ResetPassword from '../pages/ResetPassword';
 import Admin from '../pages/Admin';
-import AddVehicle from '../pages/AddVehicle';
+import AddVehicle from '../pages/AddVehiclePage';
+import EditUserVehicle from '../pages/EditUserVehicle';
+import ListUserVehicles from '../pages/ListUserVehicles';
 
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 class App extends React.Component {
@@ -47,6 +49,8 @@ class App extends React.Component {
               <ProtectedRoute path="/comparator" component={CarComparator}/>
               <ProtectedRoute path="/edit/:_id" component={EditStuff}/>
               <ProtectedRoute path="/add-vehicle" component={AddVehicle}/>
+              <ProtectedRoute path="/edit-vehicle/:_id" component={EditUserVehicle}/>
+              <ProtectedRoute path="/list-user-vehicles" component={ListUserVehicles}/>
               <ProtectedRoute path="/admin" component={Admin}/>
               <Route component={NotFound}/>
             </Switch>

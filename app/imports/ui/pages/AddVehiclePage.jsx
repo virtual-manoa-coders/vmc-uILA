@@ -78,7 +78,7 @@ const formSchema = new SimpleSchema({
 const bridge = new SimpleSchema2Bridge(formSchema);
 
 /** Renders the Page for adding a document. */
-class AddVehicle extends React.Component {
+class AddVehiclePage extends React.Component {
   /** On submit, insert the data. */
   submit(data, formRef) {
     const { carName, carMake, carModel, carYear, carMPG, carPrice } = data;
@@ -121,7 +121,7 @@ class AddVehicle extends React.Component {
   }
 }
 
-AddVehicle.propTypes = {
+AddVehiclePage.propTypes = {
   AllUserVehicles: PropTypes.array.isRequired,
   ready: PropTypes.bool.isRequired,
 };
@@ -133,4 +133,4 @@ export default withTracker(() => {
     AllUserVehicles: AllUserVehicles.collection.find({}).fetch,
     ready: sub1.ready() && sub2.ready(),
   };
-})(AddVehicle);
+})(AddVehiclePage);

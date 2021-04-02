@@ -9,6 +9,8 @@ import { UserTransportation } from '../../api/userData/UserTransportation';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
 import TransportDataEntry from '../components/TransportDataEntry';
 import ListTransportEntry from '../components/ListTransportEntry';
+import AddVehicle from '../components/AddVehicle';
+import ListUserVehicles from './ListUserVehicles';
 
 class Dashboard extends React.Component {
 
@@ -54,7 +56,14 @@ class Dashboard extends React.Component {
       {
         menuItem: 'Add a Vehicle',
         render: () => <Tab.Pane attached={false}>
-          Add Vehicle Here
+          <AddVehicle/>
+        </Tab.Pane>,
+      },
+      {
+        menuItem: 'View/Edit Vehicles',
+        render: () => <Tab.Pane attached={false}>
+          <ListUserVehicles
+          style={{ topMargin: '0' }}/>
         </Tab.Pane>,
       },
     ];

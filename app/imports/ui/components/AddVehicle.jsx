@@ -99,7 +99,7 @@ class AddVehicle extends React.Component {
   render() {
     let fRef = null;
     return (
-        <Grid id='page-style' container centered>
+        <Grid container centered>
           <Grid.Column>
             <Header style={{ color: '#2292b3' }} textAlign='center' as='h3'>Add a Vehicle
             </Header>

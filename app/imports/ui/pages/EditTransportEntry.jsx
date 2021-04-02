@@ -76,7 +76,7 @@ class EditTransportEntry extends React.Component {
           <Grid.Column>
             <AutoForm schema={bridge} onSubmit={data => this.submit(data)} model={this.props.doc}>
               <Segment>
-                <Header style={{ fontFamily: 'Comfortaa', color: '#2292b3' }} textAlign='center' as='h4'>Edit
+                <Header style={{ color: '#2292b3' }} textAlign='center' as='h3'>Edit
                   Transport Entry</Header>
                 <DateField id='date'
                            name='date'
