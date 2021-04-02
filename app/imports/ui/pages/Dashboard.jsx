@@ -36,7 +36,7 @@ class Dashboard extends React.Component {
         render: () => <Tab.Pane attached={false}>
           <Container>
             <Header as="h3" textAlign="center" style={{ color: '#2292b3' }}>Your Trip History</Header>
-            <Table celled>
+            <Table unstackable celled striped>
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>Date</Table.HeaderCell>
@@ -62,8 +62,7 @@ class Dashboard extends React.Component {
       {
         menuItem: 'View/Edit Vehicles',
         render: () => <Tab.Pane attached={false}>
-          <ListUserVehicles
-          style={{ topMargin: '0' }}/>
+          <ListUserVehicles/>
         </Tab.Pane>,
       },
     ];

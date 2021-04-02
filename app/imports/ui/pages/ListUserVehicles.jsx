@@ -18,7 +18,7 @@ class ListUserVehicles extends React.Component {
     return (
         <Container id='page-style'>
           <Header as="h3" textAlign="center" style={{ color: '#2292b3' }}>Your Vehicles</Header>
-          <Table celled>
+          <Table unstackable celled>
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Car Name</Table.HeaderCell>
