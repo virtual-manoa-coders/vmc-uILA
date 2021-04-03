@@ -35,11 +35,11 @@ class Admin extends React.Component {
             <Grid.Row>
               <Grid columns={'equal'} style={{ width: '100%' }}>
                 <Grid.Column>
-                  <Button inverted fluid size={'massive'} onClick={() => this.handleViewChange('user')}>Manage
+                  <Button inverted color={'blue'} fluid size={'massive'} onClick={() => this.handleViewChange('user')}>Manage
                     Users</Button>
                 </Grid.Column>
                 <Grid.Column>
-                  <Button inverted fluid size={'massive'} onClick={() => this.handleViewChange('vehicle')}>Manage
+                  <Button inverted color={'blue'} fluid size={'massive'} onClick={() => this.handleViewChange('vehicle')}>Manage
                     Vehicles</Button>
                 </Grid.Column>
               </Grid>
@@ -51,7 +51,7 @@ class Admin extends React.Component {
 
   render() {
     return (
-        <Container>
+        <Container style={{ marginTop: '86px' }}>
           {
             this.state.currentPageView === 'overview' &&
             this.renderOverview()
