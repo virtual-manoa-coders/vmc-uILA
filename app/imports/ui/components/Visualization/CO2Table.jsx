@@ -4,12 +4,31 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { CO2CalculationTimespan } from './Functions';
 
-const CO2Table = (props) => {
+const tableStyle = (image) => {
+  return {
+    // Image effects
+    backgroundImage: `url(${image})`,
+        // center BG
+        backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+  };
+};
+
+const CO2Table = ({ data, backgroundImage }) => {
+  const style = {
+    // Image effects
+    backgroundImage: `url(${backgroundImage})`,
+        // center BG
+        backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+  };
   return (
       <Grid container>
         <Grid.Row>
           <Grid.Column>
-            <Table padded basic definition id="community-table">
+            <Table style={tableStyle(backgroundImage)} padded basic definition id="community-table">
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell />
@@ -21,23 +40,23 @@ const CO2Table = (props) => {
               <Table.Body>
                 <Table.Row>
                   <Table.Cell>Today</Table.Cell>
-                  <Table.Cell>{ CO2CalculationTimespan(props.data, moment().subtract(1, 'd'), null, 'user') }</Table.Cell>
-                  <Table.Cell>{ CO2CalculationTimespan(props.data, moment().subtract(1, 'd'), null, 'average')}</Table.Cell>
+                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'd'), null, 'user') }</Table.Cell>
+                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'd'), null, 'average')}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>Week</Table.Cell>
-                  <Table.Cell>{ CO2CalculationTimespan(props.data, moment().subtract(1, 'w'), null, 'user') }</Table.Cell>
-                  <Table.Cell>{ CO2CalculationTimespan(props.data, moment().subtract(1, 'w'), null, 'average') }</Table.Cell>
+                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'w'), null, 'user') }</Table.Cell>
+                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'w'), null, 'average') }</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>Month</Table.Cell>
-                  <Table.Cell>{ CO2CalculationTimespan(props.data, moment().subtract(1, 'months'), null, 'user') }</Table.Cell>
-                  <Table.Cell>{ CO2CalculationTimespan(props.data, moment().subtract(1, 'months'), null, 'average') }</Table.Cell>
+                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'months'), null, 'user') }</Table.Cell>
+                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'months'), null, 'average') }</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>Annual</Table.Cell>
-                  <Table.Cell>{ CO2CalculationTimespan(props.data, moment().subtract(1, 'years'), null, 'user') }</Table.Cell>
-                  <Table.Cell>{ CO2CalculationTimespan(props.data, moment().subtract(1, 'years'), null, 'average') }</Table.Cell>
+                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'years'), null, 'user') }</Table.Cell>
+                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'years'), null, 'average') }</Table.Cell>
                 </Table.Row>
               </Table.Body>
             </Table>
@@ -48,6 +67,7 @@ const CO2Table = (props) => {
 };
 
 CO2Table.propTypes = {
+  backgroundImage: PropTypes.string,
   data: PropTypes.array.isRequired,
 };
 
