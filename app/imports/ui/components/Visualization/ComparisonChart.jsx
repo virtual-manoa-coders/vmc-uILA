@@ -90,7 +90,7 @@ class ComparisonChart extends React.Component {
         <Grid container={this.props.container}>
           <Grid.Column>
             <Grid.Row>
-              <Segment style={{ borderRadius: '20px 20px 0px 0px' }} size={'large'} inverted color='violet'>
+              <Segment style={{ borderRadius: '20px 20px 0px 0px', backgroundColor: '#54678F', boxShadow: '0px 7px 10px 1px #A3A3A3' }} size={'large'} inverted>
                 <Grid columns={3} verticalAlign='middle' padded='horizontally' container>
                   <Grid.Row>
                     <Grid.Column floated='left' verticalAlign='middle'>
@@ -120,7 +120,7 @@ class ComparisonChart extends React.Component {
               </Segment>
             </Grid.Row>
             <Grid.Row>
-              <Segment padded style={{ borderRadius: '0px 0px 20px 20px' }}>
+              <Segment padded style={{ borderRadius: '0px 0px 20px 20px', boxShadow: '0px 7px 10px 1px #A3A3A3' }}>
                 {this.props.children}
               </Segment>
             </Grid.Row>

@@ -126,9 +126,6 @@ export const FilterOutTransportType = (data, exclude, timeStart, timeEnd) => {
   exclude.forEach(transportType => {
     array = array.filter(doc => doc.transport !== transportType);
   });
-  if (array.length === 0) {
-    return array;
-  }
   return array;
 };
 
@@ -136,14 +133,14 @@ export const moneySavedCalculator = (data, timeSpan, type) => {
   let result;
   const afterDateAndCar = data.filter(doc => doc.date > timeSpan && doc.transport !== 'Car');
   if (afterDateAndCar.length === 0) {
-    return 'No Data';
+    return 0;
   }
   const fuelSavedVar = calculateFuelSavedForAllUsers(afterDateAndCar);
   const aggregateFuelSaved = aggregateIndividualFuelSaved(fuelSavedVar);
   if (type === CO2CalculationTypeEnum.user) {
     const userData = userTransportDataFilter(aggregateFuelSaved);
     if (userData.length === 0) {
-      return 'No Data';
+      return 0;
     }
     result = userData[0].fuelSaved;
   } else if (type === CO2CalculationTypeEnum.average) {
@@ -153,4 +150,26 @@ export const moneySavedCalculator = (data, timeSpan, type) => {
   }
 
   return (result * gasPrice).toFixed(2);
-}
+};
+
+export const getUserCO2Percent = (data, timeStart, timeEnd) => {
+  const afterDateAndCar = FilterOutTransportType(data, ['Car'], timeStart, timeEnd);
+  if (afterDateAndCar.length === 0) {
+    return 0;
+  }
+
+  const fuelSavedVar = calculateFuelSavedForAllUsers(afterDateAndCar);
+  const aggregateFuelSaved = aggregateIndividualFuelSaved(fuelSavedVar);
+
+  aggregateFuelSaved.sort((a, b) => {
+    const keyA = a.fuelSaved;
+    const keyB = b.fuelSaved;
+    if (keyA > keyB) return -1;
+    if (keyA < keyB) return 1;
+    return 0;
+  });
+
+  const index = aggregateFuelSaved.findIndex(doc => doc.userID === Meteor.userId()) + 1;
+  const percent = (index / aggregateFuelSaved.length) * 100;
+  return percent % 100;
+};
