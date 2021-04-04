@@ -13,7 +13,6 @@ import { SectionHeader } from '../components/Visualization/SectionHeader';
 import CO2GraphWithTimeRange from '../components/Visualization/CO2GraphWithTimeRange';
 import CO2Table from '../components/Visualization/CO2Table';
 import { CO2CalculationTimespan, userTransportDataFilter, moneySavedCalculator, CO2CalculationTypeEnum } from '../components/Visualization/Functions';
-import CommunityWhatIfCO2 from '../components/Visualization/CommunityWhatIfCO2';
 
 const textStyle = { fontFamily: 'Merriweather' };
 
@@ -33,13 +32,13 @@ class Community extends React.Component {
                   childMargin='5vh'>
                 <Grid id='community' container verticalAlign='middle'>
                   <Grid.Row>
-                    <Grid.Column className='community-text' width={5} verticalAlign='middle'>
+                    <Grid.Column className='community-text' width={5} verticalAlign='right'>
                       <Grid.Row>
-                        This is you vs. the average person in your city.
+                        For the community to move forward with CO2 reduction, the change must start with you.
                       </Grid.Row>
                       <Divider hidden/>
                       <Grid.Row>
-                        You are doing x% better than the average person in your city.
+                        This is how you are contributing compared to the average of your community.
                       </Grid.Row>
                     </Grid.Column>
                     <Grid.Column width={10}>
@@ -54,35 +53,47 @@ class Community extends React.Component {
           <Divider horizontal/>
           <Grid.Row>
             <Grid.Column>
-              <CO2Table data={data}/>
+              <SectionHeader container textStyle={textStyle}>
+                CO2 Saved Summary
+              </SectionHeader>
+              <CO2Table data={data} backgroundImage='/images/cloud.jpg'/>
             </Grid.Column>
           </Grid.Row>
           <Divider horizontal/>
           <Grid.Row>
             <Grid.Column>
-              <Grid container>
-                <Grid.Row>
-                  <Grid.Column verticalAlign='middle'>
-                    <SectionHeader textStyle={textStyle}>
-                      Modes of Transportation This Month
-                    </SectionHeader>
-                  </Grid.Column>
-                </Grid.Row>
-                <Grid.Row columns={2} stretched>
-                  <Grid.Column verticalAlign='middle'>
-                    <Segment>
-                      <Header style={textStyle} textAlign='center' as='h2'>You</Header>
-                      <TransportationMethodPieChart userTransportation={ userTransportDataFilter(this.props.userTransportation) } timeSpan={moment().subtract(1, 'months')}/>
-                    </Segment>
-                  </Grid.Column>
-                  <Grid.Column verticalAlign='middle'>
-                    <Segment>
-                      <Header style={textStyle} textAlign='center' as='h2'>Community</Header>
-                      <TransportationMethodPieChart userTransportation={ this.props.userTransportation } timeSpan={moment().subtract(1, 'months')}/>
-                    </Segment>
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
+              <Section
+                  background='/images/traffic.jpg'
+                  childMargin='5vh'>
+                <Grid container>
+                  <Grid.Row>
+                    <Grid.Column verticalAlign='middle'>
+                      <SectionHeader inverted textStyle={textStyle}>
+                        Modes of Transportation This Month
+                      </SectionHeader>
+                      <Header style={textStyle} as={'h2'} inverted>
+                        There are many options for CO2-free travel.
+                        See how much you are <br/> utilizing the transportation methods
+                        in your community.
+                      </Header>
+                    </Grid.Column>
+                  </Grid.Row>
+                  <Grid.Row columns={2} stretched>
+                    <Grid.Column verticalAlign='middle'>
+                      <Segment>
+                        <Header style={textStyle} textAlign='center' as='h2'>Your travel this month</Header>
+                        <TransportationMethodPieChart userTransportation={ userTransportDataFilter(this.props.userTransportation) } timeSpan={moment().subtract(1, 'months')}/>
+                      </Segment>
+                    </Grid.Column>
+                    <Grid.Column verticalAlign='middle'>
+                      <Segment>
+                        <Header style={textStyle} textAlign='center' as='h2'>Community travel this month</Header>
+                        <TransportationMethodPieChart userTransportation={ this.props.userTransportation } timeSpan={moment().subtract(1, 'months')}/>
+                      </Segment>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              </Section>
             </Grid.Column>
           </Grid.Row>
           <Divider horizontal/>
