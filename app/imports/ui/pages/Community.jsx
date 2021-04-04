@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
-import { Grid, Table, Divider, Loader, Header, Segment, Image } from 'semantic-ui-react';
+import { Grid, Statistic, Divider, Loader, Header, Segment, Image } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { withTracker } from 'meteor/react-meteor-data';
 import moment from 'moment';
@@ -12,15 +12,21 @@ import Section from '../components/Section';
 import { SectionHeader } from '../components/Visualization/SectionHeader';
 import CO2GraphWithTimeRange from '../components/Visualization/CO2GraphWithTimeRange';
 import CO2Table from '../components/Visualization/CO2Table';
-import { CO2CalculationTimespan, userTransportDataFilter, moneySavedCalculator, CO2CalculationTypeEnum } from '../components/Visualization/Functions';
+import {
+  CO2CalculationTimespan,
+  userTransportDataFilter,
+  moneySavedCalculator,
+  CO2CalculationTypeEnum,
+  getUserCO2Percent,
+} from '../components/Visualization/Functions';
 
 const textStyle = { fontFamily: 'Merriweather' };
 
-/** A simple static component to render some text for the landing page. */
 class Community extends React.Component {
 
   dashboard() {
     const data = this.props.userTransportation;
+    console.log(getUserCO2Percent(data, moment().subtract(1, 'months'), null));
 
     return (
         <Grid id='page-style' verticalAlign='middle' textAlign='center'>
@@ -57,6 +63,24 @@ class Community extends React.Component {
                 CO2 Saved Summary
               </SectionHeader>
               <CO2Table data={data} backgroundImage='/images/cloud.jpg'/>
+              <Divider hidden/>
+              <Grid columns={3} container verticalAlign='middle'>
+                <Grid.Row>
+                  <Grid.Column floated='right' textAlign='right'>
+                    <Header as={'h1'} style={textStyle}>You are doing better than</Header>
+                  </Grid.Column>
+                  <Grid.Column width={2}>
+                    <Statistic horizontal>
+                      <Statistic.Value>{getUserCO2Percent(data, moment().subtract(1, 'months'), null)}</Statistic.Value>
+                      <Statistic.Label>%</Statistic.Label>
+                    </Statistic>
+                  </Grid.Column>
+                  <Grid.Column floated='left' textAlign='left'>
+                    <Header as={'h1'} style={textStyle}>of your community</Header>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+              <Divider hidden/>
             </Grid.Column>
           </Grid.Row>
           <Divider horizontal/>
@@ -107,6 +131,9 @@ class Community extends React.Component {
 
           <Grid.Row>
             <Grid.Column>
+              {
+                // TODO: Change this into GHG produced
+              }
               <ComparisonChart
                   icon={'cloud'}
                   metricName={'GHG Saved'}
