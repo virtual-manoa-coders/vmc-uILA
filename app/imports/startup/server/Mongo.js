@@ -3,14 +3,10 @@ import { Meteor } from 'meteor/meteor';
 import { Stuffs } from '../../api/stuff/Stuff.js';
 import { UserInfo } from '../../api/userData/UserInfo';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
+import { UserTransportation } from '../../api/userData/UserTransportation';
 
 /* eslint-disable no-console */
 
-/** Initialize the database with a default data document. */
-function addData(data) {
-  console.log(`  Adding: ${data.name} (${data.owner})`);
-  Stuffs.collection.insert(data);
-}
 
 // carMake, carModel, year, mpg isn't really needed, but is left here due to legacy code
 function addProfile({ name, email, image, carMake, carModel, carYear, carMPG, CO2Reduced, VMTReduced, fuelSaved }) {
@@ -31,14 +27,6 @@ function addCar({ carName, carMake, carModel, carYear, carMPG, carPrice }) {
   // console.log(UserVehicles.collection.find().fetch());
 }
 
-/** Initialize the collection if empty. */
-if (Stuffs.collection.find().count() === 0) {
-  if (Meteor.settings.defaultData) {
-    console.log('Creating default data.');
-    Meteor.settings.defaultData.map(data => addData(data));
-  }
-}
-
 if (UserVehicles.collection.find().count() === 0) {
   if (Meteor.settings.defaultCars) {
     console.log('Creating default cars');
@@ -57,21 +45,33 @@ if (UserInfo.collection.find().count() === 0) {
 }
 
 /** Initialize the DB if empty (no users defined.) */
-if (Meteor.users.find().count() === 0) {
-  if (Meteor.settings.defaultProfiles) {
-    if (UserVehicles.find().count() !== 0) {
-      console.log('Creating default profiles');
-      Meteor.settings.defaultProfiles.map(profile => addProfile(profile));
-    }
-    console.log('Error: Unable to find cars');
-  } else {
-    console.log('Cannot initialize the database. Please invoke meteor with a settings file.');
-  }
-}
+// if (Meteor.users.find().count() === 0) {
+//   if (Meteor.settings.defaultProfiles) {
+//     if (UserVehicles.find().count() !== 0) {
+//       console.log('Creating default profiles');
+//       Meteor.settings.defaultProfiles.map(profile => addProfile(profile));
+//     }
+//     console.log('Error: Unable to find cars');
+//   } else {
+//     console.log('Cannot initialize the database. Please invoke meteor with a settings file.');
+//   }
+// }
 
-if ((Meteor.settings.loadAssetsFile) && (Meteor.users.find().count() < 7)) {
+if ((Meteor.settings.loadAssetsFile) && (Meteor.users.find().count() < 3)) {
+  Meteor.users.find().fetch().forEach(user => console.log(user));
   const assetsFileName = 'data.json';
   console.log(`Loading data from private/${assetsFileName}`);
   const jsonData = JSON.parse(Assets.getText(assetsFileName));
   jsonData.profiles.map(profile => addProfile(profile));
+}
+
+// if there's no transport log
+  // get the 7 or less accounts id on start up
+  // add 7 transport log for each user
+  // two this week, three between this month and last two months, two between this week to last 3 months
+if (UserTransportation.count() === 0) {
+  console.log(`current transportation log count: ${UserTransportation.count()}`);
+
+  console.log('Currently active users:');
+  UserInfo.getActive().forEach(user => console.log(`user: ${user.name} id: ${user.userID}`));
 }

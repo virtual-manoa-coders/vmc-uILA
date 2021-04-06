@@ -5,6 +5,15 @@ import { Tracker } from 'meteor/tracker';
 
 /** This collection contains the user's transportation usage */
 class UserTransportationCollection {
+  /* TODO:
+   * - Extends from BaseCollection
+   * - restrict this.collection into this._collection
+   * - write new methods that replace this.collection usage
+   * - Find usage of UserTransportationCollection.collection in other files and use the new methods
+   * - Make a enum file for the allowed values
+   * Not urgent:
+   * - add validation in get, set, etc methods
+   */
   constructor() {
     // The name of this collection.
     this.name = 'UserTransportationCollection';
@@ -26,11 +35,12 @@ class UserTransportationCollection {
     // Define names for publications and subscriptions
     this.userPublicationName = `${this.name}.publication.user`;
     this.adminPublicationName = `${this.name}.publication.admin`;
+    // TODO: might have to write publication method for different types of publication if needed
     this.communityPublicationName = `${this.name}.publication.community`;
   }
 
   define({ transport, date, miles, mpg, userID }) {
-    return this._collection.insert({ transport, date, miles, mpg, userID });
+    return this.collection.insert({ transport, date, miles, mpg, userID });
   }
 
   update(id, { transport, date, miles, mpg }) {
@@ -39,7 +49,7 @@ class UserTransportationCollection {
     if (!entry) {
       throw new Meteor.Error('No such record exists');
     } else {
-      return this._collection.update({ _id: id }, { $set: { transport, date, miles, mpg } });
+      return this.collection.update({ _id: id }, { $set: { transport, date, miles, mpg } });
     }
   }
 
@@ -49,22 +59,33 @@ class UserTransportationCollection {
     if (!entry) {
       throw new Meteor.Error('No such record exists');
     } else {
-      return this._collection.remove({ _id: id });
+      return this.collection.remove({ _id: id });
     }
   }
 
   entryDoesExist(id) {
-    return this._collection.findOne({ _id: id });
+    return this.collection.findOne({ _id: id });
   }
 
   publish() {
-    Meteor.publish(this.communityPublicationName, () => this.collection.find());
+    if (Meteor.isServer) {
+      Meteor.publish(this.communityPublicationName, () => this.collection.find());
+    }
   }
 
   subscribe(name) {
     if (Meteor.isClient) {
       Meteor.subscribe(name || this.communityPublicationName);
     }
+  }
+
+  /**
+   * Returns the number of documents in this collection. NOTE: better place in parent class
+   * @returns { Number } The number of elements in this collection.
+   */
+  count() {
+    return this.collection.find()
+        .count();
   }
 }
 

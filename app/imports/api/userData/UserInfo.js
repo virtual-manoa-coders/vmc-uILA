@@ -1,9 +1,14 @@
 import { Mongo } from 'meteor/mongo';
 import SimpleSchema from 'simpl-schema';
+import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
 
 /** This collection contains the user's vehicle data */
 class UserInfoCollection {
+  /*
+   * TODO:
+   *  - not linked with built-in Meteor user accounts, add Meteor.userID()?
+   */
   constructor() {
     // The name of this collection.
     this.name = 'UserInfoCollection';
@@ -26,6 +31,24 @@ class UserInfoCollection {
     this.userPublicationName = `${this.name}.publication.user`;
     this.adminPublicationName = `${this.name}.publication.admin`;
     this.communityPublicationName = `${this.name}.publication.community`;
+  }
+
+  /**
+   * Return array of currently active user IDs.
+   * Server-side only.
+   */
+  getActive(max) {
+    if (!Meteor.isServer) {
+      console.log('getActive() is not running on the server');
+      return undefined;
+    }
+    return this.collection.find()
+        .fetch().map(user => {
+          return {
+            userID: user._id,
+            name: user.name,
+          };
+        }).slice(1, max);
   }
 }
 
