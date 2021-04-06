@@ -11,12 +11,18 @@ class UserManagement extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // state will be added later
+            selectedIndex: null,
         };
+
+        this.handleRowSelection = this.handleRowSelection.bind(this);
     }
 
     deleteUser(user) {
         UserInfo.collection.remove({ _id: user._id });
+    }
+
+    handleRowSelection(selectedIndex) {
+        this.setState({ selectedIndex });
     }
 
     render() {
@@ -38,25 +44,33 @@ class UserManagement extends React.Component {
                             </Grid.Row>
                             {
                                 this.props.userList.map((user, index) => (
-                                    <Grid.Row columns={'equal'} key={index}>
-                                        <Grid.Column>
-                                            {user.name}
-                                        </Grid.Column>
-                                        <Grid.Column>
-                                            {user.email}
-                                        </Grid.Column>
-                                        <Grid.Column>
-                                            {user.CO2Reduced}
-                                        </Grid.Column>
-                                        <Grid.Column>
-                                            {user.VMTReduced}
-                                        </Grid.Column>
-                                        <Grid.Column>
-                                            {user.fuelSaved}
-                                        </Grid.Column>
-                                        <Grid.Column onClick={() => this.deleteUser(user)}>
-                                            <Button color={'red'} disabled={user.email === this.props.currentUser}>Delete User</Button>
-                                        </Grid.Column>
+                                    <Grid.Row key={index}>
+                                        <Grid.Row columns={'equal'} onClick={() => this.handleRowSelection(index)}>
+                                            <Grid.Column>
+                                                {user.name}
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                                {user.email}
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                                {user.CO2Reduced}
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                                {user.VMTReduced}
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                                {user.fuelSaved}
+                                            </Grid.Column>
+                                            <Grid.Column onClick={() => this.deleteUser(user)}>
+                                                <Button color={'red'} disabled={user.email === this.props.currentUser}>Delete User</Button>
+                                            </Grid.Column>
+                                        </Grid.Row>
+                                        {
+                                            this.state.selectedIndex === index &&
+                                            <Grid.Row>
+                                                This would be the users travel history
+                                            </Grid.Row>
+                                        }
                                     </Grid.Row>
                                 ))
                             }
