@@ -105,7 +105,7 @@ class AddVehiclePage extends React.Component {
             </Header>
             <AutoForm ref={ref => { fRef = ref; }} schema={bridge} onSubmit={data => this.submit(data, fRef)} >
               <Segment>
-                <TextField id='carName' name='carName' showInlineError={true} placeholder='Name your car'/>
+                <TextField id='carName' name='carName' optional='true' showInlineError={true} placeholder='Name your car'/>
                 <SelectField id='carMake' name='carMake' showInlineError={true} placeholder='Car make'/>
                 <TextField id='carModel' name='carModel' showInlineError={true} placeholder='Car model'/>
                 <SelectField id='carYear' name='carYear' showInlineError={true} placeholder='Car year'/>
