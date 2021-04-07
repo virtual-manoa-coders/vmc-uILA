@@ -4,7 +4,7 @@ import { NavLink, withRouter } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
-import GHGCalculator from '../components/GHGCalculator';
+import GhgCalculator from '../components/GhgCalculator';
 
 /** A simple static component to render some text for the landing page. */
 class Landing extends React.Component {
@@ -68,7 +68,7 @@ class Landing extends React.Component {
                             GHG Calculator
                           </Modal.Header>
                           <Modal.Content>
-                            <GHGCalculator handleClose={this.handleClose}/>
+                            <GhgCalculator handleClose={this.handleClose}/>
                           </Modal.Content>
                         </Modal>
                       </Grid.Column>
@@ -96,7 +96,7 @@ class Landing extends React.Component {
                             GHG Calculator
                           </Modal.Header>
                           <Modal.Content>
-                            <GHGCalculator handleClose={this.handleClose}/>
+                            <GhgCalculator handleClose={this.handleClose}/>
                           </Modal.Content>
                         </Modal>
                       </Grid.Column>

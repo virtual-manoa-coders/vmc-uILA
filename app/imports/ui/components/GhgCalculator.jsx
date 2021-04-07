@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 /** Renders the Page for adding a document. */
-class GHGCalculator extends React.Component {
+class GhgCalculator extends React.Component {
 
   constructor(props) {
     super(props);
@@ -87,12 +87,12 @@ class GHGCalculator extends React.Component {
 }
 
 /** Require an array of userInfo documents in the props. */
-GHGCalculator.propTypes = {
+GhgCalculator.propTypes = {
   currentUser: PropTypes.string,
 };
 
-const GHGCalculatorContainer = withTracker(() => ({
+const GhgCalculatorContainer = withTracker(() => ({
   currentUser: Meteor.user() ? Meteor.user().username : '',
-}))(GHGCalculator);
+}))(GhgCalculator);
 
-export default withRouter(GHGCalculatorContainer);
+export default withRouter(GhgCalculatorContainer);
