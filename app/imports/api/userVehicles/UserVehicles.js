@@ -14,6 +14,7 @@ class UserVehiclesCollection {
      * Car Make, Model, MPG, Price, Subsidiary
      */
     // List of all of the car make (Dropdown for model will depend on selection of make)
+    carName: { type: String, optional: true },
     carMake: {
       type: String,
       allowedValues: this.cmAllowedValues,
@@ -30,7 +31,7 @@ class UserVehiclesCollection {
     this.collection.attachSchema(this.schema);
     this.userPublicationName = `${this.name}.publication.user`;
     this.adminPublicationName = `${this.name}.publication.admin`;
-    this.cmAllowedValues =  ['...',
+    this.cmAllowedValues = ['...',
             'Acura',
             'Alfa Romeo',
             'Audi',
