@@ -33,26 +33,37 @@ TextHeader.propTypes = {
   children: PropTypes.any.isRequired,
 };
 
-const ValueDifference = (props) => {
-  let difference = (props.userData - props.communityData).toFixed(2);
+const ValueDifference = ({ userData, communityData, textStyle, metric, inverted }) => {
+  let difference = (userData - communityData).toFixed(2);
   let color = 'yellow';
   let icon = 'circle';
   if (Number.isNaN(difference)) {
     difference = 0;
   }
-  if (Math.sign(difference) > 0) {
-    color = 'green';
+
+  let userGreaterThanCommunity = Math.sign(difference) > 0;
+
+  if (userGreaterThanCommunity) {
     icon = 'arrow up';
-  } else if (Math.sign(difference) < 0) {
-    color = 'red';
+  } else if (!userGreaterThanCommunity) {
     icon = 'arrow down';
+  }
+
+  if (inverted) {
+    userGreaterThanCommunity = !userGreaterThanCommunity;
+  }
+
+  if (userGreaterThanCommunity) {
+    color = 'green';
+  } else if (!userGreaterThanCommunity) {
+    color = 'red';
   }
 
   return (
       <Grid textAlign='right' columns={2}>
         <Grid.Column floated='right'>
           <Grid.Row>
-            <Header as='h1' textAlign='right' floated='right' style={props.textStyle} color={color}>
+            <Header as='h1' textAlign='right' floated='right' style={textStyle} color={color}>
               <Icon fitted size='small' name={icon} color={color}/>
               <Header.Content>
                 {Math.abs(difference)}
@@ -62,18 +73,17 @@ const ValueDifference = (props) => {
         </Grid.Column>
         <Grid.Column>
           <Grid.Row>
-            <TextHeader textSize={21} inverted={true} textAlign={'right'} textStyle={props.textStyle} as={'h3'}>
+            <TextHeader textSize={21} inverted={true} textAlign={'right'} textStyle={textStyle} as={'h3'}>
               vs community
             </TextHeader>
           </Grid.Row>
           <Grid.Row>
-            <TextHeader textSize={12} inverted={true} textAlign={'right'} textStyle={props.textStyle} as={'h3'}>
-              { checkForNoData(props.communityData, props.metric) } average
+            <TextHeader textSize={12} inverted={true} textAlign={'right'} textStyle={textStyle} as={'h3'}>
+              { checkForNoData(communityData, metric) } average
             </TextHeader>
           </Grid.Row>
         </Grid.Column>
       </Grid>
-
   );
 };
 
@@ -82,6 +92,7 @@ ValueDifference.propTypes = {
   userData: PropTypes.number.isRequired,
   communityData: PropTypes.number.isRequired,
   metric: PropTypes.string,
+  inverted: PropTypes.bool,
 };
 
 class ComparisonChart extends React.Component {
@@ -110,7 +121,9 @@ class ComparisonChart extends React.Component {
                         <Grid.Column>
                           <Grid.Row>
                             <ValueDifference userData={this.props.userData} communityData={this.props.communityData}
-                                             textStyle={this.props.textStyle} metric={this.props.metric}/>
+                                             textStyle={this.props.textStyle} metric={this.props.metric}
+                                             inverted={this.props.invertArrowColor}
+                            />
                           </Grid.Row>
                         </Grid.Column>
                       </Grid.Row>
@@ -140,6 +153,7 @@ ComparisonChart.propTypes = {
   metric: PropTypes.string,
   container: PropTypes.bool,
   children: PropTypes.any.isRequired,
+  invertArrowColor: PropTypes.bool,
 };
 
 export default ComparisonChart;
