@@ -91,7 +91,7 @@ export const CO2CalculationTypeEnum = {
  * @param data {[]} fetched userTransport collection; i.e. data = this.props.userTransportation
  * @param timeStart {Date} earliest time of the time range
  * @param timeEnd {Date} latest time of the time range
- * @param type types are: user (for one user) or average (the community average)
+ * @param type {UserTransportationTypeEnum} types are: user (for one user) or average (the community average)
  * @returns {number} pounds of CO2 reduced
  */
 export const CO2CalculationTimespan = (data, timeStart, timeEnd, type) => {
@@ -140,6 +140,39 @@ export const FilterOutTransportType = (data, exclude, timeStart, timeEnd) => {
     array = array.filter(doc => doc.transport !== transportType);
   });
   return array;
+};
+
+export const GHGProduced = (data, timeStart, timeEnd, type) => {
+  const timeNow = timeEnd || Date.now();
+  const start = timeStart || 0;
+  const afterDateJustCar = FilterOutTransportType(data, [
+    UserTransportationTypeEnum.Telecommute,
+    UserTransportationTypeEnum.Walk,
+    UserTransportationTypeEnum.Bike,
+    UserTransportationTypeEnum.Carpool,
+    UserTransportationTypeEnum.Bus,
+  ], start, timeNow);
+  if (afterDateJustCar.length === 0) {
+    return 0;
+  }
+
+  let result = 0;
+  if (type === CO2CalculationTypeEnum.average) {
+    const fuelSavedVar = calculateFuelSavedForAllUsers(afterDateJustCar);
+    const aggregateFuelSaved = aggregateIndividualFuelSaved(fuelSavedVar);
+    const combinedFuelSaved = aggregateFuelSaved.map(doc => doc.fuelSaved).reduce((accumulator, currentValue) => accumulator + currentValue);
+    const averageFuelSaved = combinedFuelSaved / aggregateFuelSaved.length;
+    const averageCO2Reduced = (averageFuelSaved * GHGperGallon).toFixed(2);
+
+    result = averageCO2Reduced;
+  } else if (type === CO2CalculationTypeEnum.user) {
+    const userData = userTransportDataFilter(afterDateJustCar);
+    if (userData.length === 0) {
+      return 0;
+    }
+    result = userCO2Aggregate(userData);
+  }
+  return result;
 };
 
 /**
