@@ -18,7 +18,7 @@ class ListTransportEntries extends React.Component {
     return (
         <Container id='page-style'>
           <Header as="h3" textAlign="center" style={{ color: '#2292b3' }}>Your Trips</Header>
-          <Table celled>
+          <Table unstackable celled striped>
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Date</Table.HeaderCell>
