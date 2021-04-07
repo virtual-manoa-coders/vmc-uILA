@@ -8,9 +8,9 @@ import { UserInfo } from '../../api/userData/UserInfo';
 import { UserTransportation } from '../../api/userData/UserTransportation';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
 import TransportDataEntry from '../components/TransportDataEntry';
-import ListTransportEntry from '../components/ListTransportEntry';
+import ListTransportEntries from '../components/ListTransportEntries';
 import AddVehicle from '../components/AddVehicle';
-import ListUserVehicles from './ListUserVehiclesPage';
+import ListUserVehicles from '../components/ListUserVehicles';
 
 class Dashboard extends React.Component {
 
@@ -34,23 +34,7 @@ class Dashboard extends React.Component {
       {
         menuItem: 'View/Edit Trips',
         render: () => <Tab.Pane attached={false}>
-          <Container>
-            <Header as="h3" textAlign="center" style={{ color: '#2292b3' }}>Your Trip History</Header>
-            <Table unstackable celled striped>
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell>Date</Table.HeaderCell>
-                  <Table.HeaderCell>Transport</Table.HeaderCell>
-                  <Table.HeaderCell>Miles</Table.HeaderCell>
-                  <Table.HeaderCell>Delete</Table.HeaderCell>
-                  <Table.HeaderCell className='edit'>Edit</Table.HeaderCell>
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                {this.props.entries.map((entry) => <ListTransportEntry key={entry._id} entry={entry} UserTransportation={UserTransportation} />)}
-              </Table.Body>
-            </Table>
-          </Container>
+         <ListTransportEntries/>
         </Tab.Pane>,
       },
       {
