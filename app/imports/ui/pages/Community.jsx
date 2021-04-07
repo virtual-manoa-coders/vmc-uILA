@@ -138,8 +138,8 @@ class Community extends React.Component {
               <ComparisonChart
                   icon={'cloud'}
                   metricName={'GHG Made'}
-                  userData={CO2CalculationTimespan(data, moment().subtract(1, 'w'), null, CO2CalculationTypeEnum.user)}
-                  communityData={CO2CalculationTimespan(data, moment().subtract(1, 'w'), null, CO2CalculationTypeEnum.average)}
+                  userData={GHGProduced(data, moment().subtract(1, 'w'), null, CO2CalculationTypeEnum.user)}
+                  communityData={GHGProduced(data, moment().subtract(1, 'w'), null, CO2CalculationTypeEnum.average)}
                   userTransportation={ this.props.userTransportation }
                   textStyle={textStyle}
                   metric={'pounds'}
