@@ -54,8 +54,8 @@ class UserInfoCollection {
 
   /**
    * A stricter form of findOne, in that it throws an exception if the entity isn't found in the collection.
-   * @param { String | Object } name Either the docID, or an object selector, or the 'name' field value.
-   * @returns { Object } The document associated with name.
+   * @param email UserInfo's email
+   * @returns String The user's Meteor id
    * @throws { Meteor.Error } If the document cannot be found.
    */
   findMeteorID(email) {

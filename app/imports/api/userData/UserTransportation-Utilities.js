@@ -44,4 +44,7 @@ export const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * max);
 };
 
+/**
+ * @return Return true or false randomly
+ */
 export const coinFilp = () => !!getRandomInt(0, 1);

@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import SimpleSchema from 'simpl-schema';
 import { Tracker } from 'meteor/tracker';
-import { UserTransportationTypeEnum } from './UserInfo-Utilities';
+import { UserTransportationTypeEnum } from './UserTransportation-Utilities';
 
 /** This collection contains the user's transportation usage */
 class UserTransportationCollection {
@@ -91,8 +91,7 @@ class UserTransportationCollection {
   }
 
   /**
-   * Returns a string representing all of the documents in this collection.
-   * @returns {String}
+   * @returns {String} representing all of the documents in this collection.
    */
   toString() {
     return this.collection.find()

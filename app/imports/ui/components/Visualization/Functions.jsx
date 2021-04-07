@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { UserTransportationTypeEnum } from '../../../api/userData/UserTransportation-Utilities';
 
 /*
  * A little note on making a standalone function:
@@ -87,14 +88,16 @@ export const CO2CalculationTypeEnum = {
 
 /**
  * Calculate the number of CO2 reduced either from one user or the averaged of the community
- * @param data The fetched userTransport collection; i.e. data = this.props.userTransportation
- * @param timeSpan A Date object to specify the time span for calculation; i.e. timespan = moment().subtract(1, 'y')
- * @param type The types are: user (for one user) or average (the community average)
- * @returns a number pounds of CO2 reduced
+ * @param data {[]} fetched userTransport collection; i.e. data = this.props.userTransportation
+ * @param timeStart {Date} earliest time of the time range
+ * @param timeEnd {Date} latest time of the time range
+ * @param type types are: user (for one user) or average (the community average)
+ * @returns {number} pounds of CO2 reduced
  */
 export const CO2CalculationTimespan = (data, timeStart, timeEnd, type) => {
   const timeNow = timeEnd || Date.now();
-  const afterDateAndCar = data.filter(doc => doc.date > timeStart && doc.date < timeNow && doc.transport !== 'Car');
+  const afterDateAndCar = data.filter(doc => doc.date > timeStart && doc.date < timeNow &&
+      doc.transport !== UserTransportationTypeEnum.Car);
   if (afterDateAndCar.length === 0) {
     return 0;
   }
@@ -117,6 +120,14 @@ export const CO2CalculationTimespan = (data, timeStart, timeEnd, type) => {
   return result;
 };
 
+/**
+ * Filter out a transport type within a time range
+ * @param data raw data from UserTransportation
+ * @param exclude {string []} array of transportation types
+ * @param timeStart earliest time in the time range
+ * @param timeEnd latest time in the time range
+ * @returns {*} an array of filtered data
+ */
 export const FilterOutTransportType = (data, exclude, timeStart, timeEnd) => {
   const timeNow = timeEnd || Date.now();
   const start = timeStart || 0;
@@ -131,9 +142,16 @@ export const FilterOutTransportType = (data, exclude, timeStart, timeEnd) => {
   return array;
 };
 
+/**
+ *
+ * @param data raw data from UserTransportation
+ * @param timeSpan earliest time range
+ * @param type transportation type
+ * @returns {number} money saved from not using a car in dollars
+ */
 export const moneySavedCalculator = (data, timeSpan, type) => {
   let result;
-  const afterDateAndCar = data.filter(doc => doc.date > timeSpan && doc.transport !== 'Car');
+  const afterDateAndCar = data.filter(doc => doc.date > timeSpan && doc.transport !== UserTransportationTypeEnum.Car);
   if (afterDateAndCar.length === 0) {
     return 0;
   }
@@ -154,8 +172,15 @@ export const moneySavedCalculator = (data, timeSpan, type) => {
   return (result * gasPrice).toFixed(2);
 };
 
+/**
+ * Returns the user's performance vs the community in percent
+ * @param data raw data from UserTransportation
+ * @param timeStart earliest time range
+ * @param timeEnd latest time range
+ * @returns {number} the percentage of how well the user is doing vs community
+ */
 export const getUserCO2Percent = (data, timeStart, timeEnd) => {
-  const afterDateAndCar = FilterOutTransportType(data, ['Car'], timeStart, timeEnd);
+  const afterDateAndCar = FilterOutTransportType(data, [UserTransportationTypeEnum.Car], timeStart, timeEnd);
   if (afterDateAndCar.length === 0) {
     return 0;
   }
