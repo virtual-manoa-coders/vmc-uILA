@@ -47,8 +47,28 @@ class UserInfoCollection {
           return {
             userID: user._id,
             name: user.name,
+            email: user.email,
           };
         }).slice(0, max);
+  }
+
+  /**
+   * A stricter form of findOne, in that it throws an exception if the entity isn't found in the collection.
+   * @param { String | Object } name Either the docID, or an object selector, or the 'name' field value.
+   * @returns { Object } The document associated with name.
+   * @throws { Meteor.Error } If the document cannot be found.
+   */
+  findMeteorID(email) {
+    // For this project, the username is the email
+    const doc = Meteor.users.findOne({ username: email })._id;
+    if (!doc) {
+      if (typeof email !== 'string') {
+        throw new Meteor.Error(`${JSON.stringify(email)} is not a defined ${this._type}`, '', Error().stack);
+      } else {
+        throw new Meteor.Error(`${email} is not a defined ${this._type}`, '', Error().stack);
+      }
+    }
+    return doc;
   }
 }
 

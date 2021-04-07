@@ -3,7 +3,11 @@ import { Meteor } from 'meteor/meteor';
 import moment from 'moment';
 import { Stuffs } from '../../api/stuff/Stuff.js';
 import { UserInfo } from '../../api/userData/UserInfo';
-import { getRandomTimeInRange, getRandomType } from '../../api/userData/UserInfo-Utilities';
+import {
+  getRandomTimeInRange,
+  getRandomTransportType,
+  getRandomInt, UserTransportationTypeEnum, coinFilp,
+} from '../../api/userData/UserInfo-Utilities';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
 import { UserTransportation } from '../../api/userData/UserTransportation';
 
@@ -22,6 +26,25 @@ function addProfile({ name, email, image, carMake, carModel, carYear, carMPG, CO
     console.log(` Unable to define ${email} with car ${carYear} ${carModel}`);
   }
 }
+
+function addTransport(startDate, endDate, leastMiles, maxMiles, userID, mpg, forceCar) {
+  const transportType = forceCar ? UserTransportationTypeEnum.Car : getRandomTransportType();
+
+  const transportLog = {
+    transport: transportType,
+    date: getRandomTimeInRange(startDate, endDate),
+    miles: getRandomInt(leastMiles, maxMiles),
+    mpg: mpg,
+    userID: userID,
+  };
+  UserTransportation.define(transportLog);
+}
+
+function userTransportGeneraton(iterations, userID, startTime, endTime) {
+  for (let i = 0; i < iterations; i++) {
+    addTransport(startTime, endTime, 1, 30, userID, 23, coinFilp()); // TODO: user user car's mpg
+  }
+};
 
 function addCar({ carName, carMake, carModel, carYear, carMPG, carPrice }) {
   console.log(` Defining car: ${carModel}`);
@@ -67,16 +90,12 @@ if ((Meteor.settings.loadAssetsFile) && UserInfo.collection.find().count() === 0
   // get the 7 or less accounts id on start up
   // add 7 transport log for each user
   // two this week, three between this month and last two months, two between this week to last 3 months
+// TODO: take mpg from user's car, the first one they have is probably fine
 if (UserTransportation.count() === 0) {
-  console.log(`current transportation log count: ${UserTransportation.count()}`);
-
   console.log('Active users:');
   UserInfo.getActive(10).forEach(user => {
-    console.log(`user: ${user.name} id: ${user.userID}`);
-    // add a couple transport log here
+    userTransportGeneraton(10, UserInfo.findMeteorID(user.email), moment().subtract(1, 'months').toDate(), new Date());
+    console.log(`Adding 10 random transport this month to user: ${user.name} id: ${user.userID}`);
   });
-  const aWeekAgo = moment().subtract(1, 'weeks').toDate();
-  const now = new Date();
-  console.log(getRandomTimeInRange(aWeekAgo, now).toString());
-  console.log(getRandomType());
+  console.log(`current transportation log count: ${UserTransportation.count()}`);
 }

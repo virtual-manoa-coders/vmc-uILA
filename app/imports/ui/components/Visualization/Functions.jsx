@@ -38,6 +38,8 @@ export const userCO2Aggregate = (data) => {
  * @returns An array of user transportation log for the currently logged in user
  */
 export const userTransportDataFilter = (data) => {
+  // TODO: This uses UserInfo id, no meteor id
+  // Perhaps add meteoruserid to transport
   return data.filter(doc => doc.userID === Meteor.userId());
 };
 

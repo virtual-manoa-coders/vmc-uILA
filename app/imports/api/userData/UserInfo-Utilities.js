@@ -26,7 +26,7 @@ export const UserTransportationTypeEnumArray = () => {
 /**
  * @returns a random transport type of the current types
  */
-export const getRandomType = () => UserTransportationTypeEnum.Array[Math.floor(Math.random() *
+export const getRandomTransportType = () => UserTransportationTypeEnum.Array[Math.floor(Math.random() *
     UserTransportationTypeEnum.Array.length)];
 
 /**
@@ -36,3 +36,12 @@ export const getRandomType = () => UserTransportationTypeEnum.Array[Math.floor(M
  */
 export const getRandomTimeInRange = (start, end) => new Date(start.valueOf() + Math.random() *
     (end.valueOf() - start.valueOf()));
+
+export const getRandomInt = (min, max) => {
+  if (min) {
+    return Math.floor(Math.random() * (max - min) + min);
+  }
+  return Math.floor(Math.random() * max);
+};
+
+export const coinFilp = () => !!getRandomInt(0, 1);
