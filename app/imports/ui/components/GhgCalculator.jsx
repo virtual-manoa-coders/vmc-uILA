@@ -91,8 +91,8 @@ GHGCalculator.propTypes = {
   currentUser: PropTypes.string,
 };
 
-const GhgCalculatorContainer = withTracker(() => ({
+const GHGCalculatorContainer = withTracker(() => ({
   currentUser: Meteor.user() ? Meteor.user().username : '',
 }))(GHGCalculator);
 
-export default withRouter(GhgCalculatorContainer);
+export default withRouter(GHGCalculatorContainer);
