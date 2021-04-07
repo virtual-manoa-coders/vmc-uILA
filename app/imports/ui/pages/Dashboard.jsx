@@ -10,7 +10,7 @@ import { UserVehicles } from '../../api/userVehicles/UserVehicles';
 import TransportDataEntry from '../components/TransportDataEntry';
 import ListTransportEntry from '../components/ListTransportEntry';
 import AddVehicle from '../components/AddVehicle';
-import ListUserVehicles from './ListUserVehicles';
+import ListUserVehicles from './ListUserVehiclesPage';
 
 class Dashboard extends React.Component {
 

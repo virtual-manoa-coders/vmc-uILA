@@ -7,7 +7,7 @@ import ListTransportEntry from '../components/ListTransportEntry';
 import { UserTransportation } from '../../api/userData/UserTransportation';
 
 /** Renders a table containing all of the Stuff documents. Use <StuffItem> to render each row. */
-class ListTransportEntries extends React.Component {
+class ListTransportEntriesPage extends React.Component {
   /** If the subscription(s) have been received, render the page, otherwise show a loading icon. */
   render() {
     return (this.props.ready) ? this.renderPage() : <Loader active>Getting data</Loader>;
@@ -37,7 +37,7 @@ class ListTransportEntries extends React.Component {
   }
 }
 /** Require an array of Stuff documents in the props. */
-ListTransportEntries.propTypes = {
+ListTransportEntriesPage.propTypes = {
   entries: PropTypes.array.isRequired,
   ready: PropTypes.bool.isRequired,
 };
@@ -49,4 +49,4 @@ export default withTracker(() => {
     entries: UserTransportation.collection.find({}, { sort: { carMake: +1 } }).fetch(),
     ready: subscription.ready(),
   };
-})(ListTransportEntries);
+})(ListTransportEntriesPage);

@@ -18,13 +18,13 @@ import Signout from '../pages/Signout';
 import Community from '../pages/Community';
 import Dashboard from '../pages/Dashboard';
 import Login from '../pages/Login';
-import ListTransportEntries from '../pages/ListTransportEntries';
+import ListTransportEntries from '../pages/ListTransportEntriesPage';
 import EditTransportEntry from '../pages/EditTransportEntry';
 import ResetPassword from '../pages/ResetPassword';
 import Admin from '../pages/Admin';
 import AddVehicle from '../pages/AddVehiclePage';
 import EditUserVehicle from '../pages/EditUserVehicle';
-import ListUserVehicles from '../pages/ListUserVehicles';
+import ListUserVehicles from '../pages/ListUserVehiclesPage';
 
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 class App extends React.Component {

@@ -3,7 +3,7 @@ import { Table, Modal, Button, Header, Icon } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
 
-/** Renders a single row in the List Transport Entries table. See pages/ListTransportEntries.jsx. */
+/** Renders a single row in the List Transport Entries table. See pages/ListTransportEntriesPage.jsx. */
 class ListUserVehicle extends React.Component {
   constructor(props) {
     super(props);

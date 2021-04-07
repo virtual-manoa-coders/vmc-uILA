@@ -16,7 +16,7 @@ class ListUserVehicles extends React.Component {
   /** Render the page once subscriptions have been received. */
   renderPage() {
     return (
-        <Container id='page-style'>
+        <Container>
           <Header as="h3" textAlign="center" style={{ color: '#2292b3' }}>Your Vehicles</Header>
           <Table unstackable celled>
             <Table.Header>

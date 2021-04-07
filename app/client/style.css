@@ -314,3 +314,7 @@ footer {
 .button.landingButton {
 	padding-top: -2em;
 }
+
+.tabs {
+  margin-top: -60px;
+}
