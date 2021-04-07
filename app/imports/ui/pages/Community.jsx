@@ -159,7 +159,7 @@ class Community extends React.Component {
                         within the thermal infrared range, causing the greenhouse effect. This gas is one of your main
                         contribution to climate change.
                       </Header>
-                      <Header> The lower your produce, the better.</Header>
+                      <Header> The lower you produce, the better.</Header>
                     </Grid.Row>
                     <Grid.Row>
                       <Divider/>
@@ -198,8 +198,8 @@ class Community extends React.Component {
                         An electric car will save you $632 per year on average over its gas-powered counterpart.
                         Generally, it costs $1,117 per year to run a new gas-powered vehicle, and only $485 per
                         year to run a new electric one.
-                        <Header> The higher you saved, the better.</Header>
                       </Header>
+                      <Header> The higher you save, the better.</Header>
                     </Grid.Row>
                     <Grid.Row>
                       <Divider/>

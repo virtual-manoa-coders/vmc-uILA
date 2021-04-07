@@ -43,16 +43,20 @@ const ValueDifference = ({ userData, communityData, textStyle, metric, inverted 
 
   let userGreaterThanCommunity = Math.sign(difference) > 0;
 
+  if (userGreaterThanCommunity) {
+    icon = 'arrow up';
+  } else if (!userGreaterThanCommunity) {
+    icon = 'arrow down';
+  }
+
   if (inverted) {
     userGreaterThanCommunity = !userGreaterThanCommunity;
   }
 
   if (userGreaterThanCommunity) {
     color = 'green';
-    icon = 'arrow up';
   } else if (!userGreaterThanCommunity) {
     color = 'red';
-    icon = 'arrow down';
   }
 
   return (
