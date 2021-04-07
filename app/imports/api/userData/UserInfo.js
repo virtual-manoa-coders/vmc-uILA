@@ -48,7 +48,7 @@ class UserInfoCollection {
             userID: user._id,
             name: user.name,
           };
-        }).slice(1, max);
+        }).slice(0, max);
   }
 }
 

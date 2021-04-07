@@ -1,7 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 // import { _ } from 'meteor/underscore';
+import moment from 'moment';
 import { Stuffs } from '../../api/stuff/Stuff.js';
 import { UserInfo } from '../../api/userData/UserInfo';
+import { getRandomTimeInRange, getRandomType } from '../../api/userData/UserInfo-Utilities';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
 import { UserTransportation } from '../../api/userData/UserTransportation';
 
@@ -37,11 +39,15 @@ if (UserVehicles.collection.find().count() === 0) {
 }
 
 /** Initialize the collection if empty. */
-if (UserInfo.collection.find().count() === 0) {
+if ((Meteor.settings.loadAssetsFile) && UserInfo.collection.find().count() === 0) {
   if (Meteor.settings.defaultProfiles) {
     console.log('Creating default Profiles.');
     Meteor.settings.defaultProfiles.map(data => addProfile(data));
   }
+  const assetsFileName = 'data.json';
+  console.log(`Loading data from private/${assetsFileName}`);
+  const jsonData = JSON.parse(Assets.getText(assetsFileName));
+  jsonData.profiles.map(profile => addProfile(profile));
 }
 
 /** Initialize the DB if empty (no users defined.) */
@@ -57,14 +63,6 @@ if (UserInfo.collection.find().count() === 0) {
 //   }
 // }
 
-if ((Meteor.settings.loadAssetsFile) && (Meteor.users.find().count() < 3)) {
-  Meteor.users.find().fetch().forEach(user => console.log(user));
-  const assetsFileName = 'data.json';
-  console.log(`Loading data from private/${assetsFileName}`);
-  const jsonData = JSON.parse(Assets.getText(assetsFileName));
-  jsonData.profiles.map(profile => addProfile(profile));
-}
-
 // if there's no transport log
   // get the 7 or less accounts id on start up
   // add 7 transport log for each user
@@ -72,6 +70,13 @@ if ((Meteor.settings.loadAssetsFile) && (Meteor.users.find().count() < 3)) {
 if (UserTransportation.count() === 0) {
   console.log(`current transportation log count: ${UserTransportation.count()}`);
 
-  console.log('Currently active users:');
-  UserInfo.getActive().forEach(user => console.log(`user: ${user.name} id: ${user.userID}`));
+  console.log('Active users:');
+  UserInfo.getActive(10).forEach(user => {
+    console.log(`user: ${user.name} id: ${user.userID}`);
+    // add a couple transport log here
+  });
+  const aWeekAgo = moment().subtract(1, 'weeks').toDate();
+  const now = new Date();
+  console.log(getRandomTimeInRange(aWeekAgo, now).toString());
+  console.log(getRandomType());
 }

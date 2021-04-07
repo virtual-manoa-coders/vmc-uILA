@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import SimpleSchema from 'simpl-schema';
 import { Tracker } from 'meteor/tracker';
+import { UserTransportationTypeEnum } from './UserInfo-Utilities';
 
 /** This collection contains the user's transportation usage */
 class UserTransportationCollection {
@@ -23,7 +24,7 @@ class UserTransportationCollection {
     this.schema = new SimpleSchema({
       transport: {
         type: String,
-        allowedValues: ['Telecommute', 'Walk', 'Bike', 'Carpool', 'Bus', 'Car'],
+        allowedValues: UserTransportationTypeEnum.Array,
       },
       date: Date,
       miles: Number,
