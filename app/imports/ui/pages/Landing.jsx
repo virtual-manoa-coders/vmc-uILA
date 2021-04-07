@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, Grid, Button, Icon, Divider } from 'semantic-ui-react';
+import { Header, Grid, Button, Icon, Divider, Modal } from 'semantic-ui-react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
@@ -8,6 +8,14 @@ import GhgCalculator from '../components/GhgCalculator';
 
 /** A simple static component to render some text for the landing page. */
 class Landing extends React.Component {
+  state = {
+    modalOpen: false,
+  };
+
+  handleOpen = () => this.setState({ modalOpen: true });
+
+  handleClose = () => this.setState({ modalOpen: false });
+
   render() {
     return (
         <Grid id='landing-page' verticalAlign='middle' textAlign='center' container>
@@ -23,13 +31,13 @@ class Landing extends React.Component {
                   <br/>
                   <h3>205,721lb of CO2 reduced</h3>
                 </Grid.Column>
-              <Divider hidden/>
+                <Divider hidden/>
                 <Grid.Column verticalAlign='middle'>
                   <Icon name='small road'/>
                   <br/>
                   <h3>10,500 gallons of gas saved</h3>
                 </Grid.Column>
-              <Divider hidden/>
+                <Divider hidden/>
                 <Grid.Column verticalAlign='middle'>
                   <Icon name='small taxi'/>
                   <br/>
@@ -43,23 +51,56 @@ class Landing extends React.Component {
               <Grid.Row>
                 {
                   this.props.currentUser &&
-                  <Grid.Column centered verticalAlign='middle' className='get-started'>
+                  <div>
+                    <Grid.Column centered verticalAlign='middle' className='get-started'>
                       <Header as='h2' inverted>GET STARTED</Header>
-                      <Button className='landingButton' inverted as={NavLink} exact to="/dashboard" key='dashboard'>Go to Dashboard</Button>
-                  </Grid.Column>
-                    }
-                  {
-                    !this.props.currentUser &&
-                    <div>
-                        <Grid.Column centered verticalAlign='middle' textAlign='center'>
-                          <Button.Group size='huge'>
-                          <Button className='landingButton' inverted as={NavLink} exact to="/signin" key='login'>Login</Button>
-                          <Button.Or/>
-                          <Button className='landingButton' inverted as={NavLink} exact to="/signup" key='signup'>Sign up</Button>
-                        </Button.Group>
-                        </Grid.Column>
-                    </div>
-                  }
+                        <Button className='landingButton' inverted as={NavLink} exact to="/dashboard" key='dashboard'>Go
+                          to
+                          Dashboard</Button>
+                        <Button className='landingButton' inverted onClick={this.handleOpen}>GHG Calculator</Button>
+                      <Modal
+                          open={this.state.modalOpen}
+                          onClose={this.handleClose}
+                          closeIcon
+                      >
+                        <Modal.Header>
+                          GHG Calculator
+                        </Modal.Header>
+                        <Modal.Content>
+                          <GhgCalculator handleClose={this.handleClose}/>
+                        </Modal.Content>
+                      </Modal>
+                    </Grid.Column>
+                  </div>
+                }
+                {
+                  !this.props.currentUser &&
+                  <div>
+                    <Grid.Column centered verticalAlign='middle' textAlign='center'>
+                      <Button.Group size='huge'>
+                        <Button className='landingButton' inverted as={NavLink} exact to="/signin"
+                                key='login'>Login</Button>
+                        <Button.Or/>
+                        <Button className='landingButton' inverted as={NavLink} exact to="/signup" key='signup'>Sign
+                          up</Button>
+                      </Button.Group>
+                      <br/>
+                      <Button className='landingButton' inverted onClick={this.handleOpen}>GHG Calculator</Button>
+                      <Modal
+                          open={this.state.modalOpen}
+                          onClose={this.handleClose}
+                          closeIcon
+                      >
+                        <Modal.Header>
+                          GHG Calculator
+                        </Modal.Header>
+                        <Modal.Content>
+                          <GhgCalculator handleClose={this.handleClose}/>
+                        </Modal.Content>
+                      </Modal>
+                    </Grid.Column>
+                  </div>
+                }
               </Grid.Row>
             </Grid>
           </div>
@@ -103,17 +144,6 @@ class Landing extends React.Component {
               <Grid.Column width={12}>
                 Compare your current emission options to other options
               </Grid.Column>
-            </Grid.Row>
-          </Grid>
-          <Grid container>
-            <Grid.Row centered className='ghg-landing'>
-              Not ready to become a member yet? Test out the emissions calculator here!
-            </Grid.Row>
-            <Grid.Row className='about-font' centered style={{ fontSize: '0.75em' }}>
-              Enter your vehicle&apos;s MPG and distance traveled to calculate the amount of CO2 emitted.
-            </Grid.Row>
-            <Grid.Row>
-              <GhgCalculator/>
             </Grid.Row>
           </Grid>
         </Grid>
