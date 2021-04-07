@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Card, Button } from 'semantic-ui-react';
+import { Grid, Card, Button, Input } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
@@ -31,6 +31,17 @@ class UserManagement extends React.Component {
                 <div>
                     <Button onClick={() => this.props.handleViewChange('overview')}>Go Back</Button>
                 </div>
+                <Card>
+                    <Card.Header>Filter Options</Card.Header>
+                    <Card.Content>
+                        Name Search
+                        <Input/>
+                        Email Search
+                        <Input/>
+                        <Button>Clear All</Button>
+                        <Button>Filter</Button>
+                    </Card.Content>
+                </Card>
                 <Card className={'user-management'} fluid>
                     <Card.Content>
                         <Grid>
