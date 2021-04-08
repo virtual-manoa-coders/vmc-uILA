@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
-import { Grid, Table, Divider, Loader, Header, Segment, Image } from 'semantic-ui-react';
+import { Grid, Statistic, Divider, Loader, Header, Segment, Image } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { withTracker } from 'meteor/react-meteor-data';
 import moment from 'moment';
@@ -12,17 +12,23 @@ import Section from '../components/Section';
 import { SectionHeader } from '../components/Visualization/SectionHeader';
 import CO2GraphWithTimeRange from '../components/Visualization/CO2GraphWithTimeRange';
 import CO2Table from '../components/Visualization/CO2Table';
-import { CO2CalculationTimespan, userTransportDataFilter, moneySavedCalculator, CO2CalculationTypeEnum } from '../components/Visualization/Functions';
-import CommunityWhatIfCO2 from '../components/Visualization/CommunityWhatIfCO2';
+import {
+  CO2CalculationTimespan,
+  userTransportDataFilter,
+  moneySavedCalculator,
+  CO2CalculationTypeEnum,
+  getUserCO2Percent,
+  GHGProduced,
+} from '../components/Visualization/Functions';
 
 const textStyle = { fontFamily: 'Merriweather' };
 
-/** A simple static component to render some text for the landing page. */
 class Community extends React.Component {
 
   dashboard() {
     const data = this.props.userTransportation;
-
+    console.log(GHGProduced(data, moment().subtract(1, 'months'), null, CO2CalculationTypeEnum.user));
+    console.log(GHGProduced(data, moment().subtract(1, 'months'), null, CO2CalculationTypeEnum.average));
     return (
         <Grid id='page-style' verticalAlign='middle' textAlign='center'>
           <Grid.Row>
@@ -33,13 +39,13 @@ class Community extends React.Component {
                   childMargin='5vh'>
                 <Grid id='community' container verticalAlign='middle'>
                   <Grid.Row>
-                    <Grid.Column className='community-text' width={5} verticalAlign='middle'>
+                    <Grid.Column className='community-text' width={5} verticalAlign='right'>
                       <Grid.Row>
-                        This is you vs. the average person in your city.
+                        For the community to move forward with CO2 reduction, the change must start with you.
                       </Grid.Row>
                       <Divider hidden/>
                       <Grid.Row>
-                        You are doing x% better than the average person in your city.
+                        This is how you are contributing compared to the average of your community.
                       </Grid.Row>
                     </Grid.Column>
                     <Grid.Column width={10}>
@@ -54,35 +60,65 @@ class Community extends React.Component {
           <Divider horizontal/>
           <Grid.Row>
             <Grid.Column>
-              <CO2Table data={data}/>
+              <SectionHeader container textStyle={textStyle}>
+                CO2 Saved Summary
+              </SectionHeader>
+              <CO2Table data={data} backgroundImage='/images/cloud.jpg'/>
+              <Divider hidden/>
+              <Grid columns={3} container verticalAlign='middle'>
+                <Grid.Row>
+                  <Grid.Column floated='right' textAlign='right'>
+                    <Header as={'h1'} style={textStyle}>You are doing better than</Header>
+                  </Grid.Column>
+                  <Grid.Column width={2}>
+                    <Statistic horizontal>
+                      <Statistic.Value>{getUserCO2Percent(data, moment().subtract(1, 'months'), null)}</Statistic.Value>
+                      <Statistic.Label>%</Statistic.Label>
+                    </Statistic>
+                  </Grid.Column>
+                  <Grid.Column floated='left' textAlign='left'>
+                    <Header as={'h1'} style={textStyle}>of your community</Header>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+              <Divider hidden/>
             </Grid.Column>
           </Grid.Row>
           <Divider horizontal/>
           <Grid.Row>
             <Grid.Column>
-              <Grid container>
-                <Grid.Row>
-                  <Grid.Column verticalAlign='middle'>
-                    <SectionHeader textStyle={textStyle}>
-                      Modes of Transportation This Month
-                    </SectionHeader>
-                  </Grid.Column>
-                </Grid.Row>
-                <Grid.Row columns={2} stretched>
-                  <Grid.Column verticalAlign='middle'>
-                    <Segment>
-                      <Header style={textStyle} textAlign='center' as='h2'>You</Header>
-                      <TransportationMethodPieChart userTransportation={ userTransportDataFilter(this.props.userTransportation) } timeSpan={moment().subtract(1, 'months')}/>
-                    </Segment>
-                  </Grid.Column>
-                  <Grid.Column verticalAlign='middle'>
-                    <Segment>
-                      <Header style={textStyle} textAlign='center' as='h2'>Community</Header>
-                      <TransportationMethodPieChart userTransportation={ this.props.userTransportation } timeSpan={moment().subtract(1, 'months')}/>
-                    </Segment>
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
+              <Section
+                  background='/images/traffic.jpg'
+                  childMargin='5vh'>
+                <Grid container>
+                  <Grid.Row>
+                    <Grid.Column verticalAlign='middle'>
+                      <SectionHeader inverted textStyle={textStyle}>
+                        Modes of Transportation This Month
+                      </SectionHeader>
+                      <Header style={textStyle} as={'h2'} inverted>
+                        There are many options for CO2-free travel.
+                        See how much you are <br/> utilizing the transportation methods
+                        in your community.
+                      </Header>
+                    </Grid.Column>
+                  </Grid.Row>
+                  <Grid.Row columns={2} stretched>
+                    <Grid.Column verticalAlign='middle'>
+                      <Segment>
+                        <Header style={textStyle} textAlign='center' as='h2'>Your travel this month</Header>
+                        <TransportationMethodPieChart userTransportation={ userTransportDataFilter(this.props.userTransportation) } timeSpan={moment().subtract(1, 'months')}/>
+                      </Segment>
+                    </Grid.Column>
+                    <Grid.Column verticalAlign='middle'>
+                      <Segment>
+                        <Header style={textStyle} textAlign='center' as='h2'>Community travel this month</Header>
+                        <TransportationMethodPieChart userTransportation={ this.props.userTransportation } timeSpan={moment().subtract(1, 'months')}/>
+                      </Segment>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              </Section>
             </Grid.Column>
           </Grid.Row>
           <Divider horizontal/>
@@ -96,14 +132,18 @@ class Community extends React.Component {
 
           <Grid.Row>
             <Grid.Column>
+              {
+                // TODO: Change this into GHG produced
+              }
               <ComparisonChart
                   icon={'cloud'}
-                  metricName={'GHG Saved'}
-                  userData={CO2CalculationTimespan(data, moment().subtract(1, 'w'), null, CO2CalculationTypeEnum.user)}
-                  communityData={CO2CalculationTimespan(data, moment().subtract(1, 'w'), null, CO2CalculationTypeEnum.average)}
+                  metricName={'GHG Made'}
+                  userData={GHGProduced(data, moment().subtract(1, 'w'), null, CO2CalculationTypeEnum.user)}
+                  communityData={GHGProduced(data, moment().subtract(1, 'w'), null, CO2CalculationTypeEnum.average)}
                   userTransportation={ this.props.userTransportation }
                   textStyle={textStyle}
                   metric={'pounds'}
+                  invertArrowColor
                   container
               >
                 <Grid columns={2} container>
@@ -117,8 +157,9 @@ class Community extends React.Component {
                       <Header textAlign='left' textStyle={textStyle} as={'h3'}>
                         A greenhouse gas (sometimes abbreviated GHG) is a gas that absorbs and emits radiant energy
                         within the thermal infrared range, causing the greenhouse effect. This gas is one of your main
-                        contribution to climate change, so the higher you reduce your carbon footprint, the better.
+                        contribution to climate change.
                       </Header>
+                      <Header> The lower you produce, the better.</Header>
                     </Grid.Row>
                     <Grid.Row>
                       <Divider/>
@@ -158,6 +199,7 @@ class Community extends React.Component {
                         Generally, it costs $1,117 per year to run a new gas-powered vehicle, and only $485 per
                         year to run a new electric one.
                       </Header>
+                      <Header> The higher you save, the better.</Header>
                     </Grid.Row>
                     <Grid.Row>
                       <Divider/>
