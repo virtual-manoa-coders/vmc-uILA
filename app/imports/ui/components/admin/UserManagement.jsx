@@ -1,10 +1,12 @@
 import React from 'react';
-import { Grid, Card, Button, Input } from 'semantic-ui-react';
+import { Grid, Card, Button, Input, Table } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import { UserInfo } from '../../../api/userData/UserInfo';
+import ListTransportEntry from '../ListTransportEntry';
+import { UserTransportation } from '../../../api/userData/UserTransportation';
 
 /** A simple static component to render some text for the landing page. */
 class UserManagement extends React.Component {
@@ -79,7 +81,9 @@ class UserManagement extends React.Component {
                                         {
                                             this.state.selectedIndex === index &&
                                             <Grid.Row>
-                                                This would be the users travel history
+                                                <Table.Body>
+                                                    {this.props.entries.map((entry) => <ListTransportEntry key={entry._id} entry={entry} UserTransportation={UserTransportation} />)}
+                                                </Table.Body>
                                             </Grid.Row>
                                         }
                                     </Grid.Row>
@@ -103,12 +107,14 @@ class UserManagement extends React.Component {
 UserManagement.propTypes = {
     currentUser: PropTypes.string,
     userList: PropTypes.array.isRequired,
+    entries: PropTypes.array.isRequired,
     handleViewChange: PropTypes.func.isRequired,
 };
 
 /** withTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker */
 const UserManagementContainer = withTracker(() => ({
     currentUser: Meteor.user() ? Meteor.user().username : '',
+    entries: UserTransportation.collection.find({}, { sort: { date: -1 } }).fetch(),
 }))(UserManagement);
 
 /** Enable ReactRouter for this component. https://reacttraining.com/react-router/web/api/withRouter */
