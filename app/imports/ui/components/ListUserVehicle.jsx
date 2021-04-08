@@ -2,6 +2,7 @@ import React from 'react';
 import { Table, Modal, Button, Header, Icon } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
+import EditUserVehicle from './EditUserVehicle';
 
 /** Renders a single row in the List Transport Entries table. See pages/ListTransportEntriesPage.jsx. */
 class ListUserVehicle extends React.Component {
@@ -21,9 +22,15 @@ class ListUserVehicle extends React.Component {
     this.setOpen(false);
   }
 
+  // state = {
+  //   modalOpen: false,
+  // };
+  //
+  // handleOpen = () => this.setState({ modalOpen: true });
+  //
+  // handleClose = () => this.setState({ modalOpen: false });
+
   render() {
-    // const date = ` ${this.props.entry.date} `;
-    // const shortenedDate = moment(date).format('L');
     return (
         <Table.Row className='entry-table'>
           <Table.Cell>{this.props.entry.carName}</Table.Cell>
@@ -60,6 +67,19 @@ class ListUserVehicle extends React.Component {
             <Link to={`/edit-vehicle/${this.props.entry._id}`}>
               <Icon name='edit'/>
             </Link>
+            {/*<Button basic size='tiny' color='black' icon='edit' onClick={() => this.handleOpen(this.props.entry._id)}/>*/}
+            {/*<Modal*/}
+            {/*    open={this.state.modalOpen}*/}
+            {/*    onClose={this.handleClose}*/}
+            {/*    closeIcon*/}
+            {/*>*/}
+            {/*  <Modal.Header>*/}
+            {/*    Edit Vehicle*/}
+            {/*  </Modal.Header>*/}
+            {/*  <Modal.Content>*/}
+            {/*    <EditUserVehicle{this.props.entry._id}handleClose={this.handleClose}/>*/}
+            {/*  </Modal.Content>*/}
+            {/*</Modal>*/}
           </Table.Cell>
         </Table.Row>
     );

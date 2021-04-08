@@ -253,9 +253,16 @@ footer {
 }
 
 #view-trips {
+  border: none;
+  background: white;
+  float: right;
+}
+
+#list-user-vehicles, #transport-data-entry, #add-vehicle {
 	border: none;
-	background: white;
+	background: #66b3ff;
 	float: right;
+  margin-bottom: 0.5em;
 }
 
 /* Admin Page CSS */

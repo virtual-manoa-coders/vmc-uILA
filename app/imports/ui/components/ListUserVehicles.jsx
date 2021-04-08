@@ -1,13 +1,22 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { Container, Header, Loader, Table } from 'semantic-ui-react';
+import { NavLink } from 'react-router-dom';
+import { Button, Container, Header, Loader, Modal, Table } from 'semantic-ui-react';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import ListUserVehicle from '../components/ListUserVehicle';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
+import AddVehicle from '../components/AddVehicle';
 
 /** Renders a table containing all of the Stuff documents. Use <StuffItem> to render each row. */
 class ListUserVehicles extends React.Component {
+  state = {
+    modalOpen: false,
+  };
+
+  handleOpen = () => this.setState({ modalOpen: true });
+
+  handleClose = () => this.setState({ modalOpen: false });
   /** If the subscription(s) have been received, render the page, otherwise show a loading icon. */
   render() {
     return (this.props.ready) ? this.renderPage() : <Loader active>Getting data</Loader>;
@@ -18,6 +27,20 @@ class ListUserVehicles extends React.Component {
     return (
         <Container>
           <Header as="h3" textAlign="center" style={{ color: '#2292b3' }}>Your Vehicles</Header>
+          <Button id='list-user-vehicles' onClick={this.handleOpen}> Add a Vehicle
+          </Button>
+          <Modal
+              open={this.state.modalOpen}
+              onClose={this.handleClose}
+              closeIcon
+          >
+            <Modal.Header>
+              Add a Vehicle
+            </Modal.Header>
+            <Modal.Content>
+              <AddVehicle handleClose={this.handleClose}/>
+            </Modal.Content>
+          </Modal>
           <Table unstackable celled>
             <Table.Header>
               <Table.Row>
@@ -32,13 +55,15 @@ class ListUserVehicles extends React.Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {this.props.entries.map((entry) => <ListUserVehicle key={entry._id} entry={entry} UserTransportation={UserVehicles} />)}
+              {this.props.entries.map((entry) => <ListUserVehicle key={entry._id} entry={entry}
+                                                                  UserVehicles={UserVehicles}/>)}
             </Table.Body>
           </Table>
         </Container>
     );
   }
 }
+
 /** Require an array of Stuff documents in the props. */
 ListUserVehicles.propTypes = {
   entries: PropTypes.array.isRequired,
