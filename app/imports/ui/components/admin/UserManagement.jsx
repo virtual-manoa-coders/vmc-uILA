@@ -15,6 +15,7 @@ class UserManagement extends React.Component {
         this.state = {
             selectedIndex: null,
         };
+        console.log(this.props.userList);
 
         this.handleRowSelection = this.handleRowSelection.bind(this);
     }
@@ -23,7 +24,14 @@ class UserManagement extends React.Component {
         UserInfo.collection.remove({ _id: user._id });
     }
 
-    handleRowSelection(selectedIndex) {
+    handleRowSelection(index) {
+        let selectedIndex = index;
+
+        // Deselect the row if it is clicked again
+        if (selectedIndex === this.state.selectedIndex) {
+            selectedIndex = null;
+        }
+
         this.setState({ selectedIndex });
     }
 
@@ -33,8 +41,10 @@ class UserManagement extends React.Component {
                 <div>
                     <Button onClick={() => this.props.handleViewChange('overview')}>Go Back</Button>
                 </div>
-                <Card>
-                    <Card.Header>Filter Options</Card.Header>
+                <Card fluid>
+                    <Card.Content>
+                        <h3>Filter Options</h3>
+                    </Card.Content>
                     <Card.Content>
                         Name Search
                         <Input/>
@@ -58,32 +68,45 @@ class UserManagement extends React.Component {
                             {
                                 this.props.userList.map((user, index) => (
                                     <Grid.Row key={index}>
-                                        <Grid.Row columns={'equal'} onClick={() => this.handleRowSelection(index)}>
-                                            <Grid.Column>
-                                                {user.name}
-                                            </Grid.Column>
-                                            <Grid.Column>
-                                                {user.email}
-                                            </Grid.Column>
-                                            <Grid.Column>
-                                                {user.CO2Reduced}
-                                            </Grid.Column>
-                                            <Grid.Column>
-                                                {user.VMTReduced}
-                                            </Grid.Column>
-                                            <Grid.Column>
-                                                {user.fuelSaved}
-                                            </Grid.Column>
-                                            <Grid.Column onClick={() => this.deleteUser(user)}>
-                                                <Button color={'red'} disabled={user.email === this.props.currentUser}>Delete User</Button>
-                                            </Grid.Column>
-                                        </Grid.Row>
+                                        <Grid columns={'equal'} style={{ width: '100%', marginLeft: '0' }} onClick={() => this.handleRowSelection(index)}>
+                                            <Grid.Row>
+                                                <Grid.Column>
+                                                    {user.name}
+                                                </Grid.Column>
+                                                <Grid.Column>
+                                                    {user.email}
+                                                </Grid.Column>
+                                                <Grid.Column>
+                                                    {user.CO2Reduced}
+                                                </Grid.Column>
+                                                <Grid.Column>
+                                                    {user.VMTReduced}
+                                                </Grid.Column>
+                                                <Grid.Column>
+                                                    {user.fuelSaved}
+                                                </Grid.Column>
+                                                <Grid.Column onClick={() => this.deleteUser(user)}>
+                                                    <Button color={'red'} disabled={user.email === this.props.currentUser}>Delete User</Button>
+                                                </Grid.Column>
+                                            </Grid.Row>
+                                        </Grid>
                                         {
                                             this.state.selectedIndex === index &&
                                             <Grid.Row>
-                                                <Table.Body>
-                                                    {this.props.entries.map((entry) => <ListTransportEntry key={entry._id} entry={entry} UserTransportation={UserTransportation} />)}
-                                                </Table.Body>
+                                                <Table celled basic={'very'}>
+                                                    <Table.Header>
+                                                        <Table.Row>
+                                                            <Table.HeaderCell>Date</Table.HeaderCell>
+                                                            <Table.HeaderCell>Transport</Table.HeaderCell>
+                                                            <Table.HeaderCell>Miles</Table.HeaderCell>
+                                                            <Table.HeaderCell>Delete</Table.HeaderCell>
+                                                            <Table.HeaderCell className='edit'>Edit</Table.HeaderCell>
+                                                        </Table.Row>
+                                                    </Table.Header>
+                                                    <Table.Body>
+                                                        {this.props.entries.map((entry) => <ListTransportEntry key={entry._id} entry={entry} UserTransportation={UserTransportation} />)}
+                                                    </Table.Body>
+                                                </Table>
                                             </Grid.Row>
                                         }
                                     </Grid.Row>

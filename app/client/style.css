@@ -286,7 +286,7 @@ footer {
     float: right;
 }
 
-/* Admin Page CSS */
+/* Admin Page CSS starts */
 #admin-page button {
     height: 16em;
     margin-top: 0.5em;
@@ -298,6 +298,7 @@ footer {
 
 .user-management .row {
     border-bottom: 1px solid #efefef;
+    width: 100%;
 }
 
 .user-management .row:last-child {
@@ -308,10 +309,17 @@ footer {
     word-break: break-word;
 }
 
+.user-management table {
+    padding: 1em;
+    width: 100%;
+}
+
 .auto-margin {
     margin-left: auto;
     margin-right: auto;
 }
+
+/* Admin Page CSS ends */
 
 .comparator-text {
     font-size: 36px;
