@@ -1,6 +1,6 @@
 import React from 'react';
-import { Grid, Header, Loader, Segment, Button } from 'semantic-ui-react';
-import { AutoForm, ErrorsField, NumField, SelectField, SubmitField, DateField } from 'uniforms-semantic';
+import { Grid, Header, Loader, Segment, Button, Checkbox } from 'semantic-ui-react';
+import { AutoForm, ErrorsField, NumField, SelectField, SubmitField, DateField, TextField } from 'uniforms-semantic';
 import swal from 'sweetalert';
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
@@ -19,6 +19,10 @@ TODO:
 
 /** Create a schema to specify the structure of the data to appear in the logging form. */
 const formSchema = new SimpleSchema({
+  trips: {
+    type: String,
+    allowedValues: ['Work', 'School', 'Grandmas house'],
+  },
   transport: {
     type: String,
     allowedValues: ['Telecommute', 'Walk', 'Bike', 'Carpool', 'Bus', 'Car'],
@@ -26,6 +30,8 @@ const formSchema = new SimpleSchema({
   },
   date: Date,
   miles: Number,
+  saveTrip: Boolean,
+  nameTrip: String,
 });
 
 const bridge = new SimpleSchema2Bridge(formSchema);
@@ -65,14 +71,17 @@ class TransportDataEntry extends React.Component {
             }} schema={bridge} onSubmit={data => this.submit(data, fRef)}>
               <Segment>
               <Header style={{ color: '#2292b3' }} textAlign='center' as='h3'>Log a Trip</Header>
+                <SelectField name='trips' label='Saved Trips'/>
                 <DateField name='date'
                            max={new Date()}
                            min={new Date(2017, 1, 1)}
                 />
                 <SelectField name='transport'/>
                 <NumField name='miles' decimal={false}/>
-                <SubmitField value='Submit'/>
+                <Checkbox label ='Save this trip for future use'/>
+                <TextField name='nameTrip' label='Name trip' disabled/>
                 <ErrorsField/>
+                <SubmitField value='Submit'/>
                 <Button id='view-trips' as={NavLink} activeClassName="active" exact to="/list-transport-entries" key='list-transport-entries'> View/Edit Your Trips
                 </Button>
               </Segment>

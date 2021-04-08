@@ -67,19 +67,6 @@ class About extends React.Component {
               </Grid.Column>
               <Grid.Column>
                 <Item className='font-comfortaa'>
-                  <Item.Image size='tiny' circular src='images/christian.jpg' as='a'
-                              href='https://github.com/christianjensenv'/>
-                  <span>Christian</span>
-                </Item>
-              </Grid.Column>
-              <Grid.Column>
-                <Item className='font-comfortaa'>
-                  <Item.Image size='tiny' circular src='images/sophia.png' as='a' href='https://github.com/s-rathyen'/>
-                  <span>Sophia</span>
-                </Item>
-              </Grid.Column>
-              <Grid.Column>
-                <Item className='font-comfortaa'>
                   <Item.Image size='tiny' circular src='images/patima.png' as='a'
                               href='https://github.com/patimapoochai'/>
                   <span>Patima</span>
