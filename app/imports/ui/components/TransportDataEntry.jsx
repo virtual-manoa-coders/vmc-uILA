@@ -28,6 +28,10 @@ const formSchema = new SimpleSchema({
     allowedValues: ['Telecommute', 'Walk', 'Bike', 'Carpool', 'Bus', 'Car'],
     defaultValue: 'Telecommute',
   },
+  car: {
+    type: String,
+    allowedValues: ['2007 Toyota Yaris', '2010 Tesla Model X'],
+  },
   date: Date,
   miles: Number,
   saveTrip: Boolean,
@@ -38,7 +42,6 @@ const bridge = new SimpleSchema2Bridge(formSchema);
 
 /** Renders the Page for adding a document. */
 class TransportDataEntry extends React.Component {
-
   /** On log your commute submit, insert the data into UserTransportation. */
   submit(data, formRef) {
     const { date, transport, miles } = data;
@@ -77,8 +80,9 @@ class TransportDataEntry extends React.Component {
                            min={new Date(2017, 1, 1)}
                 />
                 <SelectField name='transport'/>
+                <SelectField name='car' disabled/>
                 <NumField name='miles' decimal={false}/>
-                <Checkbox label ='Save this trip for future use'/>
+                <Checkbox name='nameTrip' label ='Save this trip for future use'/>
                 <TextField name='nameTrip' label='Name trip' disabled/>
                 <ErrorsField/>
                 <SubmitField value='Submit'/>
