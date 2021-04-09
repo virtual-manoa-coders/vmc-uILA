@@ -18,6 +18,7 @@ import {
   moneySavedCalculator,
   CO2CalculationTypeEnum,
   getUserCO2Percent,
+  GHGProduced,
 } from '../components/Visualization/Functions';
 
 const textStyle = { fontFamily: 'Merriweather' };
@@ -26,8 +27,8 @@ class Community extends React.Component {
 
   dashboard() {
     const data = this.props.userTransportation;
-    console.log(getUserCO2Percent(data, moment().subtract(1, 'months'), null));
-
+    console.log(GHGProduced(data, moment().subtract(1, 'months'), null, CO2CalculationTypeEnum.user));
+    console.log(GHGProduced(data, moment().subtract(1, 'months'), null, CO2CalculationTypeEnum.average));
     return (
         <Grid id='page-style' verticalAlign='middle' textAlign='center'>
           <Grid.Row>
@@ -136,12 +137,13 @@ class Community extends React.Component {
               }
               <ComparisonChart
                   icon={'cloud'}
-                  metricName={'GHG Saved'}
-                  userData={CO2CalculationTimespan(data, moment().subtract(1, 'w'), null, CO2CalculationTypeEnum.user)}
-                  communityData={CO2CalculationTimespan(data, moment().subtract(1, 'w'), null, CO2CalculationTypeEnum.average)}
+                  metricName={'GHG Made'}
+                  userData={GHGProduced(data, moment().subtract(1, 'w'), null, CO2CalculationTypeEnum.user)}
+                  communityData={GHGProduced(data, moment().subtract(1, 'w'), null, CO2CalculationTypeEnum.average)}
                   userTransportation={ this.props.userTransportation }
                   textStyle={textStyle}
                   metric={'pounds'}
+                  invertArrowColor
                   container
               >
                 <Grid columns={2} container>
@@ -155,8 +157,9 @@ class Community extends React.Component {
                       <Header textAlign='left' textStyle={textStyle} as={'h3'}>
                         A greenhouse gas (sometimes abbreviated GHG) is a gas that absorbs and emits radiant energy
                         within the thermal infrared range, causing the greenhouse effect. This gas is one of your main
-                        contribution to climate change, so the higher you reduce your carbon footprint, the better.
+                        contribution to climate change.
                       </Header>
+                      <Header> The lower you produce, the better.</Header>
                     </Grid.Row>
                     <Grid.Row>
                       <Divider/>
@@ -196,6 +199,7 @@ class Community extends React.Component {
                         Generally, it costs $1,117 per year to run a new gas-powered vehicle, and only $485 per
                         year to run a new electric one.
                       </Header>
+                      <Header> The higher you save, the better.</Header>
                     </Grid.Row>
                     <Grid.Row>
                       <Divider/>
