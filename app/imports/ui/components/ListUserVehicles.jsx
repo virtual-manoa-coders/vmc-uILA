@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { NavLink } from 'react-router-dom';
-import { Button, Container, Header, Loader, Modal, Table } from 'semantic-ui-react';
+import { Button, Container, Header, Loader, Modal, Table, Card, Segment } from 'semantic-ui-react';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import ListUserVehicle from '../components/ListUserVehicle';
@@ -17,6 +17,7 @@ class ListUserVehicles extends React.Component {
   handleOpen = () => this.setState({ modalOpen: true });
 
   handleClose = () => this.setState({ modalOpen: false });
+
   /** If the subscription(s) have been received, render the page, otherwise show a loading icon. */
   render() {
     return (this.props.ready) ? this.renderPage() : <Loader active>Getting data</Loader>;
@@ -25,7 +26,7 @@ class ListUserVehicles extends React.Component {
   /** Render the page once subscriptions have been received. */
   renderPage() {
     return (
-        <Container>
+        <div>
           <Header as="h3" textAlign="center" style={{ color: '#2292b3' }}>Your Vehicles</Header>
           <Button id='list-user-vehicles' onClick={this.handleOpen}> Add a Vehicle
           </Button>
@@ -41,30 +42,53 @@ class ListUserVehicles extends React.Component {
               <AddVehicle handleClose={this.handleClose}/>
             </Modal.Content>
           </Modal>
-          <Table unstackable celled>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Car Name</Table.HeaderCell>
-                <Table.HeaderCell>Car Make</Table.HeaderCell>
-                <Table.HeaderCell>Car Model</Table.HeaderCell>
-                <Table.HeaderCell>Car Year</Table.HeaderCell>
-                <Table.HeaderCell>Car MPG</Table.HeaderCell>
-                <Table.HeaderCell>Car Price</Table.HeaderCell>
-                <Table.HeaderCell>Delete</Table.HeaderCell>
-                <Table.HeaderCell className='edit'>Edit</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
+          {/*<Table unstackable celled>*/
+          }
+          {/*  <Table.Header>*/
+          }
+          {/*    <Table.Row>*/
+          }
+          {/*      <Table.HeaderCell>Car Name</Table.HeaderCell>*/
+          }
+          {/*      <Table.HeaderCell>Car Make</Table.HeaderCell>*/
+          }
+          {/*      <Table.HeaderCell>Car Model</Table.HeaderCell>*/
+          }
+          {/*      <Table.HeaderCell>Car Year</Table.HeaderCell>*/
+          }
+          {/*      <Table.HeaderCell>Car MPG</Table.HeaderCell>*/
+          }
+          {/*      <Table.HeaderCell>Car Price</Table.HeaderCell>*/
+          }
+          {/*      <Table.HeaderCell>Delete</Table.HeaderCell>*/
+          }
+          {/*      <Table.HeaderCell className='edit'>Edit</Table.HeaderCell>*/
+          }
+          {/*    </Table.Row>*/
+          }
+          {/*  </Table.Header>*/
+          }
+          {/*  <Table.Body>*/
+          }
+          {/*    {this.props.entries.map((entry) => <ListUserVehicle key={entry._id} entry={entry}*/
+          }
+          {/*                                                        UserVehicles={UserVehicles}/>)}*/
+          }
+          {/*  </Table.Body>*/
+          }
+          {/*</Table>*/
+          }
+          <Container>
+            <Card.Group centered>
               {this.props.entries.map((entry) => <ListUserVehicle key={entry._id} entry={entry}
                                                                   UserVehicles={UserVehicles}/>)}
-            </Table.Body>
-          </Table>
-        </Container>
+            </Card.Group>
+          </Container>
+        </div>
     );
   }
 }
 
-/** Require an array of Stuff documents in the props. */
 ListUserVehicles.propTypes = {
   entries: PropTypes.array.isRequired,
   ready: PropTypes.bool.isRequired,
