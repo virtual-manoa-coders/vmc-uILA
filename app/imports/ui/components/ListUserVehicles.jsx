@@ -47,42 +47,6 @@ class ListUserVehicles extends React.Component {
               </Modal>
               </Grid.Column>
             </Grid.Row>
-            {/*<Table unstackable celled>*/
-            }
-            {/*  <Table.Header>*/
-            }
-            {/*    <Table.Row>*/
-            }
-            {/*      <Table.HeaderCell>Car Name</Table.HeaderCell>*/
-            }
-            {/*      <Table.HeaderCell>Car Make</Table.HeaderCell>*/
-            }
-            {/*      <Table.HeaderCell>Car Model</Table.HeaderCell>*/
-            }
-            {/*      <Table.HeaderCell>Car Year</Table.HeaderCell>*/
-            }
-            {/*      <Table.HeaderCell>Car MPG</Table.HeaderCell>*/
-            }
-            {/*      <Table.HeaderCell>Car Price</Table.HeaderCell>*/
-            }
-            {/*      <Table.HeaderCell>Delete</Table.HeaderCell>*/
-            }
-            {/*      <Table.HeaderCell className='edit'>Edit</Table.HeaderCell>*/
-            }
-            {/*    </Table.Row>*/
-            }
-            {/*  </Table.Header>*/
-            }
-            {/*  <Table.Body>*/
-            }
-            {/*    {this.props.entries.map((entry) => <ListUserVehicle key={entry._id} entry={entry}*/
-            }
-            {/*                                                        UserVehicles={UserVehicles}/>)}*/
-            }
-            {/*  </Table.Body>*/
-            }
-            {/*</Table>*/
-            }
             <Grid.Row>
               <Container>
                 <Card.Group centered>
