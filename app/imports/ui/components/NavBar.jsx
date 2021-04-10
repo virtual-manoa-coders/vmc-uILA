@@ -39,7 +39,7 @@ class NavBar extends React.Component {
             boxShadow: 'none',
             borderBottom: 'none',
             fontFamily: 'Comfortaa',
-            fontWeight: '800'
+            fontWeight: '800',
           }}>
             <Menu.Item as={NavLink} activeClassName="" exact to="/">
               <Image size='small' src='images/logo2.png'/>

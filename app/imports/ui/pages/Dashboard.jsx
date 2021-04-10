@@ -92,12 +92,10 @@ class Dashboard extends React.Component {
               <h2>3 days</h2>
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row id='space-row'>
-          </Grid.Row>
           <Grid.Row columns={2} height='equal' width='equal'>
             <Grid.Column>
               <Segment>
-              <Tab menu={{ secondary: true, pointing: true }} panes={panes}/>
+              <Tab fluid style={{ overflow: 'auto', height: 450 }} menu={{ secondary: true, pointing: true }} panes={panes}/>
               </Segment>
             </Grid.Column>
           </Grid.Row>

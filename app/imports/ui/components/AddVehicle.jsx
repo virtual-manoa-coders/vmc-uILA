@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Segment, Header } from 'semantic-ui-react';
+import { Grid, Segment, Header, Form } from 'semantic-ui-react';
 import { AutoForm, ErrorsField, SelectField, SubmitField, TextField, NumField } from 'uniforms-semantic';
 import swal from 'sweetalert';
 import { Meteor } from 'meteor/meteor';
@@ -13,7 +13,8 @@ import { AllUserVehicles } from '../../api/userVehicles/AllUserVehicles';
 /** Create a schema to specify the structure of the data to appear in the form. */
 const formSchema = new SimpleSchema({
   carName: { type: String, label: 'Name your car' },
-  carMake: { type: String, optional: true,
+  carMake: {
+    type: String, optional: true,
     allowedValues: [
       'Acura',
       'Alfa Romeo',
@@ -62,7 +63,8 @@ const formSchema = new SimpleSchema({
       'Toyota',
       'Volkswagen',
       'Volvo',
-    ] },
+    ]
+  },
   carModel: { type: String, label: 'Car model', optional: true },
   carYear: {
     type: String,
@@ -103,14 +105,21 @@ class AddVehicle extends React.Component {
           <Grid.Column>
             <Header style={{ color: '#2292b3' }} textAlign='center' as='h3'>Add a Vehicle
             </Header>
-            <AutoForm ref={ref => { fRef = ref; }} schema={bridge} onSubmit={data => this.submit(data, fRef)} >
+            <AutoForm ref={ref => {
+              fRef = ref;
+            }} schema={bridge} onSubmit={data => this.submit(data, fRef)}>
               <Segment>
-                <TextField id='carName' name='carName' optional='true' showInlineError={true} placeholder='Name your car'/>
-                <SelectField id='carMake' name='carMake' showInlineError={true} placeholder='Car make'/>
-                <TextField id='carModel' name='carModel' showInlineError={true} placeholder='Car model'/>
-                <SelectField id='carYear' name='carYear' showInlineError={true} placeholder='Car year'/>
-                <NumField id='carMPG' name='carMPG' showInlineError={true} placeholder='Average miles per gallon'/>
-                <NumField id='carPrice' name='carPrice' showInlineError={true} placeholder='Car Price'/>
+                <TextField id='carName' name='carName' optional='true' showInlineError={true}
+                           placeholder='Name your car'/>
+                <Form.Group widths='equal'>
+                  <SelectField id='carMake' name='carMake' showInlineError={true} placeholder='Car make'/>
+                  <TextField id='carModel' name='carModel' showInlineError={true} placeholder='Car model'/>
+                </Form.Group>
+                <Form.Group widths='equal'>
+                  <SelectField id='carYear' name='carYear' showInlineError={true} placeholder='Car year'/>
+                  <NumField id='carMPG' name='carMPG' showInlineError={true} placeholder='Average miles per gallon'/>
+                  <NumField id='carPrice' name='carPrice' showInlineError={true} placeholder='Car Price'/>
+                </Form.Group>
                 <SubmitField value='Submit'/>
                 <ErrorsField/>
               </Segment>
