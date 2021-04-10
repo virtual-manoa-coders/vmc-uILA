@@ -26,7 +26,7 @@ class ListUserVehicles extends React.Component {
   /** Render the page once subscriptions have been received. */
   renderPage() {
     return (
-        <div>
+        <div id='list-vehicles'>
           <Header as="h3" textAlign="center" style={{ color: '#2292b3' }}>Your Vehicles</Header>
           <Grid>
             <Grid.Row>
