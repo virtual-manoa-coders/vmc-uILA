@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { NavLink } from 'react-router-dom';
-import { Button, Container, Header, Loader, Modal, Table, Card, Segment } from 'semantic-ui-react';
+import { Button, Container, Header, Loader, Modal, Table, Card, Grid } from 'semantic-ui-react';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import ListUserVehicle from '../components/ListUserVehicle';
@@ -28,62 +28,70 @@ class ListUserVehicles extends React.Component {
     return (
         <div>
           <Header as="h3" textAlign="center" style={{ color: '#2292b3' }}>Your Vehicles</Header>
-          <Button id='list-user-vehicles' onClick={this.handleOpen}> Add a Vehicle
-          </Button>
-          <Modal
-              open={this.state.modalOpen}
-              onClose={this.handleClose}
-              closeIcon
-          >
-            <Modal.Header>
-              Add a Vehicle
-            </Modal.Header>
-            <Modal.Content>
-              <AddVehicle handleClose={this.handleClose}/>
-            </Modal.Content>
-          </Modal>
-          {/*<Table unstackable celled>*/
-          }
-          {/*  <Table.Header>*/
-          }
-          {/*    <Table.Row>*/
-          }
-          {/*      <Table.HeaderCell>Car Name</Table.HeaderCell>*/
-          }
-          {/*      <Table.HeaderCell>Car Make</Table.HeaderCell>*/
-          }
-          {/*      <Table.HeaderCell>Car Model</Table.HeaderCell>*/
-          }
-          {/*      <Table.HeaderCell>Car Year</Table.HeaderCell>*/
-          }
-          {/*      <Table.HeaderCell>Car MPG</Table.HeaderCell>*/
-          }
-          {/*      <Table.HeaderCell>Car Price</Table.HeaderCell>*/
-          }
-          {/*      <Table.HeaderCell>Delete</Table.HeaderCell>*/
-          }
-          {/*      <Table.HeaderCell className='edit'>Edit</Table.HeaderCell>*/
-          }
-          {/*    </Table.Row>*/
-          }
-          {/*  </Table.Header>*/
-          }
-          {/*  <Table.Body>*/
-          }
-          {/*    {this.props.entries.map((entry) => <ListUserVehicle key={entry._id} entry={entry}*/
-          }
-          {/*                                                        UserVehicles={UserVehicles}/>)}*/
-          }
-          {/*  </Table.Body>*/
-          }
-          {/*</Table>*/
-          }
-          <Container>
-            <Card.Group centered>
-              {this.props.entries.map((entry) => <ListUserVehicle key={entry._id} entry={entry}
-                                                                  UserVehicles={UserVehicles}/>)}
-            </Card.Group>
-          </Container>
+          <Grid>
+            <Grid.Row>
+              <Grid.Column floated='right'>
+              <Button id='list-user-vehicles' onClick={this.handleOpen}> Add a Vehicle
+              </Button>
+              <Modal
+                  open={this.state.modalOpen}
+                  onClose={this.handleClose}
+                  closeIcon
+              >
+                <Modal.Header>
+                  Add a Vehicle
+                </Modal.Header>
+                <Modal.Content>
+                  <AddVehicle handleClose={this.handleClose}/>
+                </Modal.Content>
+              </Modal>
+              </Grid.Column>
+            </Grid.Row>
+            {/*<Table unstackable celled>*/
+            }
+            {/*  <Table.Header>*/
+            }
+            {/*    <Table.Row>*/
+            }
+            {/*      <Table.HeaderCell>Car Name</Table.HeaderCell>*/
+            }
+            {/*      <Table.HeaderCell>Car Make</Table.HeaderCell>*/
+            }
+            {/*      <Table.HeaderCell>Car Model</Table.HeaderCell>*/
+            }
+            {/*      <Table.HeaderCell>Car Year</Table.HeaderCell>*/
+            }
+            {/*      <Table.HeaderCell>Car MPG</Table.HeaderCell>*/
+            }
+            {/*      <Table.HeaderCell>Car Price</Table.HeaderCell>*/
+            }
+            {/*      <Table.HeaderCell>Delete</Table.HeaderCell>*/
+            }
+            {/*      <Table.HeaderCell className='edit'>Edit</Table.HeaderCell>*/
+            }
+            {/*    </Table.Row>*/
+            }
+            {/*  </Table.Header>*/
+            }
+            {/*  <Table.Body>*/
+            }
+            {/*    {this.props.entries.map((entry) => <ListUserVehicle key={entry._id} entry={entry}*/
+            }
+            {/*                                                        UserVehicles={UserVehicles}/>)}*/
+            }
+            {/*  </Table.Body>*/
+            }
+            {/*</Table>*/
+            }
+            <Grid.Row>
+              <Container>
+                <Card.Group centered>
+                  {this.props.entries.map((entry) => <ListUserVehicle key={entry._id} entry={entry}
+                                                                      UserVehicles={UserVehicles}/>)}
+                </Card.Group>
+              </Container>
+            </Grid.Row>
+          </Grid>
         </div>
     );
   }
