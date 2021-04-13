@@ -22,10 +22,10 @@ const UserTransportationTypeEnum = {
 };
 
 const defaultCars = [
-  { carMake: 'Toyota', carModel: 'Camry', carYear: 2012, carMPG: 28, carPrice: 13000 },
-  { carMake: 'Honda', carModel: 'Civic', carYear: 2018, carMPG: 36, carPrice: 20000 },
-  { carMake: 'Nissan', carModel: 'Sentra', carYear: 2013, carMPG: 31, carPrice: 11000 },
-  { carMake: 'Honda', carModel: 'Fit', carYear: 2014, carMPG: 29, carPrice: 12000 },
+  { carMake: 'Toyota', carModel: 'Camry', carYear: '2012', carMPG: 28, carPrice: 13000 },
+  { carMake: 'Honda', carModel: 'Civic', carYear: '2018', carMPG: 36, carPrice: 20000 },
+  { carMake: 'Nissan', carModel: 'Sentra', carYear: '2013', carMPG: 31, carPrice: 11000 },
+  { carMake: 'Honda', carModel: 'Fit', carYear: '2014', carMPG: 29, carPrice: 12000 },
 ];
 
 /* This JSON will be modified and wrote into a file */
@@ -90,7 +90,7 @@ function addTransport(JSONArray, date, leastMiles, maxMiles, username, mpg, forc
   const transportType = forceCar ? UserTransportationTypeEnum.Car : randomElement(UserTransportationTypeEnum.Array);
   JSONArray.push({
     transport: transportType,
-    date: date,
+    date: date.valueOf(),
     miles: randomInt(leastMiles, maxMiles),
     mpg: mpg,
     username: username,
@@ -164,8 +164,7 @@ outputJson.defaultAccounts.forEach(user => {
 console.log(`Number of default accounts: ${outputJson.defaultAccounts.length} (including admin)`);
 console.log(`Number of default transports: ${outputJson.defaultTransport.length}`);
 
-console.log(`File wrote to: ${JSONSettings.filename}`);
-
-fs.writeFileSync(JSONSettings.filename, JSON.stringify(outputJson));
+fs.writeFileSync(`./private/${JSONSettings.filename}`, JSON.stringify(outputJson));
+console.log(`File wrote to: ./private/${JSONSettings.filename}`);
 
 console.log('End of data generation');
