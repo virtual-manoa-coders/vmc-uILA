@@ -7,15 +7,17 @@ import * as Functions from './StartUpFunctions';
 /* Main Workflow */
 if (Meteor.settings.useJSONDefaultData) {
   const fileName = 'defaultData.json';
-  const path = `../../../private/${fileName}`;
+  const path = `/private/${fileName}`;
   // const rawData = fs.readFileSync(`${path}`, 'utf8'); // can't find path :c
   // console.log(rawData);
   const jsonData = JSON.parse(Assets.getText(fileName));
 
+  console.log(`Loading data from ${path}`);
   Functions.addJSONCars(jsonData.defaultCars);
   Functions.addJSONProfile(jsonData.defaultAccounts);
   Functions.addJsonTransport(jsonData.defaultTransport);
 } else {
+  console.log('Generating data using built-in methonds and settings.development.json');
   Functions.addDefaultCar();
   Functions.addDefaultProfiles();
   Functions.addDefaultTransport();

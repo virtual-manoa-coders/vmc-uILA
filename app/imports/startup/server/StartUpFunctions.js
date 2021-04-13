@@ -29,6 +29,7 @@ export function addDefaultCar() {
   }
 }
 
+/** Add default cars to UserVehicles from default JSON file */
 export function addJSONCars(defaultCarsArray) {
   if (UserVehicles.collection.find().count() === 0) {
     if (defaultCarsArray) {
@@ -40,7 +41,7 @@ export function addJSONCars(defaultCarsArray) {
   }
 }
 
-/** Add users to the Meteor users database */
+/** Add profiles to UserInfo from settings.development.json */
 // carMake, carModel, year, mpg isn't really needed, but is left here due to legacy code
 function addProfile({ name, email, image, carModel, carYear, CO2Reduced, VMTReduced, fuelSaved }) {
   const createdAt = new Date();
@@ -72,6 +73,8 @@ export function addDefaultProfiles() {
   }
 }
 
+/* This assumes that the profiles are added to Meteor Users collection first in Account.jsx */
+/** Add default profiles to UserInfo from default JSON file */
 export function addJSONProfile(accountArrays) {
   if ((Meteor.settings.useJSONDefaultData) && UserInfo.collection.find().count() === 0) {
     console.log('Creating default Profiles.');
@@ -84,6 +87,7 @@ export function addJSONProfile(accountArrays) {
   }
 }
 
+/** Add a transport logs to UserTransportation */
 function addTransport({ transport, date, miles, mpg, username }) {
   const userID = UserInfo.findMeteorID(username);
   const dateObject = new Date(date);
@@ -91,6 +95,7 @@ function addTransport({ transport, date, miles, mpg, username }) {
   UserTransportation.define({ transport, date: dateObject, miles, mpg, userID });
 }
 
+/** Load transport from default JSON file */
 export function addJsonTransport(transportArray) {
   if ((Meteor.settings.useJSONDefaultData) && UserTransportation.count() === 0) {
     transportArray.forEach(transport => {
