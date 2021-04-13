@@ -67,8 +67,10 @@ class UserManagement extends React.Component {
                             </Grid.Row>
                             {
                                 this.props.userList.map((user, index) => (
-                                    <Grid.Row key={index}>
-                                        <Grid columns={'equal'} style={{ width: '100%', marginLeft: '0' }} onClick={() => this.handleRowSelection(index)}>
+                                    <Grid.Row key={index} style={{ paddingBottom: 0 }}>
+                                        <Grid columns={'equal'}
+                                              className={`admin-table-row ${this.state.selectedIndex === index ? 'active-index' : ''}`}
+                                              onClick={() => this.handleRowSelection(index)}>
                                             <Grid.Row>
                                                 <Grid.Column>
                                                     {user.name}
@@ -92,7 +94,7 @@ class UserManagement extends React.Component {
                                         </Grid>
                                         {
                                             this.state.selectedIndex === index &&
-                                            <Grid.Row>
+                                            <Grid.Row className={'admin-travel-history'}>
                                                 <Table celled basic={'very'}>
                                                     <Table.Header>
                                                         <Table.Row>
@@ -100,11 +102,14 @@ class UserManagement extends React.Component {
                                                             <Table.HeaderCell>Transport</Table.HeaderCell>
                                                             <Table.HeaderCell>Miles</Table.HeaderCell>
                                                             <Table.HeaderCell>Delete</Table.HeaderCell>
-                                                            <Table.HeaderCell className='edit'>Edit</Table.HeaderCell>
                                                         </Table.Row>
                                                     </Table.Header>
                                                     <Table.Body>
-                                                        {this.props.entries.map((entry) => <ListTransportEntry key={entry._id} entry={entry} UserTransportation={UserTransportation} />)}
+                                                        {
+                                                            this.props.entries.map((entry) => <ListTransportEntry key={entry._id}
+                                                                                                                    entry={entry} admin
+                                                                                                                    UserTransportation={UserTransportation} />)
+                                                        }
                                                     </Table.Body>
                                                 </Table>
                                             </Grid.Row>
