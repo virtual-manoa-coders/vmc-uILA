@@ -138,7 +138,7 @@ class UserProfile extends React.Component {
             <Grid.Column verticalAlign='middle' width={11}>
               <Card fluid>
                 <Card.Content>
-                  <TravelPatterns/>
+                  <TravelPatterns userTransportation={this.props.userTransportation} timeSpan={this.state.timeSpan}/>
                 </Card.Content>
               </Card>
             </Grid.Column>

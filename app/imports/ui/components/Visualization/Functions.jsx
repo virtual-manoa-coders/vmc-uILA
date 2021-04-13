@@ -17,9 +17,7 @@ export const gasPrice = 3.57;
  * @param milesPerGallon The car's miles per gallon
  * @returns {number} Fuel saved by gallon
  */
-export const fuelSaved = (milesSaved, milesPerGallon) => {
-  return milesSaved / milesPerGallon;
-};
+export const fuelSaved = (milesSaved, milesPerGallon) => milesSaved / milesPerGallon;
 
 /**
  * Calculate the CO2 saved for one user
@@ -38,11 +36,11 @@ export const userCO2Aggregate = (data) => {
  * @param data An array of user transportation log objects
  * @returns An array of user transportation log for the currently logged in user
  */
-export const userTransportDataFilter = (data) => {
+export const userTransportDataFilter = (data) =>
   // TODO: This uses UserInfo id, no meteor id
   // Perhaps add meteoruserid to transport
-  return data.filter(doc => doc.userID === Meteor.userId());
-};
+   data.filter(doc => doc.userID === Meteor.userId())
+;
 
 /**
  * Calculate fuelsaved and add it to each document and this should be good for both one user and all users
