@@ -117,6 +117,7 @@ function generateTransportsForWeek(currentDate, user) {
     const nowAdjusted = moment(now.day(i).toDate()).subtract(10, 'hours');
     addTransport(outputJson.defaultTransport, nowAdjusted.toDate(), 5, 20,
         user.email, user.carMPG);
+    console.log(nowAdjusted);
   }
 }
 
@@ -138,7 +139,7 @@ function generateTransport(user) {
   const now = moment();
   for (let i = 12; i >= 1; i--) {
     generateTransportsForWeek(now.toDate(), user);
-    now.subtract(1, 'week');
+    now.subtract(1, 'week').endOf('week');
   }
   const lenow = moment();
   for (let i = 3; i >= 1; i--) {
