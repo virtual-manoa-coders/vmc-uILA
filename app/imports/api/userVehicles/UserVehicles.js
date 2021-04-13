@@ -83,6 +83,27 @@ class UserVehiclesCollection {
     this.cyAllowedValues = ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008',
         '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'];
   }
+
+  /**
+   * Runs findOne on this collection.
+   * @see {@link http://docs.meteor.com/#/full/findOne|Meteor Docs on Mongo Find}
+   * @param { Object } selector A MongoDB selector.
+   * @param { Object } options MongoDB options.
+   * @returns {Mongo.Cursor}
+   */
+  findOne(selector, options) {
+    const theSelector = (typeof selector === 'undefined') ? {} : selector;
+    return this.collection.findOne(theSelector, options);
+  }
+
+  /**
+   * Returns a string representing all of the documents in this collection.
+   * @returns {String}
+   */
+  toString() {
+    return this.collection.find({})
+        .fetch();
+  }
 }
 
 export const UserVehicles = new UserVehiclesCollection();
