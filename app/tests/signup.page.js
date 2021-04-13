@@ -17,6 +17,18 @@ class SignupPage {
     await this.isDisplayed(testController);
     await testController.typeText('#signup-form-email', username);
     await testController.typeText('#signup-form-password', password);
+    await testController.typeText('#signup-form-confirmPassword', password);
+
+    const carMakeSelector = Selector('#signup-form-carMake');
+    const carMakeOption = carMakeSelector.find('menu transition');
+    const carYearSelector = Selector('#signup-form-carYear');
+    const carYearOption = carYearSelector.find('2012');
+
+    await testController.click(carMakeSelector);
+    await testController.click(carMakeOption.withText('Toyota'));
+    await testController.click(carYearSelector);
+    await testController.click(carYearOption);
+
     await testController.click('#signup-form-submit');
     await navBar.isLoggedIn(testController, username);
   }

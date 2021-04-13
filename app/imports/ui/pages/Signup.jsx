@@ -103,7 +103,7 @@ class Signup extends React.Component {
                   />
                   <Form.Input
                       label="Confirm Password"
-                      id="signup-form-password"
+                      id="signup-form-confirmPassword"
                       icon="lock"
                       iconPosition="left"
                       name="confirmPassword"
@@ -112,6 +112,7 @@ class Signup extends React.Component {
                       onChange={this.handleChange}
                   />
                   <Form.Select
+                      id="signup-form-carMake"
                       fluid
                       label='Car Make'
                       name='carMake'
@@ -123,10 +124,11 @@ class Signup extends React.Component {
                       onChange={this.handleChange}
                   />
                   <Form.Select
-                    fluid
-                    label='Car Year'
-                    name='carYear'
-                    options={UserVehicles.cyAllowedValues.map(function(currentValue, index, array){
+                      id="signup-form-password"
+                      fluid
+                      label='Car Year'
+                      name='carYear'
+                      options={UserVehicles.cyAllowedValues.map(function(currentValue, index, array){
                         return {key:index, text:currentValue, value:currentValue};
                       })
                     }
