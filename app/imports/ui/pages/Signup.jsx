@@ -3,13 +3,15 @@ import PropTypes from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
 import { Container, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
 import { Accounts } from 'meteor/accounts-base';
+import { Roles } from 'meteor/alanning:roles';
 import { UserInfo } from '../../api/userData/UserInfo';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
-import { Roles } from 'meteor/alanning:roles';
+// eslint-disable-next-line no-unused-vars
 
+// eslint-disable-next-line no-unused-vars
 function addProfile({ name, email, image, carMake, carModel, carYear, carMPG, CO2Reduced, VMTReduced, fuelSaved }) {
   const createdAt = new Date();
-  const carID = UserVehicles.collection.find( ).fetch().filter(car => car.carModel === carModel && car.carYear === carYear)[0]._id;
+  const carID = UserVehicles.collection.find().fetch().filter(car => car.carModel === carModel && car.carYear === carYear)[0]._id;
   console.log(carID);
   if (carID) {
     console.log(` Defining profile: ${email} with car: ${carYear} ${carModel} carID: ${carID}`);
@@ -45,7 +47,7 @@ class Signup extends React.Component {
     if (password !== confirmPassword) {
       this.setState({ error: 'Passwords do not match, try again' });
     } else {
-      Accounts.createUser({ email, username: email, password, profile: {carMake, carYear}}, (err) => {
+      Accounts.createUser({ email, username: email, password, profile: { carMake, carYear } }, (err) => {
         if (err) {
           this.setState({ error: err.reason });
         } else {
@@ -59,7 +61,8 @@ class Signup extends React.Component {
           //   userID,
           //   informationEntered,
           // }));
-          UserInfo.collection.insert({_id: Meteor.userId(), email :email,  });
+          // eslint-disable-next-line no-undef
+          UserInfo.collection.insert({ _id: Meteor.userId(), email: email });
         }
       });
     }
@@ -115,8 +118,9 @@ class Signup extends React.Component {
                       fluid
                       label='Car Make'
                       name='carMake'
-                      options={UserVehicles.cmAllowedValues.map(function(currentValue, index, array){
-                          return {key:index, text: currentValue, value: currentValue};
+                      {/* eslint-disable-next-line no-unused-vars */}
+                      options={UserVehicles.cmAllowedValues.map(function (currentValue, index, array) {
+                          return { key: index, text: currentValue, value: currentValue };
                         })
                       }
                       placeholder='Car Make'
@@ -126,8 +130,8 @@ class Signup extends React.Component {
                     fluid
                     label='Car Year'
                     name='carYear'
-                    options={UserVehicles.cyAllowedValues.map(function(currentValue, index, array){
-                        return {key:index, text:currentValue, value:currentValue};
+                    options={UserVehicles.cyAllowedValues.map(function (currentValue, index, array) {
+                        return { key: index, text: currentValue, value: currentValue };
                       })
                     }
                     placeholder='Car Year'

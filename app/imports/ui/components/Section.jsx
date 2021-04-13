@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import { Header, Grid } from 'semantic-ui-react';
 import React from 'react';
 import PropTypes from 'prop-types';

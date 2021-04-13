@@ -19,6 +19,7 @@ export default class CarComparator extends React.Component {
       slidesToShow: 1,
       slidesToScroll: 1,
     };
+    // eslint-disable-next-line no-unused-vars
     const align = {
       textAlign: 'center',
       color: '#2E303E',

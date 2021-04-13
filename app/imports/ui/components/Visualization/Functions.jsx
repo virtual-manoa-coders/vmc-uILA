@@ -16,9 +16,7 @@ export const gasPrice = 3.57;
  * @param milesPerGallon The car's miles per gallon
  * @returns {number} Fuel saved by gallon
  */
-export const fuelSaved = (milesSaved, milesPerGallon) => {
-  return milesSaved / milesPerGallon;
-};
+export const fuelSaved = (milesSaved, milesPerGallon) => milesSaved / milesPerGallon;
 
 /**
  * Calculate the CO2 saved for one user
@@ -37,9 +35,7 @@ export const userCO2Aggregate = (data) => {
  * @param data An array of user transportation log objects
  * @returns An array of user transportation log for the currently logged in user
  */
-export const userTransportDataFilter = (data) => {
-  return data.filter(doc => doc.userID === Meteor.userId());
-};
+export const userTransportDataFilter = (data) => data.filter(doc => doc.userID === Meteor.userId());
 
 /**
  * Calculate fuelsaved and add it to each document and this should be good for both one user and all users
@@ -69,6 +65,7 @@ export const aggregateIndividualFuelSaved = (data) => {
 
     if (existing.length) { // if the item is already in the result
       const existingIndex = result.indexOf(existing[0]);
+      // eslint-disable-next-line operator-assignment
       result[existingIndex].fuelSaved = result[existingIndex].fuelSaved + doc.fuelSaved;
     } else { // if the item isn't in the result list, just push it to the list
       result.push(doc);

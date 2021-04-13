@@ -1,5 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 import SimpleSchema from 'simpl-schema';
+// eslint-disable-next-line no-unused-vars
 import { Tracker } from 'meteor/tracker';
 
 class UserVehiclesCollection {
@@ -30,7 +31,7 @@ class UserVehiclesCollection {
     this.collection.attachSchema(this.schema);
     this.userPublicationName = `${this.name}.publication.user`;
     this.adminPublicationName = `${this.name}.publication.admin`;
-    this.cmAllowedValues =  ['...',
+    this.cmAllowedValues = ['...',
             'Acura',
             'Alfa Romeo',
             'Audi',

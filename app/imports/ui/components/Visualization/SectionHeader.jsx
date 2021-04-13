@@ -1,4 +1,5 @@
 import React from 'react';
+// eslint-disable-next-line no-unused-vars
 import { Segment, Grid, Divider } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { TextHeader } from './ComparisonChart';

@@ -13,6 +13,7 @@ function addData(data) {
 }
 
 // carMake, carModel, year, mpg isn't really needed, but is left here due to legacy code
+// eslint-disable-next-line no-unused-vars
 function addProfile({ name, email, image, carMake, carModel, carYear, carMPG, CO2Reduced, VMTReduced, fuelSaved }) {
   const createdAt = new Date();
   const carID = UserVehicles.collection.find().fetch().filter(car => car.carModel === carModel && car.carYear === carYear)[0]._id;

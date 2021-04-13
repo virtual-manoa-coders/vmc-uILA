@@ -39,7 +39,7 @@ class NavBar extends React.Component {
             boxShadow: 'none',
             borderBottom: 'none',
             fontFamily: 'Comfortaa',
-            fontWeight: '800'
+            fontWeight: '800',
           }}>
             <Menu.Item as={NavLink} activeClassName="" exact to="/">
               <Image size='small' src='images/logo2.png'/>
@@ -52,7 +52,7 @@ class NavBar extends React.Component {
                   <Menu.Item as={NavLink} activeClassName="active" exact to="/community"
                              key='community'>Community</Menu.Item>,
                   <Menu.Item as={NavLink} activeClassName="active" exact to="/dashboard"
-                             key='dashboard'>Dashboard</Menu.Item>,]
+                             key='dashboard'>Dashboard</Menu.Item>]
             ) : ''}
             {Roles.userIsInRole(Meteor.userId(), 'admin') ? (
                 <Menu.Item as={NavLink} activeClassName="active" exact to="/admin" key='admin'>Admin</Menu.Item>

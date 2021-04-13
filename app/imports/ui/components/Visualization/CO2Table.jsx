@@ -1,21 +1,21 @@
 import React from 'react';
+// eslint-disable-next-line no-unused-vars
 import { Table, Header, Grid } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { CO2CalculationTimespan } from './Functions';
 
-const tableStyle = (image) => {
-  return {
+const tableStyle = (image) => ({
     // Image effects
     backgroundImage: `url(${image})`,
         // center BG
         backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
       backgroundSize: 'cover',
-  };
-};
+  });
 
 const CO2Table = ({ data, backgroundImage }) => {
+  // eslint-disable-next-line no-unused-vars
   const style = {
     // Image effects
     backgroundImage: `url(${backgroundImage})`,

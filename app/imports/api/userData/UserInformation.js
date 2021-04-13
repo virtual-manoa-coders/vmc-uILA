@@ -12,7 +12,7 @@ class UserInformationCollection {
     // Define the structure of each document in the collection.
     this.schema = new SimpleSchema({
       userID: String,
-      //legalName: String,
+      // legalName: String,
       informationEntered: Boolean,
       carMake: { type: String, optional: true },
       carModel: { type: String, optional: true },

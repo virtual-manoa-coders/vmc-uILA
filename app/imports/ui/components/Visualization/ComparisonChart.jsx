@@ -1,4 +1,5 @@
 import React from 'react';
+// eslint-disable-next-line no-unused-vars
 import { Container, Header, Segment, Grid, Icon, Divider, Loader } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
