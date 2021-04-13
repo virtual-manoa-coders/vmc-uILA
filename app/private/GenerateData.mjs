@@ -28,7 +28,7 @@ const defaultCars = [
   { carMake: 'Honda', carModel: 'Fit', carYear: '2014', carMPG: 29, carPrice: 12000 },
 ];
 
-/* This JSON will be modified and wrote into a file */
+/** This JSON will be modified and wrote into a file */
 const outputJson = {
   defaultAccounts: [
     { email: 'admin@foo.com', password: credentials.password, role: 'admin' },
@@ -45,21 +45,22 @@ const outputJson = {
 const getRandomTimeInRange = (start, end) => new Date(start.valueOf() + Math.random() *
     (end.valueOf() - start.valueOf()));
 
-// function to pick random array element out of array
+/** @returns random array element out of array */
 function randomElement(array) {
   return array[Math.floor(Math.random() * array.length)];
 }
 
-// Function to generate random number
+/** @returns random Integer in range */
 function randomInt(min, max) {
   return parseInt((Math.random() * (max - min) + min), 10);
 }
 
+/** @returns Date object of the momentjs object */
 function momentToDate(momentObject) {
   return moment(momentObject.toDate()).subtract(10, 'hours').toDate();
 }
 
-// function to add user
+/** Add a user object to the given JSONArray */
 function addUser(JSONArray, name) {
   const car = randomElement(defaultCars);
   JSONArray.push({
@@ -77,14 +78,19 @@ function addUser(JSONArray, name) {
   });
 }
 
-// function to generate 20 users
+/** Generate {iterations} number of users users */
 function userGeneration(iterations) {
   for (let i = 0; i < iterations; i++) {
     addUser(outputJson.defaultAccounts, `user${i + 1}`);
   }
 }
 
-// function to generate a log
+/**
+ * Add a transport object to the given JSONArray
+ * @params leastMiles number of minimum random miles
+ * @params maxMiles number of maximum random miles
+ * @params forceCar boolean, true: force transport type to be Car
+ */
 function addTransport(JSONArray, date, leastMiles, maxMiles, username, mpg, forceCar) {
   // TODO: Make this pulls from UserTransportation-Utilities.jsx, make babel run in cli somehow
   const transportType = forceCar ? UserTransportationTypeEnum.Car : randomElement(UserTransportationTypeEnum.Array);
@@ -97,9 +103,7 @@ function addTransport(JSONArray, date, leastMiles, maxMiles, username, mpg, forc
   });
 }
 
-// function to generate 5 logs in weekdays
-  // have to make sure this doesn't exceed the current day
-  // do: add transport to moment().endOf(current week).days(5,4,3,2,1)
+/** Add a transport log to weekdays up to the currentDate  */
 function generateTransportsForWeek(currentDate, user) {
   let now = moment(currentDate).add(0, 'day').endOf('day');
   let day;
@@ -117,10 +121,10 @@ function generateTransportsForWeek(currentDate, user) {
     const nowAdjusted = moment(now.day(i).toDate()).subtract(10, 'hours');
     addTransport(outputJson.defaultTransport, nowAdjusted.toDate(), 5, 20,
         user.email, user.carMPG);
-    console.log(nowAdjusted);
   }
 }
 
+/** Add two extra transport log in the current month */
 function generateExtraTransport(currentDate, user) {
   const now = moment(currentDate);
   const monthStart = momentToDate(now.startOf('month'));
@@ -131,10 +135,7 @@ function generateExtraTransport(currentDate, user) {
   }
 }
 
-// function to do this every week for 3 months
-  // do this week
-  // subtract one week from moment
-  // do this for 12 weeks (3 months)
+/** Add transport logs; every week days for 3 months, and two extra logs in every month */
 function generateTransport(user) {
   const now = moment();
   for (let i = 12; i >= 1; i--) {
@@ -148,7 +149,7 @@ function generateTransport(user) {
   }
 }
 
-/* Actual WorkFlow */
+/* Actual JSON creation */
 const JSONSettings = {
   userCount: 20,
   filename: 'defaultData.json',
@@ -168,4 +169,5 @@ console.log(`Number of default transports: ${outputJson.defaultTransport.length}
 fs.writeFileSync(`./private/${JSONSettings.filename}`, JSON.stringify(outputJson));
 console.log(`File wrote to: ./private/${JSONSettings.filename}`);
 
-console.log('End of data generation');
+console.log('== End of data generation ==');
+console.log('To use defaultData.json, set "useJSONDefaultData": true in settings.development.json');
