@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
 import { Container, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
 import { Accounts } from 'meteor/accounts-base';
+// eslint-disable-next-line no-unused-vars
 import { Roles } from 'meteor/alanning:roles';
 import { UserInfo } from '../../api/userData/UserInfo';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
@@ -118,7 +119,7 @@ class Signup extends React.Component {
                       fluid
                       label='Car Make'
                       name='carMake'
-                      {/* eslint-disable-next-line no-unused-vars */}
+                      /* eslint-disable-next-line no-unused-vars */
                       options={UserVehicles.cmAllowedValues.map(function (currentValue, index, array) {
                           return { key: index, text: currentValue, value: currentValue };
                         })
@@ -130,6 +131,7 @@ class Signup extends React.Component {
                     fluid
                     label='Car Year'
                     name='carYear'
+                    /* eslint-disable-next-line no-unused-vars */
                     options={UserVehicles.cyAllowedValues.map(function (currentValue, index, array) {
                         return { key: index, text: currentValue, value: currentValue };
                       })
