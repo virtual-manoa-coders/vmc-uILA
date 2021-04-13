@@ -2,7 +2,7 @@
   "name": "meteor-application-template-react",
   "private": true,
   "dependencies": {
-    "@babel/runtime": "^7.12.5",
+    "@babel/cli": "^7.13.14",
     "@reactchartjs/react-chart.js": "^1.0.0-rc.3",
     "bcrypt": "^5.0.1",
     "chart.js": "^2.9.4",
@@ -43,6 +43,7 @@
     "start": "meteor --no-release-check --exclude-archs web.browser.legacy,web.cordova --settings ../config/settings.development.json",
     "lint": "eslint --quiet --ext .jsx --ext .js ./imports",
     "testcafe-development": "testcafe chrome tests/*.testcafe.js",
-    "testcafe": "testcafe chrome:headless tests/*.testcafe.js -q --app \"meteor npm run start\""
+    "testcafe": "testcafe chrome:headless tests/*.testcafe.js -q --app \"meteor npm run start\"",
+    "generate-data": "node --harmony ./private/GenerateData.mjs"
   }
 }

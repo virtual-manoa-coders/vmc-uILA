@@ -3,11 +3,11 @@ import { Meteor } from 'meteor/meteor';
 import { Container, Header, Loader, Table } from 'semantic-ui-react';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
-import ListUserVehicle from '../components/ListUserVehicle';
-import { UserVehicles } from '../../api/userVehicles/UserVehicles';
+import ListTransportEntry from '../components/ListTransportEntry';
+import { UserTransportation } from '../../api/userData/UserTransportation';
 
 /** Renders a table containing all of the Stuff documents. Use <StuffItem> to render each row. */
-class ListUserVehicles extends React.Component {
+class ListTransportEntriesPage extends React.Component {
   /** If the subscription(s) have been received, render the page, otherwise show a loading icon. */
   render() {
     return (this.props.ready) ? this.renderPage() : <Loader active>Getting data</Loader>;
@@ -17,22 +17,19 @@ class ListUserVehicles extends React.Component {
   renderPage() {
     return (
         <Container id='page-style'>
-          <Header as="h3" textAlign="center" style={{ color: '#2292b3' }}>Your Vehicles</Header>
-          <Table celled>
+          <Header as="h3" textAlign="center" style={{ color: '#2292b3' }}>Your Trips</Header>
+          <Table unstackable celled striped>
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>Car Name</Table.HeaderCell>
-                <Table.HeaderCell>Car Make</Table.HeaderCell>
-                <Table.HeaderCell>Car Model</Table.HeaderCell>
-                <Table.HeaderCell>Car Year</Table.HeaderCell>
-                <Table.HeaderCell>Car MPG</Table.HeaderCell>
-                <Table.HeaderCell>Car Price</Table.HeaderCell>
+                <Table.HeaderCell>Date</Table.HeaderCell>
+                <Table.HeaderCell>Transport</Table.HeaderCell>
+                <Table.HeaderCell>Miles</Table.HeaderCell>
                 <Table.HeaderCell>Delete</Table.HeaderCell>
                 <Table.HeaderCell className='edit'>Edit</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {this.props.entries.map((entry) => <ListUserVehicle key={entry._id} entry={entry} UserTransportation={UserVehicles} />)}
+              {this.props.entries.map((entry) => <ListTransportEntry key={entry._id} entry={entry} UserTransportation={UserTransportation} />)}
             </Table.Body>
           </Table>
         </Container>
@@ -40,16 +37,16 @@ class ListUserVehicles extends React.Component {
   }
 }
 /** Require an array of Stuff documents in the props. */
-ListUserVehicles.propTypes = {
+ListTransportEntriesPage.propTypes = {
   entries: PropTypes.array.isRequired,
   ready: PropTypes.bool.isRequired,
 };
 
 /** withTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker */
 export default withTracker(() => {
-  const subscription = Meteor.subscribe(UserVehicles.userPublicationName);
+  const subscription = Meteor.subscribe(UserTransportation.userPublicationName);
   return {
-    entries: UserVehicles.collection.find({}, { sort: { date: -1 } }).fetch(),
+    entries: UserTransportation.collection.find({}, { sort: { carMake: +1 } }).fetch(),
     ready: subscription.ready(),
   };
-})(ListUserVehicles);
+})(ListTransportEntriesPage);
