@@ -14,6 +14,10 @@ class UserManagement extends React.Component {
         super(props);
         this.state = {
             selectedIndex: null,
+            sortColumn: {
+                name: 'createdAt',
+                isDescending: true,
+            },
         };
         console.log(this.props.userList);
 
@@ -22,6 +26,15 @@ class UserManagement extends React.Component {
 
     deleteUser(user) {
         UserInfo.collection.remove({ _id: user._id });
+    }
+
+    sort(name) {
+        const sortColumn = {
+            name: name,
+            order: this.state.sortColumn.name === name ? true : !this.state.sortColumn.isDescending,
+        };
+
+        this.setState({ sortColumn });
     }
 
     handleRowSelection(index) {
@@ -58,15 +71,26 @@ class UserManagement extends React.Component {
                     <Card.Content>
                         <Grid>
                             <Grid.Row columns={'equal'}>
-                                <Grid.Column>Name</Grid.Column>
-                                <Grid.Column>Email</Grid.Column>
-                                <Grid.Column>CO2 Reduced</Grid.Column>
-                                <Grid.Column>VMT Reduced</Grid.Column>
-                                <Grid.Column>Fuel Saved</Grid.Column>
+                                <Grid.Column onClick={() => this.sort('name')}>Name</Grid.Column>
+                                <Grid.Column onClick={() => this.sort('email')}>Email</Grid.Column>
+                                <Grid.Column onClick={() => this.sort('CO2Reduced')}>CO2 Reduced</Grid.Column>
+                                <Grid.Column onClick={() => this.sort('VMTReduced')}>VMT Reduced</Grid.Column>
+                                <Grid.Column onClick={() => this.sort('fuelSaved')}>Fuel Saved</Grid.Column>
                                 <Grid.Column>Action</Grid.Column>
                             </Grid.Row>
                             {
-                                this.props.userList.map((user, index) => (
+                                this.props.userList.sort((a, b) => {
+                                    if (a[this.sortColumn.name] < b[this.sortColumn.name]) {
+                                        return this.sortColumn.isDescending ? -1 : 1;
+                                    }
+
+                                    if (a[this.sortColumn.name] > b[this.sortColumn.name]) {
+                                        return this.sortColumn.isDescending ? 1 : -1;
+                                    }
+
+                                    return 0;
+                                })
+                                .map((user, index) => (
                                     <Grid.Row key={index} style={{ paddingBottom: 0 }}>
                                         <Grid columns={'equal'}
                                               className={`admin-table-row ${this.state.selectedIndex === index ? 'active-index' : ''}`}
