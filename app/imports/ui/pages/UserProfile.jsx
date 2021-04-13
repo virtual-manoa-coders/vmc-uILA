@@ -146,7 +146,7 @@ class UserProfile extends React.Component {
 
           <Grid.Row>
             <Grid.Column>
-                <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
+                <Tab style={{ overflow: 'auto', height: 600 }} menu={{ secondary: true, pointing: true }} panes={panes} />
             </Grid.Column>
           </Grid.Row>
         </Grid>
