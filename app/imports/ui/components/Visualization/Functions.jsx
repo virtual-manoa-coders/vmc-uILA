@@ -233,13 +233,13 @@ export const getUserCO2Percent = (data, timeStart, timeEnd) => {
 };
 
 /**
- * Calculate the methods of travel one user
+ * Calculate the number of times of travel one user took from the point of profile creation
  * @param timeSpan Only select data from today to the timespan
  * @param data The methods of transportation to retrieve
  * @returns {number[]} A 6-element array of # of mode of transport
  */
 export const travelPatternsFunction = (data, timeSpan) => {
-  const afterDateAndCar = this.props.data.filter(doc => doc.date > timeSpan);
+  const afterDateAndCar = data.filter(doc => doc.date > timeSpan);
   if (afterDateAndCar.length === 0) {
     return [0];
   }

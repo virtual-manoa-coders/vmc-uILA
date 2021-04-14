@@ -1,13 +1,14 @@
 import React from 'react';
 import { Bar } from '@reactchartjs/react-chart.js';
 import PropTypes from 'prop-types';
+import { travelPatternsFunction } from './Functions';
 
 class TravelPatterns extends React.Component {
     /**
      * Change the chart's display based on a given preset
      * @param data The transport data from this.props
      * @param timeSpan Only select data from today to the timespan
-     * @returns a data to use for the pie chart component
+     * @returns a data to use for the bar chart component
      */
     barChartPreset(data, timeSpan) {
         return {
@@ -15,7 +16,7 @@ class TravelPatterns extends React.Component {
             datasets: [
                 {
                     label: '# of Transport',
-                    data: this.travelPatternsFunction(data, timeSpan),
+                    data: travelPatternsFunction(data, timeSpan),
                     backgroundColor: 'rgba(75,192,192,1)',
                     borderColor: 'rgba(0,0,0,1)',
                     borderWidth: 2,
