@@ -52,7 +52,7 @@ class Dashboard extends React.Component {
     ];
 
     return (
-        <Grid id='dash' padded verticalAlign='middle' container
+        <Grid id='dashboard-page' padded verticalAlign='middle' container
               textAlign='center' columns='equal'>
           <Grid.Row>
             <Grid.Column>

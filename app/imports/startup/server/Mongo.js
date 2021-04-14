@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import * as fs from 'fs';
 import * as Functions from './StartUpFunctions';
+import { UserVehicles } from '../../api/userVehicles/UserVehicles';
 
 /* eslint-disable no-console */
 
@@ -35,5 +36,3 @@ if (Meteor.settings.useJSONDefaultData) {
 //     console.log('Cannot initialize the database. Please invoke meteor with a settings file.');
 //   }
 // }
-
-

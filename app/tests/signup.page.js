@@ -20,14 +20,15 @@ class SignupPage {
     await testController.typeText('#signup-form-confirmPassword', password);
 
     const carMakeSelector = Selector('#signup-form-carMake');
-    const carMakeOption = carMakeSelector.find('menu transition');
+    // I have no idea why this works, praise the omnissiah
+    const carMakeOption = carMakeSelector.child().child();
     const carYearSelector = Selector('#signup-form-carYear');
-    const carYearOption = carYearSelector.find('2012');
+    const carYearOption = carYearSelector.child().child();
 
     await testController.click(carMakeSelector);
-    await testController.click(carMakeOption.withText('Toyota'));
+    await testController.click(carMakeOption.nth(45));
     await testController.click(carYearSelector);
-    await testController.click(carYearOption);
+    await testController.click(carYearOption.nth(12));
 
     await testController.click('#signup-form-submit');
     await navBar.isLoggedIn(testController, username);
