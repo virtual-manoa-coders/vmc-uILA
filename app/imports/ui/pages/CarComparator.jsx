@@ -28,7 +28,7 @@ export default class CarComparator extends React.Component {
     };
 
     return (
-        <Container id='page-style'>
+        <Container id='comparator-page'>
           <Header as="h1" textAlign='center'>Gasoline vs Electric/Hybrid</Header>
           <Grid style={gridStyle} textAlign='center' container columns={2} padded='vertically'>
             <Grid.Column floated='left' width='7' >

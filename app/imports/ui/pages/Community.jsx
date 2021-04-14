@@ -30,7 +30,7 @@ class Community extends React.Component {
     console.log(GHGProduced(data, moment().subtract(1, 'months'), null, CO2CalculationTypeEnum.user));
     console.log(GHGProduced(data, moment().subtract(1, 'months'), null, CO2CalculationTypeEnum.average));
     return (
-        <Grid id='page-style' verticalAlign='middle' textAlign='center'>
+        <Grid id='community-page' verticalAlign='middle' textAlign='center'>
           <Grid.Row>
             <Grid.Column>
               <Section
