@@ -24,6 +24,14 @@ class UserManagement extends React.Component {
         this.handleRowSelection = this.handleRowSelection.bind(this);
     }
 
+    // componentDidUpdate(prevProps) {
+    //     console.log(this.props, prevProps)
+    //
+    //     if (prevProps.ready != this.props.ready) {
+    //         initUserEntries
+    //     }
+    // }
+
     deleteUser(user) {
         UserInfo.collection.remove({ _id: user._id });
     }
@@ -31,8 +39,10 @@ class UserManagement extends React.Component {
     sort(name) {
         const sortColumn = {
             name: name,
-            order: this.state.sortColumn.name === name ? true : !this.state.sortColumn.isDescending,
+            isDescending: this.state.sortColumn.name !== name ? true : !this.state.sortColumn.isDescending,
         };
+        console.log(this.state.sortColumn, name, this.state.sortColumn.name);
+        console.log(this.state.sortColumn.name !== name ? true : !this.state.sortColumn.isDescending);
 
         this.setState({ sortColumn });
     }
@@ -80,12 +90,12 @@ class UserManagement extends React.Component {
                             </Grid.Row>
                             {
                                 this.props.userList.sort((a, b) => {
-                                    if (a[this.sortColumn.name] < b[this.sortColumn.name]) {
-                                        return this.sortColumn.isDescending ? -1 : 1;
+                                    if (a[this.state.sortColumn.name] < b[this.state.sortColumn.name]) {
+                                        return this.state.sortColumn.isDescending ? -1 : 1;
                                     }
 
-                                    if (a[this.sortColumn.name] > b[this.sortColumn.name]) {
-                                        return this.sortColumn.isDescending ? 1 : -1;
+                                    if (a[this.state.sortColumn.name] > b[this.state.sortColumn.name]) {
+                                        return this.state.sortColumn.isDescending ? 1 : -1;
                                     }
 
                                     return 0;
@@ -164,10 +174,14 @@ UserManagement.propTypes = {
 };
 
 /** withTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker */
-const UserManagementContainer = withTracker(() => ({
-    currentUser: Meteor.user() ? Meteor.user().username : '',
-    entries: UserTransportation.collection.find({}, { sort: { date: -1 } }).fetch(),
-}))(UserManagement);
+const UserManagementContainer = withTracker(() => {
+    const sub = Meteor.subscribe(UserTransportation.adminPublicationName);
+    return {
+        currentUser: Meteor.user() ? Meteor.user().username : '',
+        entries: UserTransportation.collection.find({}, { sort: { date: -1 } }).fetch(),
+        ready: sub.ready(),
+    };
+})(UserManagement);
 
 /** Enable ReactRouter for this component. https://reacttraining.com/react-router/web/api/withRouter */
 export default withRouter(UserManagementContainer);

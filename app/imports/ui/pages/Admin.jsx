@@ -72,7 +72,6 @@ class Admin extends React.Component {
 /** Declare the types of all properties. */
 Admin.propTypes = {
   currentUser: PropTypes.string,
-  userTransportation: PropTypes.array.isRequired,
   userVehicles: PropTypes.array.isRequired,
   users: PropTypes.array.isRequired,
   ready: PropTypes.bool.isRequired,
@@ -82,13 +81,11 @@ Admin.propTypes = {
 export default withTracker(() => {
   // Get access to UserInfo documents.
   const sub1 = Meteor.subscribe(UserInfo.adminPublicationName);
-  const sub2 = Meteor.subscribe(UserTransportation.adminPublicationName);
-  const sub3 = Meteor.subscribe(UserVehicles.adminPublicationName);
+  const sub2 = Meteor.subscribe(UserVehicles.adminPublicationName);
   return {
     currentUser: Meteor.user() ? Meteor.user().username : '',
     userVehicles: UserVehicles.collection.find({}).fetch(),
-    userTransportation: UserTransportation.collection.find({}).fetch(),
     users: UserInfo.collection.find({}).fetch(),
-    ready: sub1.ready() && sub2.ready() && sub3.ready(),
+    ready: sub1.ready() && sub2.ready(),
   };
 })(Admin);
