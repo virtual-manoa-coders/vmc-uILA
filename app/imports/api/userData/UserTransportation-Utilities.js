@@ -47,4 +47,8 @@ export const getRandomInt = (min, max) => {
 /**
  * @return Return true or false randomly
  */
-export const coinFilp = () => !!getRandomInt(0, 1);
+export const coinFilp = () => {
+  const flip = Math.random();
+  if (flip < 0.5) { return true; }
+  return false;
+};

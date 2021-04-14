@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Header, Loader, Image, Grid, Segment, Form, Tab } from 'semantic-ui-react';
+import { Card, Header, Loader, Image, Grid, Segment, Form, Tab, Menu } from 'semantic-ui-react';
 import { AutoForm, SubmitField, TextField, SelectField, NumField } from 'uniforms-semantic';
 import swal from 'sweetalert';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
@@ -12,6 +12,9 @@ import { UserTransportation } from '../../api/userData/UserTransportation';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
 import TravelPatterns from '../components/Visualization/TravelPatterns';
 import TransportDataEntry from '../components/TransportDataEntry';
+import ListUserVehicles from '../components/ListUserVehicles';
+import ListTransportEntries from '../components/ListTransportEntries';
+import moment from "moment";
 
 /** Create a schema to specify the structure of the data to appear in the form. */
 const formSchema = new SimpleSchema({
@@ -34,6 +37,11 @@ TODO:
  */
 /** Renders the Profile page */
 class UserProfile extends React.Component {
+  /** create a startDate variable to display data from one year out*/
+  constructor(props) {
+    super(props);
+    this.state = { startDate: moment().subtract(1, 'years').toDate() };
+  }
 
   /** On submit, insert the data. */
   submit(data) {
@@ -42,7 +50,7 @@ class UserProfile extends React.Component {
       if (error) {
         swal('Error', error.message, 'error');
       } else {
-        swal('Success', 'Profile updated successfully. Refresh page to view changes.', 'success');
+        swal('Success', 'Profile updated successfully.');
       }
     });
     UserVehicles.collection.update(carID, { $set: { carMake, carModel, carYear, carMPG } }, (error) => {
@@ -76,7 +84,13 @@ class UserProfile extends React.Component {
         </Tab.Pane>,
       },
       {
-        menuItem: 'Edit Your Info',
+        menuItem: 'View/Edit Trips',
+        render: () => <Tab.Pane attached={false}>
+          <ListTransportEntries/>
+        </Tab.Pane>,
+      },
+      {
+        menuItem: 'Edit Basic Info',
         render: () => <Tab.Pane attached={false}>
           <AutoForm model={profile} schema={bridge} onSubmit={data => this.submit(data)}>
             <Segment>
@@ -85,16 +99,16 @@ class UserProfile extends React.Component {
                 <TextField id='name' name='name' showInlineError={true} placeholder={'Your name'}/>
                 <TextField id='image' name='image' showInlineError={true} placeholder={'Image URL'}/>
               </Form.Group>
-              <Form.Group widths='equal'>
-                <TextField id='carMake' name='carMake' showInlineError={true} placeholder={'Car make'}/>
-                <TextField id='carModel' name='carModel' showInlineError={true} placeholder={'Car model'}/>
-                <SelectField id='carYear' name='carYear' showInlineError={true} placeholder={'Year'}/>
-              </Form.Group>
-              <NumField id='carMPG' name='carMPG' decimal={false} showInlineError={true}
-                        placeholder={'Miles per gallon'}/>
               <SubmitField id='update-profile' value='Update Profile'/>
             </Segment>
           </AutoForm>
+        </Tab.Pane>,
+      },
+      {
+        menuItem: 'View/Edit Vehicles',
+        render: () => <Tab.Pane attached={false}>
+          <ListUserVehicles
+              style={{ topMargin: '0' }}/>
         </Tab.Pane>,
       },
     ];
@@ -129,7 +143,7 @@ class UserProfile extends React.Component {
             <Grid.Column verticalAlign='middle' width={11}>
               <Card fluid>
                 <Card.Content>
-                  <TravelPatterns/>
+                  <TravelPatterns userTransportation={this.props.userTransportation} timeSpan={this.state.startDate}/>
                 </Card.Content>
               </Card>
             </Grid.Column>
@@ -137,7 +151,7 @@ class UserProfile extends React.Component {
 
           <Grid.Row>
             <Grid.Column>
-                <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
+                <Tab style={{ overflow: 'auto', height: 600 }} menu={{ secondary: true, pointing: true }} panes={panes} />
             </Grid.Column>
           </Grid.Row>
         </Grid>

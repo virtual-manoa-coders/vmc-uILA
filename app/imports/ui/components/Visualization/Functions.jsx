@@ -17,9 +17,7 @@ export const gasPrice = 3.57;
  * @param milesPerGallon The car's miles per gallon
  * @returns {number} Fuel saved by gallon
  */
-export const fuelSaved = (milesSaved, milesPerGallon) => {
-  return milesSaved / milesPerGallon;
-};
+export const fuelSaved = (milesSaved, milesPerGallon) => milesSaved / milesPerGallon;
 
 /**
  * Calculate the CO2 saved for one user
@@ -38,11 +36,11 @@ export const userCO2Aggregate = (data) => {
  * @param data An array of user transportation log objects
  * @returns An array of user transportation log for the currently logged in user
  */
-export const userTransportDataFilter = (data) => {
+export const userTransportDataFilter = (data) =>
   // TODO: This uses UserInfo id, no meteor id
   // Perhaps add meteoruserid to transport
-  return data.filter(doc => doc.userID === Meteor.userId());
-};
+   data.filter(doc => doc.userID === Meteor.userId())
+;
 
 /**
  * Calculate fuelsaved and add it to each document and this should be good for both one user and all users
@@ -232,4 +230,45 @@ export const getUserCO2Percent = (data, timeStart, timeEnd) => {
   const index = aggregateFuelSaved.findIndex(doc => doc.userID === Meteor.userId()) + 1;
   const percent = (index / aggregateFuelSaved.length) * 100;
   return percent % 100;
+};
+
+/**
+ * Calculate the number of times of travel one user took from the point of profile creation
+ * @param timeSpan Only select data from today to the timespan
+ * @param data The methods of transportation to retrieve
+ * @returns {number[]} A 6-element array of # of mode of transport
+ */
+export const travelPatternsFunction = (data, timeSpan) => {
+  const afterDateAndCar = data.filter(doc => doc.date > timeSpan);
+  if (afterDateAndCar.length === 0) {
+    return [0];
+  }
+  const transportMethod = afterDateAndCar.map(doc => doc.transport);
+  const dataArray = [0, 0, 0, 0, 0, 0]; // We can only use an array for the Pie component. don't change
+  transportMethod.forEach(doc => {
+    switch (doc) {
+      case 'Telecommute':
+        dataArray[0] += 1;
+        break;
+      case 'Walk':
+        dataArray[1] += 1;
+        break;
+      case 'Bike':
+        dataArray[2] += 1;
+        break;
+      case 'Carpool':
+        dataArray[3] += 1;
+        break;
+      case 'Bus':
+        dataArray[4] += 1;
+        break;
+      case 'Car':
+        dataArray[5] += 1;
+        break;
+      default:
+        console.log('Error: Unexpected transport type');
+        break;
+    }
+  });
+  return dataArray;
 };

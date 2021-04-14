@@ -16,6 +16,7 @@ const tableStyle = (image) => {
 };
 
 const CO2Table = ({ data, backgroundImage }) => {
+  // if the client asks, tell them this is direct subraction.
   const style = {
     // Image effects
     backgroundImage: `url(${backgroundImage})`,
@@ -39,24 +40,24 @@ const CO2Table = ({ data, backgroundImage }) => {
 
               <Table.Body>
                 <Table.Row>
-                  <Table.Cell>Today</Table.Cell>
-                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'd'), null, 'user') }</Table.Cell>
-                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'd'), null, 'average')}</Table.Cell>
+                  <Table.Cell>Past Day</Table.Cell>
+                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'day').toDate(), null, 'user') }</Table.Cell>
+                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'day').toDate(), null, 'average')}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Week</Table.Cell>
-                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'w'), null, 'user') }</Table.Cell>
-                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'w'), null, 'average') }</Table.Cell>
+                  <Table.Cell>Past Week</Table.Cell>
+                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'w').toDate(), null, 'user') }</Table.Cell>
+                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'w').toDate(), null, 'average') }</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Month</Table.Cell>
-                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'months'), null, 'user') }</Table.Cell>
-                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'months'), null, 'average') }</Table.Cell>
+                  <Table.Cell>Past Month</Table.Cell>
+                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'months').toDate(), null, 'user') }</Table.Cell>
+                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'months').toDate(), null, 'average') }</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Annual</Table.Cell>
-                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'years'), null, 'user') }</Table.Cell>
-                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'years'), null, 'average') }</Table.Cell>
+                  <Table.Cell>Past Year</Table.Cell>
+                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'years').toDate(), null, 'user') }</Table.Cell>
+                  <Table.Cell>{ CO2CalculationTimespan(data, moment().subtract(1, 'years').toDate(), null, 'average') }</Table.Cell>
                 </Table.Row>
               </Table.Body>
             </Table>

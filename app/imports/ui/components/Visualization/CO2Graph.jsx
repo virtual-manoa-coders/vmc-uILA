@@ -38,7 +38,7 @@ const DataPoints = (data, dateType, numberOfDataPoints, calType, date) => {
   const time = moment(date.toDate()); // moment objects are passed by reference
 
   for (let i = 0; i < numberOfDataPoints; i++) {
-    result[numberOfDataPoints - i - 1] = CO2CalculationTimespan(data, moment(time.toDate()).subtract(1, dateType), moment(time).toDate(), calType);
+    result[numberOfDataPoints - i - 1] = CO2CalculationTimespan(data, moment(time.toDate()).subtract(1, dateType).toDate(), moment(time).toDate(), calType);
     time.subtract(1, dateType);
   }
   return result;

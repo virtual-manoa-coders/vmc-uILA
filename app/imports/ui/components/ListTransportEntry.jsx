@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
 import moment from 'moment';
 
-/** Renders a single row in the List Transport Entries table. See pages/ListTransportEntries.jsx. */
+/** Renders a single row in the List Transport Entries table. See pages/ListTransportEntriesPage.jsx. */
 class ListTransportEntry extends React.Component {
   constructor(props) {
     super(props);
