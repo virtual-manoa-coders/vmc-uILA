@@ -149,7 +149,7 @@ class Community extends React.Component {
                 <Grid columns={2} container>
                   <Grid.Column>
                     <Grid.Row>
-                      <Image height="80%" width="80%" src="images/temp_graph.png" centered/>
+                      <Image height="80%" width="80%" src="images/car_exhaust.jpg" centered/>
                     </Grid.Row>
                   </Grid.Column>
                   <Grid.Column>
@@ -189,7 +189,7 @@ class Community extends React.Component {
                 <Grid columns={2} container>
                   <Grid.Column>
                     <Grid.Row>
-                      <Image height="80%" width="80%" src="images/temp_bar.png" centered/>
+                      <Image height="80%" width="80%" src="images/gas_pump.jpg" centered/>
                     </Grid.Row>
                   </Grid.Column>
                   <Grid.Column>
