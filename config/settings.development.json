@@ -25,7 +25,7 @@
     { "carMake": "Honda", "carModel": "Fit", "carYear": "2014", "carMPG": 29, "carPrice": 12000 }
   ],
 
-  "useJSONDefaultData": true,
+  "useDeprecatedDefaultData": false,
   "loadAssetsFile": true
 
 }
