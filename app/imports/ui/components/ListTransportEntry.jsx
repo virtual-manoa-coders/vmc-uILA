@@ -54,11 +54,14 @@ class ListTransportEntry extends React.Component {
               </Modal.Actions>
             </Modal>
           </Table.Cell>
-          <Table.Cell>
-            <Link to={`/edit-transport-entry/${this.props.entry._id}`}>
-              <Icon name='edit'/>
-            </Link>
-          </Table.Cell>
+          {
+            !this.props.admin &&
+            <Table.Cell>
+              <Link to={`/edit-transport-entry/${this.props.entry._id}`}>
+                <Icon name='edit'/>
+              </Link>
+            </Table.Cell>
+          }
         </Table.Row>
     );
   }
@@ -68,6 +71,7 @@ class ListTransportEntry extends React.Component {
 ListTransportEntry.propTypes = {
   entry: PropTypes.object.isRequired,
   UserTransportation: PropTypes.object.isRequired,
+  admin: PropTypes.boolean,
 };
 
 export default withRouter(ListTransportEntry);
