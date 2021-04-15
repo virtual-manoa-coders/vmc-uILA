@@ -76,7 +76,7 @@ export function addDefaultProfiles() {
 /* This assumes that the profiles are added to Meteor Users collection first in Account.jsx */
 /** Add default profiles to UserInfo from default JSON file */
 export function addJSONProfile(accountArrays) {
-  if ((Meteor.settings.useJSONDefaultData) && UserInfo.collection.find().count() === 0) {
+  if (UserInfo.collection.find().count() === 0) {
     console.log('Creating default Profiles.');
     accountArrays.forEach(profile => {
       // admin doesn't have profile data
@@ -97,7 +97,7 @@ function addTransport({ transport, date, miles, mpg, username }) {
 
 /** Load transport from default JSON file */
 export function addJsonTransport(transportArray) {
-  if ((Meteor.settings.useJSONDefaultData) && UserTransportation.count() === 0) {
+  if (UserTransportation.count() === 0) {
     transportArray.forEach(transport => {
       addTransport(transport);
     });

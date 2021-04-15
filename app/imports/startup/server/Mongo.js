@@ -6,7 +6,7 @@ import { UserVehicles } from '../../api/userVehicles/UserVehicles';
 /* eslint-disable no-console */
 
 /* Main Workflow */
-if (Meteor.settings.useJSONDefaultData) {
+if (!Meteor.settings.useDeprecatedDefaultData) {
   const fileName = 'defaultData.json';
   const path = `/private/${fileName}`;
   // const rawData = fs.readFileSync(`${path}`, 'utf8'); // can't find path :c
@@ -18,7 +18,7 @@ if (Meteor.settings.useJSONDefaultData) {
   Functions.addJSONProfile(jsonData.defaultAccounts);
   Functions.addJsonTransport(jsonData.defaultTransport);
 } else {
-  console.log('Generating data using built-in methonds and settings.development.json');
+  console.log('DEPRECATED: Generating data using built-in methonds and settings.development.json');
   Functions.addDefaultCar();
   Functions.addDefaultProfiles();
   Functions.addDefaultTransport();

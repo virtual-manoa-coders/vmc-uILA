@@ -22,7 +22,7 @@ function createUser(email, password, role) {
 if (Meteor.users.find().count() === 0) {
   const fileName = 'defaultData.json';
   const jsonData = JSON.parse(Assets.getText(fileName));
-  if (Meteor.settings.useJSONDefaultData) {
+  if (!Meteor.settings.useDeprecatedDefaultData) {
     console.log(`Creating the default user(s) from ${fileName}`);
     jsonData.defaultAccounts.map(({ email, password, role }) => createUser(email, password, role));
   } else if (Meteor.settings.defaultAccounts) {
