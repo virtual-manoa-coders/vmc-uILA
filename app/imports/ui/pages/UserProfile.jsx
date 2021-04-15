@@ -13,8 +13,8 @@ import { UserVehicles } from '../../api/userVehicles/UserVehicles';
 import TravelPatterns from '../components/Visualization/TravelPatterns';
 import TransportDataEntry from '../components/TransportDataEntry';
 import ListUserVehicles from '../components/ListUserVehicles';
-import AddVehicle from '../components/AddVehicle';
 import ListTransportEntries from '../components/ListTransportEntries';
+import moment from "moment";
 
 /** Create a schema to specify the structure of the data to appear in the form. */
 const formSchema = new SimpleSchema({
@@ -37,6 +37,11 @@ TODO:
  */
 /** Renders the Profile page */
 class UserProfile extends React.Component {
+  /** create a startDate variable to display data from one year out*/
+  constructor(props) {
+    super(props);
+    this.state = { startDate: moment().subtract(1, 'years').toDate() };
+  }
 
   /** On submit, insert the data. */
   submit(data) {
@@ -138,7 +143,7 @@ class UserProfile extends React.Component {
             <Grid.Column verticalAlign='middle' width={11}>
               <Card fluid>
                 <Card.Content>
-                  <TravelPatterns/>
+                  <TravelPatterns userTransportation={this.props.userTransportation} timeSpan={this.state.startDate}/>
                 </Card.Content>
               </Card>
             </Grid.Column>

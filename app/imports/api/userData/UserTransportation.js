@@ -37,7 +37,7 @@ class UserTransportationCollection {
     this.userPublicationName = `${this.name}.publication.user`;
     this.adminPublicationName = `${this.name}.publication.admin`;
     // TODO: might have to write publication method for different types of publication if needed
-    // Can make a get funciton for the collection name, then use that with publish method
+    // Can make a get function for the collection name, then use that with publish method
     this.communityPublicationName = `${this.name}.publication.community`;
   }
 

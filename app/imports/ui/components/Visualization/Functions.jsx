@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { UserTransportationTypeEnum } from '../../../api/userData/UserTransportation-Utilities';
 
 /*
  * A little note on making a standalone function:
@@ -35,7 +36,11 @@ export const userCO2Aggregate = (data) => {
  * @param data An array of user transportation log objects
  * @returns An array of user transportation log for the currently logged in user
  */
-export const userTransportDataFilter = (data) => data.filter(doc => doc.userID === Meteor.userId());
+export const userTransportDataFilter = (data) =>
+  // TODO: This uses UserInfo id, no meteor id
+  // Perhaps add meteoruserid to transport
+   data.filter(doc => doc.userID === Meteor.userId())
+;
 
 /**
  * Calculate fuelsaved and add it to each document and this should be good for both one user and all users
@@ -65,7 +70,6 @@ export const aggregateIndividualFuelSaved = (data) => {
 
     if (existing.length) { // if the item is already in the result
       const existingIndex = result.indexOf(existing[0]);
-      // eslint-disable-next-line operator-assignment
       result[existingIndex].fuelSaved = result[existingIndex].fuelSaved + doc.fuelSaved;
     } else { // if the item isn't in the result list, just push it to the list
       result.push(doc);
@@ -82,14 +86,16 @@ export const CO2CalculationTypeEnum = {
 
 /**
  * Calculate the number of CO2 reduced either from one user or the averaged of the community
- * @param data The fetched userTransport collection; i.e. data = this.props.userTransportation
- * @param timeSpan A Date object to specify the time span for calculation; i.e. timespan = moment().subtract(1, 'y')
- * @param type The types are: user (for one user) or average (the community average)
- * @returns a number pounds of CO2 reduced
+ * @param data {[]} fetched userTransport collection; i.e. data = this.props.userTransportation
+ * @param timeStart {Date} earliest time of the time range
+ * @param timeEnd {Date} latest time of the time range
+ * @param type {UserTransportationTypeEnum} types are: user (for one user) or average (the community average)
+ * @returns {number} pounds of CO2 reduced
  */
 export const CO2CalculationTimespan = (data, timeStart, timeEnd, type) => {
   const timeNow = timeEnd || Date.now();
-  const afterDateAndCar = data.filter(doc => doc.date > timeStart && doc.date < timeNow && doc.transport !== 'Car');
+  const afterDateAndCar = data.filter(doc => doc.date > timeStart && doc.date < timeNow &&
+      doc.transport !== UserTransportationTypeEnum.Car);
   if (afterDateAndCar.length === 0) {
     return 0;
   }
@@ -112,6 +118,14 @@ export const CO2CalculationTimespan = (data, timeStart, timeEnd, type) => {
   return result;
 };
 
+/**
+ * Filter out a transport type within a time range
+ * @param data raw data from UserTransportation
+ * @param exclude {string []} array of transportation types
+ * @param timeStart earliest time in the time range
+ * @param timeEnd latest time in the time range
+ * @returns {*} an array of filtered data
+ */
 export const FilterOutTransportType = (data, exclude, timeStart, timeEnd) => {
   const timeNow = timeEnd || Date.now();
   const start = timeStart || 0;
@@ -126,9 +140,49 @@ export const FilterOutTransportType = (data, exclude, timeStart, timeEnd) => {
   return array;
 };
 
+export const GHGProduced = (data, timeStart, timeEnd, type) => {
+  const timeNow = timeEnd || Date.now();
+  const start = timeStart || 0;
+  const afterDateJustCar = FilterOutTransportType(data, [
+    UserTransportationTypeEnum.Telecommute,
+    UserTransportationTypeEnum.Walk,
+    UserTransportationTypeEnum.Bike,
+    UserTransportationTypeEnum.Carpool,
+    UserTransportationTypeEnum.Bus,
+  ], start, timeNow);
+  if (afterDateJustCar.length === 0) {
+    return 0;
+  }
+
+  let result = 0;
+  if (type === CO2CalculationTypeEnum.average) {
+    const fuelSavedVar = calculateFuelSavedForAllUsers(afterDateJustCar);
+    const aggregateFuelSaved = aggregateIndividualFuelSaved(fuelSavedVar);
+    const combinedFuelSaved = aggregateFuelSaved.map(doc => doc.fuelSaved).reduce((accumulator, currentValue) => accumulator + currentValue);
+    const averageFuelSaved = combinedFuelSaved / aggregateFuelSaved.length;
+    const averageCO2Reduced = (averageFuelSaved * GHGperGallon).toFixed(2);
+
+    result = averageCO2Reduced;
+  } else if (type === CO2CalculationTypeEnum.user) {
+    const userData = userTransportDataFilter(afterDateJustCar);
+    if (userData.length === 0) {
+      return 0;
+    }
+    result = userCO2Aggregate(userData);
+  }
+  return result;
+};
+
+/**
+ *
+ * @param data raw data from UserTransportation
+ * @param timeSpan earliest time range
+ * @param type transportation type
+ * @returns {number} money saved from not using a car in dollars
+ */
 export const moneySavedCalculator = (data, timeSpan, type) => {
   let result;
-  const afterDateAndCar = data.filter(doc => doc.date > timeSpan && doc.transport !== 'Car');
+  const afterDateAndCar = data.filter(doc => doc.date > timeSpan && doc.transport !== UserTransportationTypeEnum.Car);
   if (afterDateAndCar.length === 0) {
     return 0;
   }
@@ -149,8 +203,15 @@ export const moneySavedCalculator = (data, timeSpan, type) => {
   return (result * gasPrice).toFixed(2);
 };
 
+/**
+ * Returns the user's performance vs the community in percent
+ * @param data raw data from UserTransportation
+ * @param timeStart earliest time range
+ * @param timeEnd latest time range
+ * @returns {number} the percentage of how well the user is doing vs community
+ */
 export const getUserCO2Percent = (data, timeStart, timeEnd) => {
-  const afterDateAndCar = FilterOutTransportType(data, ['Car'], timeStart, timeEnd);
+  const afterDateAndCar = FilterOutTransportType(data, [UserTransportationTypeEnum.Car], timeStart, timeEnd);
   if (afterDateAndCar.length === 0) {
     return 0;
   }
@@ -169,4 +230,45 @@ export const getUserCO2Percent = (data, timeStart, timeEnd) => {
   const index = aggregateFuelSaved.findIndex(doc => doc.userID === Meteor.userId()) + 1;
   const percent = (index / aggregateFuelSaved.length) * 100;
   return percent % 100;
+};
+
+/**
+ * Calculate the number of times of travel one user took from the point of profile creation
+ * @param timeSpan Only select data from today to the timespan
+ * @param data The methods of transportation to retrieve
+ * @returns {number[]} A 6-element array of # of mode of transport
+ */
+export const travelPatternsFunction = (data, timeSpan) => {
+  const afterDateAndCar = data.filter(doc => doc.date > timeSpan);
+  if (afterDateAndCar.length === 0) {
+    return [0];
+  }
+  const transportMethod = afterDateAndCar.map(doc => doc.transport);
+  const dataArray = [0, 0, 0, 0, 0, 0]; // We can only use an array for the Pie component. don't change
+  transportMethod.forEach(doc => {
+    switch (doc) {
+      case 'Telecommute':
+        dataArray[0] += 1;
+        break;
+      case 'Walk':
+        dataArray[1] += 1;
+        break;
+      case 'Bike':
+        dataArray[2] += 1;
+        break;
+      case 'Carpool':
+        dataArray[3] += 1;
+        break;
+      case 'Bus':
+        dataArray[4] += 1;
+        break;
+      case 'Car':
+        dataArray[5] += 1;
+        break;
+      default:
+        console.log('Error: Unexpected transport type');
+        break;
+    }
+  });
+  return dataArray;
 };

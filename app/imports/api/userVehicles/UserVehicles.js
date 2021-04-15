@@ -105,6 +105,14 @@ class UserVehiclesCollection {
     return this.collection.find({})
         .fetch();
   }
+
+  carMakeToIndex(carMake) {
+    return this.cmAllowedValues.findIndex(make => make === carMake);
+  }
+
+  carYearToIndex(carYear) {
+    return this.cyAllowedValues.findIndex(year => year === carYear);
+  }
 }
 
 export const UserVehicles = new UserVehiclesCollection();

@@ -3,16 +3,13 @@ import PropTypes from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
 import { Container, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
 import { Accounts } from 'meteor/accounts-base';
-// eslint-disable-next-line no-unused-vars
-import { Roles } from 'meteor/alanning:roles';
 import { UserInfo } from '../../api/userData/UserInfo';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
-// eslint-disable-next-line no-unused-vars
+import { Roles } from 'meteor/alanning:roles';
 
-// eslint-disable-next-line no-unused-vars
 function addProfile({ name, email, image, carMake, carModel, carYear, carMPG, CO2Reduced, VMTReduced, fuelSaved }) {
   const createdAt = new Date();
-  const carID = UserVehicles.collection.find().fetch().filter(car => car.carModel === carModel && car.carYear === carYear)[0]._id;
+  const carID = UserVehicles.collection.find( ).fetch().filter(car => car.carModel === carModel && car.carYear === carYear)[0]._id;
   console.log(carID);
   if (carID) {
     console.log(` Defining profile: ${email} with car: ${carYear} ${carModel} carID: ${carID}`);
@@ -48,7 +45,7 @@ class Signup extends React.Component {
     if (password !== confirmPassword) {
       this.setState({ error: 'Passwords do not match, try again' });
     } else {
-      Accounts.createUser({ email, username: email, password, profile: { carMake, carYear } }, (err) => {
+      Accounts.createUser({ email, username: email, password, profile: {carMake, carYear}}, (err) => {
         if (err) {
           this.setState({ error: err.reason });
         } else {
@@ -62,8 +59,7 @@ class Signup extends React.Component {
           //   userID,
           //   informationEntered,
           // }));
-          // eslint-disable-next-line no-undef
-          UserInfo.collection.insert({ _id: Meteor.userId(), email: email });
+          UserInfo.collection.insert({_id: Meteor.userId(), email :email,  });
         }
       });
     }
@@ -107,7 +103,7 @@ class Signup extends React.Component {
                   />
                   <Form.Input
                       label="Confirm Password"
-                      id="signup-form-password"
+                      id="signup-form-confirmPassword"
                       icon="lock"
                       iconPosition="left"
                       name="confirmPassword"
@@ -116,24 +112,24 @@ class Signup extends React.Component {
                       onChange={this.handleChange}
                   />
                   <Form.Select
+                      id="signup-form-carMake"
                       fluid
                       label='Car Make'
                       name='carMake'
-                      /* eslint-disable-next-line no-unused-vars */
-                      options={UserVehicles.cmAllowedValues.map(function (currentValue, index, array) {
-                          return { key: index, text: currentValue, value: currentValue };
+                      options={UserVehicles.cmAllowedValues.map(function(currentValue, index, array){
+                          return {key:index, text: currentValue, value: currentValue};
                         })
                       }
                       placeholder='Car Make'
                       onChange={this.handleChange}
                   />
                   <Form.Select
-                    fluid
-                    label='Car Year'
-                    name='carYear'
-                    /* eslint-disable-next-line no-unused-vars */
-                    options={UserVehicles.cyAllowedValues.map(function (currentValue, index, array) {
-                        return { key: index, text: currentValue, value: currentValue };
+                      id="signup-form-carYear"
+                      fluid
+                      label='Car Year'
+                      name='carYear'
+                      options={UserVehicles.cyAllowedValues.map(function(currentValue, index, array){
+                        return {key:index, text:currentValue, value:currentValue};
                       })
                     }
                     placeholder='Car Year'
