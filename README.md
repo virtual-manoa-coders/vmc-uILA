@@ -5,8 +5,5 @@
 <h2> Is Project Malama accessable to anyone </h2>
 <p> Yes! For a limited time, we have Project Malama deployed online here: http://projectmalama.com/ </p>
 <h2> I am a developer, how do I install Project Malama? </h2>
-<p> Our application runs on Meteor app. You must first install meteor before running our application: https://www.meteor.com/developers/install. Once you get that going, download the code to your local directory and cd your way into the directory in your command line. Next, install the application: </p>
-``` $meter npm install ```
-<p>then, run the app:</p>
-``` $meteor npm run start ```
+<p> Our application runs on Meteor app. You must first install meteor before running our application: https://www.meteor.com/developers/install. Once you get that going, download the code to your local directory and cd your way into the directory in your command line. Next, install the application: by typing "meteor npm install" in your commandline. Then, run the app using "meteor npm run start". </p>
 <p>Finally, to view the application, go to http://localhost:3000 on your local browser.</p>
