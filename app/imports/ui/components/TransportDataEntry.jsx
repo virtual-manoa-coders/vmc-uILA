@@ -10,6 +10,7 @@ import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { UserTransportation } from '../../api/userData/UserTransportation';
 import { UserInfo } from '../../api/userData/UserInfo';
+import { SavedTrip } from '../../api/userData/SavedTrip';
 
 /*
 TODO:
@@ -34,7 +35,7 @@ const formSchema = new SimpleSchema({
   },
   date: Date,
   miles: Number,
-  saveTrip: Boolean,
+  saveTrip: Checkbox,
   nameTrip: String,
 });
 
@@ -42,9 +43,31 @@ const bridge = new SimpleSchema2Bridge(formSchema);
 
 /** Renders the Page for adding a document. */
 class TransportDataEntry extends React.Component {
-  /** On log your commute submit, insert the data into UserTransportation. */
+  constructor(props) {
+    super(props);
+    this.state = { isDisabled: true };
+    this.saveTrip = false;
+  }
+
+  /* Handle onChange data of toggling save trip or inputting save trip
+  change() {
+    if (this.saveTrip.checked === true) {
+      this.setState({ isDisabled: false });
+    }
+  } */
+
+  EnableName = function (val) {
+    const sbmt = document.getElementById('saveTrip');
+    if (val.checked) {
+      sbmt.disabled = false;
+    } else {
+      sbmt.disabled = true;
+    }
+  }
+
+  /** On log your commute submit, insert the data into UserTransportation. Then, insert the miles for a saved trip to data if toggled */
   submit(data, formRef) {
-    const { date, transport, miles } = data;
+    const { date, transport, miles, nameTrip } = data;
     const userID = Meteor.user()._id;
     const mpg = this.props.carMPG;
     UserTransportation.collection.insert({
@@ -62,6 +85,18 @@ class TransportDataEntry extends React.Component {
             formRef.reset();
           }
         });
+    SavedTrip.collection.insert({
+          nameTrip,
+          miles,
+    },
+        (error) => {
+          if (error) {
+            swal('Error', error.message, 'error');
+          } else {
+            swal('Success', 'Log entry added successfully', 'success');
+            formRef.reset();
+          }
+    });
   }
 
   transportationLog() {
@@ -80,10 +115,10 @@ class TransportDataEntry extends React.Component {
                            min={new Date(2017, 1, 1)}
                 />
                 <SelectField name='transport'/>
-                <SelectField name='car' disabled/>
+                <SelectField onChange={this.change} disabled={this.state.isDisabled} name='car' />
                 <NumField name='miles' decimal={false}/>
-                <Checkbox name='nameTrip' label ='Save this trip for future use'/>
-                <TextField name='nameTrip' label='Name trip' disabled/>
+                <Checkbox name='saveTrip' value='saveTrip' onClick={this.EnableName} label ='Save this trip for future use'/>
+                <TextField type='checkbox' disabled={this.state.isDisabled} name='nameTrip' label='Name trip'/>
                 <ErrorsField/>
                 <SubmitField value='Submit'/>
                 <Button id='view-trips' as={NavLink} activeClassName="active" exact to="/list-transport-entries" key='list-transport-entries'> View/Edit Your Trips
