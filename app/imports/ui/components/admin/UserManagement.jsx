@@ -19,7 +19,6 @@ class UserManagement extends React.Component {
                 isDescending: true,
             },
         };
-        console.log(this.props.userList);
 
         this.handleRowSelection = this.handleRowSelection.bind(this);
     }
@@ -41,8 +40,6 @@ class UserManagement extends React.Component {
             name: name,
             isDescending: this.state.sortColumn.name !== name ? true : !this.state.sortColumn.isDescending,
         };
-        console.log(this.state.sortColumn, name, this.state.sortColumn.name);
-        console.log(this.state.sortColumn.name !== name ? true : !this.state.sortColumn.isDescending);
 
         this.setState({ sortColumn });
     }
@@ -64,19 +61,19 @@ class UserManagement extends React.Component {
                 <div>
                     <Button onClick={() => this.props.handleViewChange('overview')}>Go Back</Button>
                 </div>
-                <Card fluid>
-                    <Card.Content>
-                        <h3>Filter Options</h3>
-                    </Card.Content>
-                    <Card.Content>
-                        Name Search
-                        <Input/>
-                        Email Search
-                        <Input/>
-                        <Button>Clear All</Button>
-                        <Button>Filter</Button>
-                    </Card.Content>
-                </Card>
+                {/* <Card fluid> */}
+                {/*    <Card.Content> */}
+                {/*        <h3>Filter Options</h3> */}
+                {/*    </Card.Content> */}
+                {/*    <Card.Content> */}
+                {/*        Name Search */}
+                {/*        <Input/> */}
+                {/*        Email Search */}
+                {/*        <Input/> */}
+                {/*        <Button>Clear All</Button> */}
+                {/*        <Button>Filter</Button> */}
+                {/*    </Card.Content> */}
+                {/* </Card> */}
                 <Card className={'user-management'} fluid>
                     <Card.Content>
                         <Grid>
@@ -140,9 +137,11 @@ class UserManagement extends React.Component {
                                                     </Table.Header>
                                                     <Table.Body>
                                                         {
-                                                            this.props.entries.map((entry) => <ListTransportEntry key={entry._id}
-                                                                                                                    entry={entry} admin
-                                                                                                                    UserTransportation={UserTransportation} />)
+                                                            this.props.entries.map((entry) => (
+                                                                    <ListTransportEntry key={entry._id}
+                                                                                        entry={entry} admin
+                                                                                        UserTransportation={UserTransportation} />
+                                                            ))
                                                         }
                                                     </Table.Body>
                                                 </Table>
@@ -175,11 +174,13 @@ UserManagement.propTypes = {
 
 /** withTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker */
 const UserManagementContainer = withTracker(() => {
-    const sub = Meteor.subscribe(UserTransportation.adminPublicationName);
+    const sub1 = Meteor.subscribe(UserTransportation.adminPublicationName);
+    const sub2 = Meteor.subscribe(UserInfo.adminPublicationName);
+
     return {
         currentUser: Meteor.user() ? Meteor.user().username : '',
         entries: UserTransportation.collection.find({}, { sort: { date: -1 } }).fetch(),
-        ready: sub.ready(),
+        ready: sub1.ready() && sub2.ready(),
     };
 })(UserManagement);
 
