@@ -1,6 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { Grid, Icon, Divider, Segment, Header, Loader, Tab, Container, Table } from 'semantic-ui-react';
+// eslint-disable-next-line no-unused-vars
+import { Grid, Icon, Divider, Segment, Header, Loader, Tab, Card, Container, Table } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { withTracker } from 'meteor/react-meteor-data';
 import TransportPieChartWithDates from '../components/Visualization/TransportPieChartWithDates';
@@ -63,33 +64,53 @@ class Dashboard extends React.Component {
 
           <Grid.Row>
             <Grid.Column verticalAlign='middle'>
-              <Icon name='big arrow circle down'/><br/>
-              GHG Reduced<br/>
-              <h2>205,721 lbs</h2>
+              <Card>
+                <Card.Content>
+                  <Icon name='big arrow circle down'/><br/>
+                  <Card.Meta>GHG Reduced</Card.Meta>
+                  <Card.Description>205,721 lbs</Card.Description>
+                </Card.Content>
+              </Card>
             </Grid.Column>
             <Divider hidden/>
             <Grid.Column verticalAlign='middle'>
-              <Icon name='big taxi'/><br/>
-              VMT Reduced<br/>
-              <h2>231,547 miles</h2>
+              <Card>
+                <Card.Content>
+                  <Icon name='big taxi'/><br/>
+                  <Card.Meta>VMT Reduced</Card.Meta>
+                  <Card.Description>231,547 miles</Card.Description>
+                </Card.Content>
+              </Card>
             </Grid.Column>
             <Divider hidden/>
             <Grid.Column verticalAlign='middle'>
-              <Icon name='big road'/><br/>
-              Gas Saved<br/>
-              <h2>10,500 gallons</h2>
+              <Card>
+                <Card.Content>
+                  <Icon name='big road'/><br/>
+                  <Card.Meta>Gas Saved</Card.Meta>
+                  <Card.Description>10,500 gallons</Card.Description>
+                </Card.Content>
+              </Card>
             </Grid.Column>
             <Divider hidden/>
             <Grid.Column verticalAlign='middle'>
-              <Icon name='big home'/><br/>
-              Telecommute<br/>
-              <h2>32 days</h2>
+              <Card>
+                <Card.Content>
+                  <Icon name='big home'/><br/>
+                  <Card.Meta>Telecommute</Card.Meta>
+                  <Card.Description>32 days</Card.Description>
+                </Card.Content>
+              </Card>
             </Grid.Column>
             <Divider hidden/>
             <Grid.Column verticalAlign='middle'>
-              <Icon name='big bicycle'/><br/>
-              Biked to Work<br/>
-              <h2>3 days</h2>
+              <Card>
+                <Card.Content>
+                  <Icon name='big bicycle'/><br/>
+                  <Card.Meta>Biked To Work</Card.Meta>
+                  <Card.Description>3 days</Card.Description>
+                </Card.Content>
+              </Card>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row columns={2} height='equal' width='equal'>
