@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, Grid, Container, Button, Icon, Divider, Modal } from 'semantic-ui-react';
+import { Header, Grid, Container, Button, Icon, Divider, Modal, Card, Image } from 'semantic-ui-react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
@@ -25,7 +25,6 @@ class Landing extends React.Component {
           <Grid id='landing-page' fluid verticalAlign='middle' centered textAlign='center' container>
             <div className='welcome-text'>
               <Grid fluid verticalAlign='middle' centered padded columns='equal'>
-
                 <Grid.Row style={{ color: '#425170' }}>
                   <Grid.Column verticalAlign='middle'>
                     <Icon name='small arrow circle down'/>
@@ -107,45 +106,42 @@ class Landing extends React.Component {
             </div>
           </Grid>
           <div>
-            <Grid className='description-section' textAlign='left' container>
+            <Grid className='description-section' textAlign='center' container>
+              <br/>
               <Grid.Row className='description-header'>
                 What does Project Malama offer?
               </Grid.Row>
               <Grid.Row>
-                <Grid.Column width={2}>
-                  <Icon name='handshake outline'/>
-                  <br/>
+              <Grid stackable columns='equal'>
+                <Grid.Column>
                   <div>
                     Connect
                   </div>
-                </Grid.Column>
-                <Grid.Column width={12}>
-                  Connect with the community and see how you are helping reduce emissions.
-                </Grid.Column>
-              </Grid.Row>
-              <Grid.Row>
-                <Grid.Column width={2}>
-                  <Icon name='clipboard outline'/>
                   <br/>
+                  <Grid.Row>
+                    Connect with the community and see how you are helping reduce emissions.
+                  </Grid.Row>
+                </Grid.Column>
+                <Grid.Column>
                   <div>
                     Track
                   </div>
-                </Grid.Column>
-                <Grid.Column width={12}>
-                  Log in your distance traveled alongside your method of transportation to track your emissions
-                </Grid.Column>
-              </Grid.Row>
-              <Grid.Row>
-                <Grid.Column width={2}>
-                  <Icon name='sliders horizontal'/>
                   <br/>
+                  <Grid.Row>
+                    Log in your distance traveled alongside your method of transportation
+                    to track your emissions.
+                  </Grid.Row>
+                </Grid.Column>
+                <Grid.Column>
                   <div>
                     Compare
                   </div>
+                  <br/>
+                  <Grid.Row>
+                    Compare your current emission options to alternatives.
+                  </Grid.Row>
                 </Grid.Column>
-                <Grid.Column width={12}>
-                  Compare your current emission options to other options
-                </Grid.Column>
+              </Grid>
               </Grid.Row>
             </Grid>
           </div>
