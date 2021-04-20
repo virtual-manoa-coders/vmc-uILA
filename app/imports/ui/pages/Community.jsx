@@ -21,6 +21,7 @@ import {
   getUserCO2Percent,
   GHGProduced,
 } from '../components/Visualization/Functions';
+import CommunityWhatIfCO2 from '../components/Visualization/CommunityWhatIfCO2';
 
 const textStyle = { fontFamily: 'Merriweather' };
 
@@ -28,8 +29,6 @@ class Community extends React.Component {
 
   dashboard() {
     const data = this.props.userTransportation;
-    console.log(GHGProduced(data, moment().subtract(1, 'months'), null, CO2CalculationTypeEnum.user));
-    console.log(GHGProduced(data, moment().subtract(1, 'months'), null, CO2CalculationTypeEnum.average));
     return (
         <Grid id='community-page' verticalAlign='middle' textAlign='center'>
           <Grid.Row>
@@ -56,6 +55,12 @@ class Community extends React.Component {
                   </Grid.Row>
                 </Grid>
               </Section>
+            </Grid.Column>
+          </Grid.Row>
+          <Divider horizontal/>
+          <Grid.Row>
+            <Grid.Column>
+              <CommunityWhatIfCO2 transportData={data} />
             </Grid.Column>
           </Grid.Row>
           <Divider horizontal/>

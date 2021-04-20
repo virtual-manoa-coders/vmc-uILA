@@ -272,3 +272,7 @@ export const travelPatternsFunction = (data, timeSpan) => {
   });
   return dataArray;
 };
+/**
+ * Clone an array by value. WARNING: Any JS object will turn into string representations; very computationally expensive!
+ */
+export const cloneArray = (array) => JSON.parse(JSON.stringify(array));
