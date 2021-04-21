@@ -30,15 +30,16 @@ const DataLabel = (format, dateType, numberOfDataPoints, date) => {
   return result;
 };
 
+/**
+ * Like GHG produced, but only remove EVs and still use the data's length to calculate GHG saved
+ */
 const GHGProducedNoFilter = (data, timeStart, timeEnd, type) => {
   const timeNow = timeEnd || Date.now();
   const start = timeStart || 0;
+  const unfilteredLength = data.length;
   const afterDateJustCar = data.filter(doc => {
-    console.log(`Transport's doc:${doc.date}`);
-    console.log(`Start:${start}; End:${timeNow}`);
-    return doc.date > start && doc.date < timeNow;
+    return doc.date > start && doc.date < timeNow && doc.transport === UserTransportationTypeEnum.Car;
   });
-  console.log(afterDateJustCar);
   if (afterDateJustCar.length === 0) {
     return 0;
   }
@@ -48,64 +49,10 @@ const GHGProducedNoFilter = (data, timeStart, timeEnd, type) => {
     const fuelSavedVar = calculateFuelSavedForAllUsers(afterDateJustCar);
     const aggregateFuelSaved = aggregateIndividualFuelSaved(fuelSavedVar);
     const combinedFuelSaved = aggregateFuelSaved.map(doc => doc.fuelSaved).reduce((accumulator, currentValue) => accumulator + currentValue);
-    const averageFuelSaved = combinedFuelSaved / aggregateFuelSaved.length;
+    const averageFuelSaved = combinedFuelSaved / unfilteredLength;
     const averageCO2Reduced = (averageFuelSaved * GHGperGallon).toFixed(2);
 
     result = averageCO2Reduced;
-  }
-  return result;
-};
-
-const GHGProducedGhetto = (data, timeStart, timeEnd, type) => {
-  const timeNow = timeEnd || Date.now();
-  const start = timeStart || 0;
-  const afterDateJustCar = FilterOutTransportType(data, [
-    UserTransportationTypeEnum.Telecommute,
-    UserTransportationTypeEnum.Walk,
-    UserTransportationTypeEnum.Bike,
-    UserTransportationTypeEnum.Carpool,
-    UserTransportationTypeEnum.Bus,
-  ], start, timeNow);
-  if (afterDateJustCar.length === 0) {
-    return 0;
-  }
-
-  let result = 0;
-  if (type === CO2CalculationTypeEnum.average) {
-    const fuelSavedVar = calculateFuelSavedForAllUsers(afterDateJustCar);
-    const aggregateFuelSaved = aggregateIndividualFuelSaved(fuelSavedVar);
-    const combinedFuelSaved = aggregateFuelSaved.map(doc => doc.fuelSaved).reduce((accumulator, currentValue) => accumulator + currentValue);
-    const averageFuelSaved = combinedFuelSaved / aggregateFuelSaved.length;
-    const averageCO2Reduced = (averageFuelSaved * GHGperGallon).toFixed(2);
-
-    result = averageCO2Reduced;
-  } else if (type === CO2CalculationTypeEnum.user) {
-    const userData = userTransportDataFilter(afterDateJustCar);
-    if (userData.length === 0) {
-      return 0;
-    }
-    result = userCO2Aggregate(userData);
-  }
-  return result;
-};
-
-/**
- * Generate a number of data points backwards for the graph in an array form, starting from the given date, each data
- * point uses the data right after last data point to the current data point, i.e. (last, current].
- * @param data Array of raw transport data
- * @param dateType The amount of time between each data point
- * @param numberOfDataPoints Number of points on the x axis
- * @param calType CO2GraphTypeEnum type
- * @param date The initial date of the right most data point
- * @returns {[]} An array of data points
- */
-const DataPoints = (data, dateType, numberOfDataPoints, calType, date) => {
-  const result = [];
-  const time = moment(date.toDate()); // moment objects are passed by reference
-
-  for (let i = 0; i < numberOfDataPoints; i++) {
-    result[numberOfDataPoints - i - 1] = GHGProducedGhetto(data, moment(time.toDate()).subtract(1, dateType).toDate(), moment(time).toDate(), calType);
-    time.subtract(1, dateType);
   }
   return result;
 };
@@ -137,14 +84,14 @@ const GraphData = (potentialData, currentData, format, dateType, numberOfDataPoi
     labels: DataLabel(format, dateType, numberOfDataPoints, now),
     datasets: [
       {
-        label: 'Last Month\'s GHG',
-        data: DataPoints(currentData, dateType, numberOfDataPoints, CO2CalculationTypeEnum.average, now),
+        label: 'Last Month\'s GHG Produced',
+        data: DataPointsNoFilter(currentData, dateType, numberOfDataPoints, CO2CalculationTypeEnum.average, now),
         fill: true,
         backgroundColor: 'rgba(124, 174, 122, 0.2)',
         borderColor: 'rgba(124, 174, 122, 1)',
       },
       {
-        label: 'Last Month\'s Potential GHG',
+        label: 'Last Month\'s Potential GHG Produced',
         data: DataPointsNoFilter(potentialData, dateType, numberOfDataPoints, CO2CalculationTypeEnum.average, now),
         fill: true,
         backgroundColor: 'rgba(74, 123, 157, 0.2)',

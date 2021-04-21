@@ -12,7 +12,7 @@ const copyTransportInMonth = (data) => {
   const dataClone = cloneArray(data); // Has to copy by value
   const filterArray = cloneArray(UserTransportationTypeEnum).Array.filter(type => type !== UserTransportationTypeEnum.Car);
   dataClone.forEach(transport => transport.date = new Date(transport.date));
-  return FilterOutTransportType(dataClone, filterArray).slice(0,20); // using multiple filter Transport type cuz another filter to be 0
+  return FilterOutTransportType(dataClone, filterArray); // using multiple filter Transport type cuz another filter to be 0
 };
 
 // set the EV from start inclusive to end inclusive
@@ -34,13 +34,15 @@ const setTransportType = (transportArray, type, start, end) => {
 // Return a CO2 produced graph that shows two lines; one is what if a percentage of the community uses this much EV
 // Another is the actual CO2 produced in the timeSpan
 const CommunityWhatIfCO2 = ({ transportData }) => { // "As our community move towards EV, you can see the impact on the CO2 produced here"
+  // eslint-disable-next-line no-unused-vars
   const [transport, setTransport] = useState(copyTransportInMonth(transportData));
-  const [inputEV, setInputEV] = useState(0);
+  // eslint-disable-next-line no-unused-vars
+  const [transportFixed, setTransportFixed] = useState(copyTransportInMonth(transportData));
   const [currentEV, setCurrentEV] = useState(0);
 
   const changeEVPercent = (currentInd, newInd) => {
     if (newInd < 0 || newInd > transport.length) {
-      throw new Error('negative index from newInd');
+      throw new Error('out of range index from newInd');
     }
     const EVDifference = newInd - currentInd;
     if (EVDifference > 0) {
@@ -60,12 +62,10 @@ const CommunityWhatIfCO2 = ({ transportData }) => { // "As our community move to
         <Grid.Row>
           <Grid.Column>
             <Segment>
-              <CO2WhatIfGraph potentialData={transport} currentData={transportData} format={'DD/MM'} dateType={'weeks'} numberOfDataPoints={5}/>
-              <Header>{inputEV}</Header>
-              <Header>{currentEV}</Header>
-              {transport.slice(0, 5).map(doc => <Header key={doc.date}>{doc.transport}</Header>)}
-              <Button onClick={() => changeEVPercent(currentEV, currentEV + 1)}>inputEV + 1</Button>
-              <Button onClick={() => changeEVPercent(currentEV, currentEV - 1)}>inputEV - 1</Button>
+              <CO2WhatIfGraph potentialData={transport} currentData={transportFixed} format={'DD/MM'} dateType={'weeks'} numberOfDataPoints={5}/>
+              <Header>{`currentEV: ${currentEV}`}</Header>
+              <Button onClick={() => changeEVPercent(currentEV, currentEV + 50)}>inputEV + 1</Button>
+              <Button onClick={() => changeEVPercent(currentEV, currentEV - 50)}>inputEV - 1</Button>
             </Segment>
           </Grid.Column>
         </Grid.Row>
