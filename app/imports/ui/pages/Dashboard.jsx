@@ -149,7 +149,7 @@ export default withTracker(() => {
   const sub2 = Meteor.subscribe(UserTransportation.userPublicationName);
   const sub3 = Meteor.subscribe(UserVehicles.userPublicationName);
   return {
-    userInfo: UserInfo.collection.findOne({}, { fields: { email: Meteor.user().username } }),
+    userInfo: UserInfo.collection.findOne({ email: Meteor.user().username }),
     userVehicles: UserVehicles.collection.find({}).fetch(),
     userTransportation: UserTransportation.collection.find({}).fetch(),
     entries: UserTransportation.collection.find({}, { sort: { date: -1 } }).fetch(),
