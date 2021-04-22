@@ -104,12 +104,3 @@ Meteor.publish(null, function () {
   }
   return this.ready();
 });
-
-// Server
-Meteor.publish('AccountsInAdminView', function () {
-  if (this.userId && Roles.userIsInRole(this.userId, 'admin')) {
-    return Meteor.users.find({});
-  } else {
-    return this.ready();
-  }
-});

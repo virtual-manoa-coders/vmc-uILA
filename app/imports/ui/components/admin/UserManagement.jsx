@@ -1,13 +1,15 @@
 import React from 'react';
-import { Grid, Card, Button, Table } from 'semantic-ui-react';
+import { Grid, Card, Button, Table, Loader, Header } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
+import swal from 'sweetalert';
 import { UserInfo } from '../../../api/userData/UserInfo';
 import ListTransportEntry from '../ListTransportEntry';
 import { UserTransportation } from '../../../api/userData/UserTransportation';
-import { Roles } from 'meteor/alanning:roles';
+import { adminFindMeteorID } from '../../../startup/both/Methods';
+import { getMeteorId } from '../Visualization/Functions';
 
 /** A simple static component to render some text for the landing page. */
 class UserManagement extends React.Component {
@@ -57,7 +59,13 @@ class UserManagement extends React.Component {
     }
 
     render() {
-      console.log(Meteor.users.find().fetch());
+      getMeteorId('user1@foo.com', (userId) => {
+        if (userId) {
+          console.log(userId);
+          // This is asyncronus, so th return value will be undefined, even though it will be a valid ID later
+          // so render transports inside the callback, i.e. here
+        }
+      });
         return (
             <div>
                 <div>
@@ -100,8 +108,6 @@ class UserManagement extends React.Component {
                                     return 0;
                                 })
                                 .map((user, index) => {
-                                  const userID = UserInfo.findMeteorID(user.email);
-                                  console.log(userID);
                                   return (
                                       <Grid.Row key={index} style={{ paddingBottom: 0 }}>
                                         <Grid columns={'equal'}
@@ -142,12 +148,9 @@ class UserManagement extends React.Component {
                                               </Table.Header>
                                               <Table.Body>
                                                 {
-                                                  this.props.entries.filter(entry => entry._id === userID)
-                                                      .map((entry) => {
-                                                        return <ListTransportEntry key={entry._id}
-                                                                                   entry={entry} admin
-                                                                                   UserTransportation={UserTransportation}/>;
-                                                      })
+                                                  this.props.entries.map((entry) => (<ListTransportEntry key={entry._id}
+                                                                                           entry={entry} admin
+                                                                                           UserTransportation={UserTransportation}/>))
                                                 }
                                               </Table.Body>
                                             </Table>
@@ -183,12 +186,11 @@ UserManagement.propTypes = {
 const UserManagementContainer = withTracker(() => {
     const sub1 = Meteor.subscribe(UserTransportation.adminPublicationName);
     const sub2 = Meteor.subscribe(UserInfo.adminPublicationName);
-    const sub3 = Meteor.subscribe('AccountsInAdminView');
 
     return {
         currentUser: Meteor.user() ? Meteor.user().username : '',
         entries: UserTransportation.collection.find({}, { sort: { date: -1 } }).fetch(),
-        ready: sub1.ready() && sub2.ready() && sub3.ready,
+        ready: sub1.ready() && sub2.ready(),
     };
 })(UserManagement);
 

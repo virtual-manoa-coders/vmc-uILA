@@ -70,29 +70,38 @@ class UserInfoCollection {
     return true;
   }
 
+
+  /**
+   * Default implementation of assertValidRoleForMethod. Asserts that userId is logged in as an Admin or Advisor.
+   * This is used in the define, update, and removeIt Meteor methods associated with each class.
+   * @param userId The userId of the logged in user. Can be null or undefined
+   * @throws { Meteor.Error } If there is no logged in user, or the user is not an Admin or Advisor.
+   */
+  assertValidRoleForMethod(userId) {
+    this._assertRole(userId, ['admin']);
+  }
+
   /**
    * A stricter form of findOne, in that it throws an exception if the entity isn't found in the collection.
-   * If called on the client side: will only show the client's account.
+   * Server-side only!
    * @param email UserInfo's email
    * @returns String The user's Meteor id
    * @throws { Meteor.Error } If the document cannot be found.
    */
   findMeteorID(email) {
     if (Meteor.isClient) {
-      console.log('Warning: Calling findMeteorID in Client');
+      throw new Error('Calling findMeteorID in Client');
     }
-    // For this project, the username is the email
-    console.log(email);
-    console.log(Meteor.users.find().fetch());
-    const doc = Meteor.users.findOne({ username: email })._id;
+
+    const doc = Meteor.users.findOne({ username: email });
     if (!doc) {
       if (typeof email !== 'string') {
-        throw new Meteor.Error(`${JSON.stringify(email)} is not a defined ${this._type}`, '', Error().stack);
+        throw new Meteor.Error(`Email: '${JSON.stringify(email)}' isn't a string`, '', Error().stack);
       } else {
-        throw new Meteor.Error(`${email} is not a defined ${this._type}`, '', Error().stack);
+        throw new Meteor.Error(`${email} is undefined; can't be found in the database`, '', Error().stack);
       }
     }
-    return doc;
+    return doc._id;
   }
 }
 
