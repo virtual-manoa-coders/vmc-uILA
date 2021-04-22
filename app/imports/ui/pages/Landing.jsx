@@ -18,138 +18,140 @@ class Landing extends React.Component {
 
   render() {
     return (
-        <Container id='landing-page' fluid textAlign='center' centered stackable>
-          <video autoPlay muted loop id='myVideo'>
-            <source src='/images/traffic.mp4' type="video/mp4"/>
-          </video>
-          <Grid fluid verticalAlign='middle' centered textAlign='center' container>
-            <div className='welcome-text'>
-              <Grid fluid verticalAlign='middle' centered padded columns='equal'>
+        <div id='landing-page'>
+          <Container fluid textAlign='center' centered stackable>
+            <video autoPlay muted loop id='myVideo'>
+              <source src='/images/traffic.mp4' type="video/mp4"/>
+            </video>
+            <Grid fluid verticalAlign='middle' centered textAlign='center' container>
+              <div className='welcome-text'>
+                <Grid fluid verticalAlign='middle' centered padded columns='equal'>
 
-                <Grid.Row style={{ color: '#425170' }}>
-                  <Grid.Column verticalAlign='middle'>
-                    <Icon name='small arrow circle down'/>
-                    <br/>
-                    <h3>205,721lb of CO2 reduced</h3>
-                  </Grid.Column>
-                  <Divider hidden/>
-                  <Grid.Column verticalAlign='middle'>
-                    <Icon name='small road'/>
-                    <br/>
-                    <h3>10,500 gallons of gas saved</h3>
-                  </Grid.Column>
-                  <Divider hidden/>
-                  <Grid.Column verticalAlign='middle'>
-                    <Icon name='small taxi'/>
-                    <br/>
-                    <h3>231,547 VMT reduced</h3>
-                  </Grid.Column>
-                </Grid.Row>
+                  <Grid.Row style={{ color: '#425170' }}>
+                    <Grid.Column verticalAlign='middle'>
+                      <Icon name='small arrow circle down'/>
+                      <br/>
+                      <h3>205,721lb of CO2 reduced</h3>
+                    </Grid.Column>
+                    <Divider hidden/>
+                    <Grid.Column verticalAlign='middle'>
+                      <Icon name='small road'/>
+                      <br/>
+                      <h3>10,500 gallons of gas saved</h3>
+                    </Grid.Column>
+                    <Divider hidden/>
+                    <Grid.Column verticalAlign='middle'>
+                      <Icon name='small taxi'/>
+                      <br/>
+                      <h3>231,547 VMT reduced</h3>
+                    </Grid.Column>
+                  </Grid.Row>
 
-                <Grid.Row id="text4">
-                  What is your contribution?
+                  <Grid.Row id="text4">
+                    What is your contribution?
+                  </Grid.Row>
+                  <Grid.Row>
+                    {
+                      this.props.currentUser &&
+                      <div>
+                        <Grid.Column centered verticalAlign='middle' className='get-started'>
+                          <Header as='h2' inverted>GET STARTED</Header>
+                          <Button className='landingButton' inverted as={NavLink} exact to="/dashboard" key='dashboard'>Go
+                            to
+                            Dashboard</Button>
+                          <Button className='landingButton' inverted onClick={this.handleOpen}>GHG Calculator</Button>
+                          <Modal
+                              open={this.state.modalOpen}
+                              onClose={this.handleClose}
+                              closeIcon
+                          >
+                            <Modal.Header>
+                              GHG Calculator
+                            </Modal.Header>
+                            <Modal.Content>
+                              <GhgCalculator handleClose={this.handleClose}/>
+                            </Modal.Content>
+                          </Modal>
+                        </Grid.Column>
+                      </div>
+                    }
+                    {
+                      !this.props.currentUser &&
+                      <div>
+                        <Grid.Column centered verticalAlign='middle' textAlign='center'>
+                          <Button.Group size='huge'>
+                            <Button className='landingButton' inverted as={NavLink} exact to="/signin"
+                                    key='login'>Login</Button>
+                            <Button.Or/>
+                            <Button className='landingButton' inverted as={NavLink} exact to="/signup" key='signup'>Sign
+                              up</Button>
+                          </Button.Group>
+                          <br/>
+                          <Button className='landingButton' onClick={this.handleOpen}>Test out the GHG Calculator</Button>
+                          <Modal
+                              open={this.state.modalOpen}
+                              onClose={this.handleClose}
+                              closeIcon
+                          >
+                            <Modal.Header>
+                              GHG Calculator
+                            </Modal.Header>
+                            <Modal.Content>
+                              <GhgCalculator handleClose={this.handleClose}/>
+                            </Modal.Content>
+                          </Modal>
+                        </Grid.Column>
+                      </div>
+                    }
+                  </Grid.Row>
+                </Grid>
+              </div>
+            </Grid>
+            <div>
+              <Grid className='description-section' textAlign='left' container>
+                <Grid.Row className='description-header'>
+                  What does Project Malama offer?
                 </Grid.Row>
                 <Grid.Row>
-                  {
-                    this.props.currentUser &&
+                  <Grid.Column width={2}>
+                    <Icon name='handshake outline'/>
+                    <br/>
                     <div>
-                      <Grid.Column centered verticalAlign='middle' className='get-started'>
-                        <Header as='h2' inverted>GET STARTED</Header>
-                        <Button className='landingButton' inverted as={NavLink} exact to="/dashboard" key='dashboard'>Go
-                          to
-                          Dashboard</Button>
-                        <Button className='landingButton' inverted onClick={this.handleOpen}>GHG Calculator</Button>
-                        <Modal
-                            open={this.state.modalOpen}
-                            onClose={this.handleClose}
-                            closeIcon
-                        >
-                          <Modal.Header>
-                            GHG Calculator
-                          </Modal.Header>
-                          <Modal.Content>
-                            <GhgCalculator handleClose={this.handleClose}/>
-                          </Modal.Content>
-                        </Modal>
-                      </Grid.Column>
+                      Connect
                     </div>
-                  }
-                  {
-                    !this.props.currentUser &&
+                  </Grid.Column>
+                  <Grid.Column width={12}>
+                    Connect with the community and see how you are helping reduce emissions.
+                  </Grid.Column>
+                </Grid.Row>
+                <Grid.Row>
+                  <Grid.Column width={2}>
+                    <Icon name='clipboard outline'/>
+                    <br/>
                     <div>
-                      <Grid.Column centered verticalAlign='middle' textAlign='center'>
-                        <Button.Group size='huge'>
-                          <Button className='landingButton' inverted as={NavLink} exact to="/signin"
-                                  key='login'>Login</Button>
-                          <Button.Or/>
-                          <Button className='landingButton' inverted as={NavLink} exact to="/signup" key='signup'>Sign
-                            up</Button>
-                        </Button.Group>
-                        <br/>
-                        <Button className='landingButton' onClick={this.handleOpen}>Test out the GHG Calculator</Button>
-                        <Modal
-                            open={this.state.modalOpen}
-                            onClose={this.handleClose}
-                            closeIcon
-                        >
-                          <Modal.Header>
-                            GHG Calculator
-                          </Modal.Header>
-                          <Modal.Content>
-                            <GhgCalculator handleClose={this.handleClose}/>
-                          </Modal.Content>
-                        </Modal>
-                      </Grid.Column>
+                      Track
                     </div>
-                  }
+                  </Grid.Column>
+                  <Grid.Column width={12}>
+                    Log in your distance traveled alongside your method of transportation to track your emissions
+                  </Grid.Column>
+                </Grid.Row>
+                <Grid.Row>
+                  <Grid.Column width={2}>
+                    <Icon name='sliders horizontal'/>
+                    <br/>
+                    <div>
+                      Compare
+                    </div>
+                  </Grid.Column>
+                  <Grid.Column width={12}>
+                    Compare your current emission options to other options
+                  </Grid.Column>
                 </Grid.Row>
               </Grid>
             </div>
-          </Grid>
-          <div>
-            <Grid className='description-section' textAlign='left' container>
-              <Grid.Row className='description-header'>
-                What does Project Malama offer?
-              </Grid.Row>
-              <Grid.Row>
-                <Grid.Column width={2}>
-                  <Icon name='handshake outline'/>
-                  <br/>
-                  <div>
-                    Connect
-                  </div>
-                </Grid.Column>
-                <Grid.Column width={12}>
-                  Connect with the community and see how you are helping reduce emissions.
-                </Grid.Column>
-              </Grid.Row>
-              <Grid.Row>
-                <Grid.Column width={2}>
-                  <Icon name='clipboard outline'/>
-                  <br/>
-                  <div>
-                    Track
-                  </div>
-                </Grid.Column>
-                <Grid.Column width={12}>
-                  Log in your distance traveled alongside your method of transportation to track your emissions
-                </Grid.Column>
-              </Grid.Row>
-              <Grid.Row>
-                <Grid.Column width={2}>
-                  <Icon name='sliders horizontal'/>
-                  <br/>
-                  <div>
-                    Compare
-                  </div>
-                </Grid.Column>
-                <Grid.Column width={12}>
-                  Compare your current emission options to other options
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
-          </div>
-        </Container>
+          </Container>
+        </div>
     );
   }
 }
