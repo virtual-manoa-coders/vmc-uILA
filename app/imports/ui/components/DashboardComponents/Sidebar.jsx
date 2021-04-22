@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 /**
  * NOTE: Will work on this component later
  */
-class Sidebar extends React.Component{
+class Sidebar extends React.Component {
   render() {
     return(
         <!-- Home -->

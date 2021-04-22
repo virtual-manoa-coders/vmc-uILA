@@ -1,10 +1,10 @@
 import SimpleSchema from 'simpl-schema';
-import { Meteor } from 'meteor/meteor';
 import BaseCollection from '../base/BaseCollection';
 
 /**
  * This is a partial BaseCollection implementation of the transport collection
  */
+// eslint-disable-next-line no-unused-vars
 class UserTransportationCollectionEXT extends BaseCollection {
   constructor() {
     super('Projects', new SimpleSchema({

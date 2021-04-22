@@ -10,7 +10,6 @@ import Landing from '../pages/Landing';
 import About from '../pages/About';
 import UserProfile from '../pages/UserProfile';
 import CarComparator from '../pages/CarComparator';
-import EditStuff from '../pages/EditStuff';
 import NotFound from '../pages/NotFound';
 import Signin from '../pages/Signin';
 import Signup from '../pages/Signup';
@@ -47,7 +46,6 @@ class App extends React.Component {
               <ProtectedRoute path="/list-transport-entries" component={ListTransportEntries}/>
               <ProtectedRoute path="/edit-transport-entry/:_id" component={EditTransportEntry}/>
               <ProtectedRoute path="/comparator" component={CarComparator}/>
-              <ProtectedRoute path="/edit/:_id" component={EditStuff}/>
               <ProtectedRoute path="/add-vehicle" component={AddVehicle}/>
               <ProtectedRoute path="/edit-vehicle/:_id" component={EditUserVehicle}/>
               <ProtectedRoute path="/list-user-vehicles" component={ListUserVehicles}/>
