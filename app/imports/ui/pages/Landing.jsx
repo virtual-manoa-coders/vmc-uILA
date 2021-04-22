@@ -18,11 +18,11 @@ class Landing extends React.Component {
 
   render() {
     return (
-        <Container fluid textAlign='center' centered stackable>
+        <Container id='landing-page' fluid textAlign='center' centered stackable>
           <video autoPlay muted loop id='myVideo'>
             <source src='/images/traffic.mp4' type="video/mp4"/>
           </video>
-          <Grid id='landing-page' fluid verticalAlign='middle' centered textAlign='center' container>
+          <Grid fluid verticalAlign='middle' centered textAlign='center' container>
             <div className='welcome-text'>
               <Grid fluid verticalAlign='middle' centered padded columns='equal'>
 
