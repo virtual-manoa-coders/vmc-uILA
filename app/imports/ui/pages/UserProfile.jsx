@@ -1,12 +1,13 @@
 import React from 'react';
-import { Card, Header, Loader, Image, Grid, Segment, Form, Tab, Menu } from 'semantic-ui-react';
-import { AutoForm, SubmitField, TextField, SelectField, NumField } from 'uniforms-semantic';
+import { Card, Header, Loader, Image, Grid, Segment, Form, Tab } from 'semantic-ui-react';
+import { AutoForm, SubmitField, TextField } from 'uniforms-semantic';
 import swal from 'sweetalert';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { UserInfo } from '../../api/userData/UserInfo';
 import { UserTransportation } from '../../api/userData/UserTransportation';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
@@ -14,7 +15,6 @@ import TravelPatterns from '../components/Visualization/TravelPatterns';
 import TransportDataEntry from '../components/TransportDataEntry';
 import ListUserVehicles from '../components/ListUserVehicles';
 import ListTransportEntries from '../components/ListTransportEntries';
-import moment from "moment";
 
 /** Create a schema to specify the structure of the data to appear in the form. */
 const formSchema = new SimpleSchema({
@@ -37,7 +37,7 @@ TODO:
  */
 /** Renders the Profile page */
 class UserProfile extends React.Component {
-  /** create a startDate variable to display data from one year out*/
+  /** create a startDate variable to display data from one year out */
   constructor(props) {
     super(props);
     this.state = { startDate: moment().subtract(1, 'years').toDate() };

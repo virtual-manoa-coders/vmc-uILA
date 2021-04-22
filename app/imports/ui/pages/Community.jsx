@@ -14,7 +14,6 @@ import { SectionHeader } from '../components/Visualization/SectionHeader';
 import CO2GraphWithTimeRange from '../components/Visualization/CO2GraphWithTimeRange';
 import CO2Table from '../components/Visualization/CO2Table';
 import {
-  CO2CalculationTimespan,
   userTransportDataFilter,
   moneySavedCalculator,
   CO2CalculationTypeEnum,

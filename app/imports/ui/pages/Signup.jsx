@@ -7,10 +7,8 @@ import { Container, Form, Grid, Header, Message, Segment } from 'semantic-ui-rea
 import { Accounts } from 'meteor/accounts-base';
 import { UserInfo } from '../../api/userData/UserInfo';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
-import { Roles } from 'meteor/alanning:roles';
-import { UserTransportation } from '../../api/userData/UserTransportation';
 
-function addProfile({ name, email, image, carMake, carModel, carYear, carMPG, CO2Reduced, VMTReduced, fuelSaved }) {
+function addProfile({ name, email, image, carModel, carYear }) {
   const createdAt = new Date();
   const carID = this.props.userVehicles.filter(car => car.carMake === carModel && car.carYear === carYear)[0]._id;
   console.log(carID);
@@ -64,7 +62,7 @@ class Signup extends React.Component {
           //   informationEntered,
           // }));
 
-          addProfile({name: 'CHANGE PLOX', email: email, carMake: carMake, carYear: carYear});
+          addProfile({ name: 'CHANGE PLOX', email: email, carMake: carMake, carYear: carYear });
         }
       });
     }
@@ -121,8 +119,8 @@ class Signup extends React.Component {
                       fluid
                       label='Car Make'
                       name='carMake'
-                      options={UserVehicles.cmAllowedValues.map(function(currentValue, index, array){
-                          return {key:index, text: currentValue, value: currentValue};
+                      options={UserVehicles.cmAllowedValues.map(function (currentValue, index) {
+                          return { key: index, text: currentValue, value: currentValue };
                         })
                       }
                       placeholder='Car Make'
@@ -133,8 +131,8 @@ class Signup extends React.Component {
                       fluid
                       label='Car Year'
                       name='carYear'
-                      options={UserVehicles.cyAllowedValues.map(function(currentValue, index, array){
-                        return {key:index, text:currentValue, value:currentValue};
+                      options={UserVehicles.cyAllowedValues.map(function (currentValue, index) {
+                        return { key: index, text: currentValue, value: currentValue };
                       })
                     }
                     placeholder='Car Year'

@@ -30,17 +30,17 @@ class Cards extends React.Component {
     } = this.props;
 
     const cardStyle = {
-      display: 'flex';
-      min-width: 'auto';
-      width: '24rem';
-      height: '14rem';
-      font-family: 'Roboto';
-      padding: '1cm';
+      "display": 'flex',
+      "min-width": 'auto',
+      "width": '24rem',
+      "height": '14rem',
+      "font-family": 'Roboto',
+      "padding": '1cm',
     };
 
     return(
         <div style={cardStyle}>
-          <!-- Pretty sure this is an error, need to change the stackable content-->
+          // <!-- Pretty sure this is an error, need to change the stackable content-->
         <Grid stackable={equal}>
           <Grid.Row>
             <div style={cardStyle}>
@@ -63,7 +63,7 @@ class Cards extends React.Component {
                 />
             </div>
             <div style={cardStyle}>
-              <!-- This is the amount of gas saved by the user-->
+              //This is the amount of gas saved by the user
               <Card
                 header={GasSaved}
                 description={[
@@ -95,8 +95,7 @@ class Cards extends React.Component {
 }
 
 Cards.propTypes = {
-  userData: PropTypes.string;
-
+  userData: PropTypes.string,
 };
 
 export default Cards;

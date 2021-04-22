@@ -21,7 +21,7 @@ class Sidebar extends React.Component{
 }
 
 Sidebar.propTypes = {
-  user: PropTypes.string;
+  user: PropTypes.string,
 }
 
 export default withTracker(() => {

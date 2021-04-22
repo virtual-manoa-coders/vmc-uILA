@@ -1,7 +1,6 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { NavLink } from 'react-router-dom';
-import { Button, Container, Header, Loader, Modal, Table, Card, Grid } from 'semantic-ui-react';
+import { Button, Container, Header, Loader, Modal, Card, Grid } from 'semantic-ui-react';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import ListUserVehicle from '../components/ListUserVehicle';

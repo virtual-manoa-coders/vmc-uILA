@@ -1,14 +1,12 @@
 import React from 'react';
-import { Grid, Card, Button, Table, Loader, Header } from 'semantic-ui-react';
+import { Grid, Card, Button, Table } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
-import swal from 'sweetalert';
 import { UserInfo } from '../../../api/userData/UserInfo';
 import ListTransportEntry from '../ListTransportEntry';
 import { UserTransportation } from '../../../api/userData/UserTransportation';
-import { adminFindMeteorID } from '../../../startup/both/Methods';
 import { getMeteorId } from '../Visualization/Functions';
 
 /** A simple static component to render some text for the landing page. */
@@ -61,7 +59,6 @@ class UserManagement extends React.Component {
     render() {
       getMeteorId('user1@foo.com', (userId) => {
         if (userId) {
-          console.log(userId);
           // This is asyncronus, so th return value will be undefined, even though it will be a valid ID later
           // so render transports inside the callback, i.e. here
         }
@@ -107,8 +104,7 @@ class UserManagement extends React.Component {
 
                                     return 0;
                                 })
-                                .map((user, index) => {
-                                  return (
+                                .map((user, index) => (
                                       <Grid.Row key={index} style={{ paddingBottom: 0 }}>
                                         <Grid columns={'equal'}
                                               className={`admin-table-row ${this.state.selectedIndex === index ? 'active-index' : ''}`}
@@ -157,8 +153,7 @@ class UserManagement extends React.Component {
                                           </Grid.Row>
                                         }
                                       </Grid.Row>
-                                  );
-                                })
+                                  ))
                             }
                             {
                                 this.props.userList.length < 1 &&

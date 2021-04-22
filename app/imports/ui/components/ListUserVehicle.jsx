@@ -2,7 +2,6 @@ import React from 'react';
 import { Modal, Button, Header, Icon, Card } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
-import EditUserVehicle from './EditUserVehicle';
 
 /** Renders a single row in the List Transport Entries table. See pages/ListTransportEntriesPage.jsx. */
 class ListUserVehicle extends React.Component {
