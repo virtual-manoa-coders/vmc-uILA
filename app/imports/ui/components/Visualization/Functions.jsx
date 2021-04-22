@@ -40,7 +40,8 @@ export const userCO2Aggregate = (data) => {
 export const userTransportDataFilter = (data) =>
   // TODO: This uses UserInfo id, no meteor id
   // Perhaps add meteoruserid to transport
-   data.filter(doc => doc.userID === Meteor.userId());
+    // eslint-disable-next-line implicit-arrow-linebreak
+  data.filter(doc => doc.userID === Meteor.userId());
 
 /**
  * Calculate fuelsaved and add it to each document and this should be good for both one user and all users
@@ -70,6 +71,7 @@ export const aggregateIndividualFuelSaved = (data) => {
 
     if (existing.length) { // if the item is already in the result
       const existingIndex = result.indexOf(existing[0]);
+      // eslint-disable-next-line operator-assignment
       result[existingIndex].fuelSaved = result[existingIndex].fuelSaved + doc.fuelSaved;
     } else { // if the item isn't in the result list, just push it to the list
       result.push(doc);

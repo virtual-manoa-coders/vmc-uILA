@@ -44,13 +44,11 @@ class UserInfoCollection {
       return undefined;
     }
     return this.collection.find()
-        .fetch().map(user => {
-          return {
+        .fetch().map(user => ({
             userID: user._id,
             name: user.name,
             email: user.email,
-          };
-        }).slice(0, max);
+          })).slice(0, max);
   }
 
   /**
@@ -69,7 +67,6 @@ class UserInfoCollection {
     }
     return true;
   }
-
 
   /**
    * Default implementation of assertValidRoleForMethod. Asserts that userId is logged in as an Admin or Advisor.
