@@ -2,6 +2,7 @@ import { Mongo } from 'meteor/mongo';
 import SimpleSchema from 'simpl-schema';
 import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
+import { Roles } from 'meteor/alanning:roles';
 
 /** This collection contains the user's vehicle data */
 class UserInfoCollection {
@@ -53,13 +54,36 @@ class UserInfoCollection {
   }
 
   /**
+   * Internal helper function to simplify definition of the assertValidRoleForMethod method.
+   * @param userId The userID.
+   * @param roles An array of roles.
+   * @throws { Meteor.Error } If userId is not defined or user is not in the specified roles.
+   * @returns True if no error is thrown.
+   * @ignore
+   */
+  _assertRole(userId, roles) {
+    if (!userId) {
+      throw new Meteor.Error('unauthorized', 'You must be logged in.', '', Error().stack);
+    } else if (!Roles.userIsInRole(userId, roles)) {
+      throw new Meteor.Error('unauthorized', `You must be one of the following roles: ${roles}`, '', Error().stack);
+    }
+    return true;
+  }
+
+  /**
    * A stricter form of findOne, in that it throws an exception if the entity isn't found in the collection.
+   * If called on the client side: will only show the client's account.
    * @param email UserInfo's email
    * @returns String The user's Meteor id
    * @throws { Meteor.Error } If the document cannot be found.
    */
   findMeteorID(email) {
+    if (Meteor.isClient) {
+      console.log('Warning: Calling findMeteorID in Client');
+    }
     // For this project, the username is the email
+    console.log(email);
+    console.log(Meteor.users.find().fetch());
     const doc = Meteor.users.findOne({ username: email })._id;
     if (!doc) {
       if (typeof email !== 'string') {

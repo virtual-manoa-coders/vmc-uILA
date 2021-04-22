@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { UserInfo } from '../../../api/userData/UserInfo';
 import ListTransportEntry from '../ListTransportEntry';
 import { UserTransportation } from '../../../api/userData/UserTransportation';
+import { Roles } from 'meteor/alanning:roles';
 
 /** A simple static component to render some text for the landing page. */
 class UserManagement extends React.Component {
@@ -56,6 +57,7 @@ class UserManagement extends React.Component {
     }
 
     render() {
+      console.log(Meteor.users.find().fetch());
         return (
             <div>
                 <div>
@@ -97,58 +99,63 @@ class UserManagement extends React.Component {
 
                                     return 0;
                                 })
-                                .map((user, index) => (
-                                    <Grid.Row key={index} style={{ paddingBottom: 0 }}>
+                                .map((user, index) => {
+                                  const userID = UserInfo.findMeteorID(user.email);
+                                  console.log(userID);
+                                  return (
+                                      <Grid.Row key={index} style={{ paddingBottom: 0 }}>
                                         <Grid columns={'equal'}
                                               className={`admin-table-row ${this.state.selectedIndex === index ? 'active-index' : ''}`}
                                               onClick={() => this.handleRowSelection(index)}>
-                                            <Grid.Row>
-                                                <Grid.Column>
-                                                    {user.name}
-                                                </Grid.Column>
-                                                <Grid.Column>
-                                                    {user.email}
-                                                </Grid.Column>
-                                                <Grid.Column>
-                                                    {user.CO2Reduced}
-                                                </Grid.Column>
-                                                <Grid.Column>
-                                                    {user.VMTReduced}
-                                                </Grid.Column>
-                                                <Grid.Column>
-                                                    {user.fuelSaved}
-                                                </Grid.Column>
-                                                <Grid.Column onClick={() => this.deleteUser(user)}>
-                                                    <Button color={'red'} disabled={user.email === this.props.currentUser}>Delete User</Button>
-                                                </Grid.Column>
-                                            </Grid.Row>
+                                          <Grid.Row>
+                                            <Grid.Column>
+                                              {user.name}
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                              {user.email}
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                              {user.CO2Reduced}
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                              {user.VMTReduced}
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                              {user.fuelSaved}
+                                            </Grid.Column>
+                                            <Grid.Column onClick={() => this.deleteUser(user)}>
+                                              <Button color={'red'} disabled={user.email === this.props.currentUser}>Delete User</Button>
+                                            </Grid.Column>
+                                          </Grid.Row>
                                         </Grid>
                                         {
-                                            this.state.selectedIndex === index &&
-                                            <Grid.Row className={'admin-travel-history'}>
-                                                <Table celled basic={'very'}>
-                                                    <Table.Header>
-                                                        <Table.Row>
-                                                            <Table.HeaderCell>Date</Table.HeaderCell>
-                                                            <Table.HeaderCell>Transport</Table.HeaderCell>
-                                                            <Table.HeaderCell>Miles</Table.HeaderCell>
-                                                            <Table.HeaderCell>Delete</Table.HeaderCell>
-                                                        </Table.Row>
-                                                    </Table.Header>
-                                                    <Table.Body>
-                                                        {
-                                                            this.props.entries.map((entry) => (
-                                                                    <ListTransportEntry key={entry._id}
-                                                                                        entry={entry} admin
-                                                                                        UserTransportation={UserTransportation} />
-                                                            ))
-                                                        }
-                                                    </Table.Body>
-                                                </Table>
-                                            </Grid.Row>
+                                          this.state.selectedIndex === index &&
+                                          <Grid.Row className={'admin-travel-history'}>
+                                            <Table celled basic={'very'}>
+                                              <Table.Header>
+                                                <Table.Row>
+                                                  <Table.HeaderCell>Date</Table.HeaderCell>
+                                                  <Table.HeaderCell>Transport</Table.HeaderCell>
+                                                  <Table.HeaderCell>Miles</Table.HeaderCell>
+                                                  <Table.HeaderCell>Delete</Table.HeaderCell>
+                                                </Table.Row>
+                                              </Table.Header>
+                                              <Table.Body>
+                                                {
+                                                  this.props.entries.filter(entry => entry._id === userID)
+                                                      .map((entry) => {
+                                                        return <ListTransportEntry key={entry._id}
+                                                                                   entry={entry} admin
+                                                                                   UserTransportation={UserTransportation}/>;
+                                                      })
+                                                }
+                                              </Table.Body>
+                                            </Table>
+                                          </Grid.Row>
                                         }
-                                    </Grid.Row>
-                                ))
+                                      </Grid.Row>
+                                  );
+                                })
                             }
                             {
                                 this.props.userList.length < 1 &&
@@ -176,11 +183,12 @@ UserManagement.propTypes = {
 const UserManagementContainer = withTracker(() => {
     const sub1 = Meteor.subscribe(UserTransportation.adminPublicationName);
     const sub2 = Meteor.subscribe(UserInfo.adminPublicationName);
+    const sub3 = Meteor.subscribe('AccountsInAdminView');
 
     return {
         currentUser: Meteor.user() ? Meteor.user().username : '',
         entries: UserTransportation.collection.find({}, { sort: { date: -1 } }).fetch(),
-        ready: sub1.ready() && sub2.ready(),
+        ready: sub1.ready() && sub2.ready() && sub3.ready,
     };
 })(UserManagement);
 
