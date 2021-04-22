@@ -1,11 +1,11 @@
 import React from 'react';
-import { Grid, Card, Button, Table } from 'semantic-ui-react';
+import { Grid, Card, Button, Table, Loader } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import { UserInfo } from '../../../api/userData/UserInfo';
-import ListTransportEntry from '../ListTransportEntry';
+import UserHistory from '../../components/admin/UserHistory';
 import { UserTransportation } from '../../../api/userData/UserTransportation';
 import { getMeteorId } from '../Visualization/Functions';
 
@@ -18,6 +18,8 @@ class UserManagement extends React.Component {
             sortColumn: {
                 name: 'createdAt',
                 isDescending: true,
+                loading: false,
+                selectedUserId: '',
             },
         };
 
@@ -45,24 +47,31 @@ class UserManagement extends React.Component {
         this.setState({ sortColumn });
     }
 
-    handleRowSelection(index) {
+    handleRowSelection(index, user) {
         let selectedIndex = index;
+
+        console.log(user);
 
         // Deselect the row if it is clicked again
         if (selectedIndex === this.state.selectedIndex) {
             selectedIndex = null;
+        } else {
+            getMeteorId(user.email, (userId) => {
+                if (userId) {
+                    setTimeout(() => {
+                        console.log(userId);
+                        // This is asyncronus, so th return value will be undefined, even though it will be a valid ID later
+                        // so render transports inside the callback, i.e. here
+                        this.setState({ selectedUserId: userId, loading: false });
+                    }, 1000);
+                }
+            });
         }
 
-        this.setState({ selectedIndex });
+        this.setState({ selectedIndex, loading: true });
     }
 
     render() {
-      getMeteorId('user1@foo.com', (userId) => {
-        if (userId) {
-          // This is asyncronus, so th return value will be undefined, even though it will be a valid ID later
-          // so render transports inside the callback, i.e. here
-        }
-      });
         return (
             <div>
                 <div>
@@ -108,7 +117,7 @@ class UserManagement extends React.Component {
                                       <Grid.Row key={index} style={{ paddingBottom: 0 }}>
                                         <Grid columns={'equal'}
                                               className={`admin-table-row ${this.state.selectedIndex === index ? 'active-index' : ''}`}
-                                              onClick={() => this.handleRowSelection(index)}>
+                                              onClick={() => this.handleRowSelection(index, user)}>
                                           <Grid.Row>
                                             <Grid.Column>
                                               {user.name}
@@ -131,7 +140,9 @@ class UserManagement extends React.Component {
                                           </Grid.Row>
                                         </Grid>
                                         {
-                                          this.state.selectedIndex === index &&
+                                          this.state.selectedIndex === index && (this.state.loading ?
+                                          <Grid.Row style={{ padding: '1em' }}><Loader active inline={'centered'}>Fetching user&apos;s travel history</Loader></Grid.Row>
+                                          :
                                           <Grid.Row className={'admin-travel-history'}>
                                             <Table celled basic={'very'}>
                                               <Table.Header>
@@ -144,13 +155,11 @@ class UserManagement extends React.Component {
                                               </Table.Header>
                                               <Table.Body>
                                                 {
-                                                  this.props.entries.map((entry) => (<ListTransportEntry key={entry._id}
-                                                                                           entry={entry} admin
-                                                                                           UserTransportation={UserTransportation}/>))
+                                                  <UserHistory selectedUserId={this.state.selectedUserId}/>
                                                 }
                                               </Table.Body>
                                             </Table>
-                                          </Grid.Row>
+                                          </Grid.Row>)
                                         }
                                       </Grid.Row>
                                   ))
