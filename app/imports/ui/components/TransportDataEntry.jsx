@@ -39,6 +39,7 @@ const bridge = new SimpleSchema2Bridge(formSchema);
 
 /** Renders the Page for adding a document. */
 class TransportDataEntry extends React.Component {
+  /** By default save name field should be disabled and not required */
   constructor(props) {
     super(props);
     this.state = { saveDisabled: true };
