@@ -40,10 +40,7 @@ Meteor.publish(UserTransportation.userPublicationName, function () {
 // User-level publication.
 // If logged in, then publish documents owned by this user. Otherwise publish nothing.
 Meteor.publish(UserVehicles.userPublicationName, function () {
-  if (this.userId) {
     return UserVehicles.collection.find();
-  }
-  return this.ready();
 });
 
 Meteor.publish(AllUserVehicles.userPublicationName, function () {
