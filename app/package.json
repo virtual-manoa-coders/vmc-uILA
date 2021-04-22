@@ -9,6 +9,7 @@
     "classnames": "^2.2.6",
     "core-js": "^3.8.3",
     "graphql": "^14.5.8",
+    "meteor": "^2.2.1",
     "meteor-node-stubs": "^1.0.1",
     "moment": "^2.29.1",
     "prop-types": "^15.7.2",

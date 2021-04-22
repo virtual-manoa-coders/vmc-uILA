@@ -14,8 +14,8 @@ import { SavedTrip } from '../../api/userData/SavedTrip';
 
 /*
 TODO:
-- Add page to enter basic info before letting you enter milage
-- After you're done, take you back to dasboard or community
+- Add page to enter basic info before letting you enter mileage
+- After you're done, take you back to dashboard or community
  */
 
 /** Create a schema to specify the structure of the data to appear in the logging form. */
@@ -29,10 +29,6 @@ const formSchema = new SimpleSchema({
     allowedValues: ['Telecommute', 'Walk', 'Bike', 'Carpool', 'Bus', 'Car'],
     defaultValue: 'Telecommute',
   },
-  car: {
-    type: String,
-    allowedValues: ['2007 Toyota Yaris', '2010 Tesla Model X'],
-  },
   date: Date,
   miles: Number,
   saveTrip: Checkbox,
@@ -45,23 +41,21 @@ const bridge = new SimpleSchema2Bridge(formSchema);
 class TransportDataEntry extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { isDisabled: true };
+    this.state = { saveDisabled: true };
+    this.state = { saveRequired: true };
     this.saveTrip = false;
   }
 
-  /* Handle onChange data of toggling save trip or inputting save trip
-  change() {
-    if (this.saveTrip.checked === true) {
-      this.setState({ isDisabled: false });
-    }
-  } */
-
-  EnableName = function (val) {
-    const sbmt = document.getElementById('saveTrip');
-    if (val.checked) {
-      sbmt.disabled = false;
+  /** When called, the nameTrip field gets enabled. */
+  EnableName = (val, x) => {
+    if (x.checked) {
+      this.setState({ saveDisabled: false });
+      this.setState({ saveRequired: true });
+      this.saveTrip = true;
     } else {
-      sbmt.disabled = true;
+        this.setState({ saveDisabled: true });
+        this.setState({ saveRequired: false });
+        this.saveTrip = false;
     }
   }
 
@@ -85,18 +79,21 @@ class TransportDataEntry extends React.Component {
             formRef.reset();
           }
         });
-    SavedTrip.collection.insert({
-          nameTrip,
-          miles,
-    },
-        (error) => {
-          if (error) {
-            swal('Error', error.message, 'error');
-          } else {
-            swal('Success', 'Log entry added successfully', 'success');
-            formRef.reset();
-          }
-    });
+    if (this.saveTrip) { // If user checked "Save this trip for future use"
+      SavedTrip.collection.insert({
+            nameTrip,
+            miles,
+          },
+          (error) => {
+            if (error) {
+              swal('Error', error.message, 'error');
+            } else {
+              swal('Success', 'Log entry added successfully', 'success');
+              formRef.reset();
+            }
+          });
+    }
+
   }
 
   transportationLog() {
@@ -109,16 +106,15 @@ class TransportDataEntry extends React.Component {
             }} schema={bridge} onSubmit={data => this.submit(data, fRef)}>
               <Segment>
               <Header style={{ color: '#2292b3' }} textAlign='center' as='h3'>Log a Trip</Header>
-                <SelectField name='trips' label='Saved Trips'/>
+                <SelectField required={false} name='trips' label='Saved Trips'/>
                 <DateField name='date'
                            max={new Date()}
                            min={new Date(2017, 1, 1)}
                 />
                 <SelectField name='transport'/>
-                <SelectField onChange={this.change} disabled={this.state.isDisabled} name='car' />
                 <NumField name='miles' decimal={false}/>
-                <Checkbox name='saveTrip' value='saveTrip' onClick={this.EnableName} label ='Save this trip for future use'/>
-                <TextField type='checkbox' disabled={this.state.isDisabled} name='nameTrip' label='Name trip'/>
+                <Checkbox required={false} name='saveTrip' onClick={this.EnableName} label ='Save this trip for future use'/>
+                <TextField required={this.state.saveRequired} disabled={this.state.saveDisabled} name='nameTrip' label='Name trip'/>
                 <ErrorsField/>
                 <SubmitField value='Submit'/>
                 <Button id='view-trips' as={NavLink} activeClassName="active" exact to="/list-transport-entries" key='list-transport-entries'> View/Edit Your Trips

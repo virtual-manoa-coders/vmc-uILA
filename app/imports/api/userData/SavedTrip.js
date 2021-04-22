@@ -34,13 +34,11 @@ class SavedTrip {
             return undefined;
         }
         return this.collection.find()
-            .fetch().map(user => {
-                return {
+            .fetch().map(user => ({
                     userID: user._id,
                     name: user.name,
                     email: user.email,
-                };
-            }).slice(0, max);
+                })).slice(0, max);
     }
 
     /**
