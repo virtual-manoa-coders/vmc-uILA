@@ -32,7 +32,7 @@ For each page in the user interface, there should be an acceptance test that ver
 ### TEST-ACCEPTANCE-02: Each Page component should have its page Id: `id='page-id'` in the root component
 
 For each page that you've authored, you should place an id attribute in the root component that the page component returns.
-```
+```js
 return (
         <Grid id='community-page' verticalAlign='middle' textAlign='center'>
           <Grid.Row>
