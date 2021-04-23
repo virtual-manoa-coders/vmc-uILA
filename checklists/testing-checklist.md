@@ -46,7 +46,7 @@ return (
 The Github actions is using a headless ubuntu, which would take a long time to load heavy components. This would fail the testcafe check, even if the page is working on your machine.
 
 #### For example, don't put the page Id in a video component
-```
+```js
  <Container id='landing-page' fluid textAlign='center' centered stackable>
             <video autoPlay muted loop id='myVideo'>
               <source src='/images/traffic.mp4' type="video/mp4"/>
@@ -56,7 +56,7 @@ The Github actions is using a headless ubuntu, which would take a long time to l
 This code will fail the acceptance test on Github
 
 #### Instead, put it in a component/tag that will be loaded instantly
-```
+```js
 <div id='landing-page'>
           <Container fluid textAlign='center' centered stackable>
             <video autoPlay muted loop id='myVideo'>
