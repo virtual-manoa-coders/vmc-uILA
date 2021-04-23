@@ -28,7 +28,44 @@ We use the "Page Object Model" to define one or more tests to exercise the behav
 
 For each page in the user interface, there should be an acceptance test that verifies that the page can be displayed successfully.
 
-### TEST-ACCEPTANCE-02: Each form has an acceptance test.
+
+### TEST-ACCEPTANCE-02: Each Page component should have its page Id: `id='page-id'` in the root component
+
+For each page that you've authored, you should place an id attribute in the root component that the page component returns.
+```
+return (
+        <Grid id='community-page' verticalAlign='middle' textAlign='center'>
+          <Grid.Row>
+            <Grid.Column>
+              <Section>
+...
+```
+
+### TEST-ACCEPTANCE-03: The root Page component with the test Id should be loaded quickly in headless, low computational power environment
+
+The Github actions is using a headless ubuntu, which would take a long time to load heavy components. This would fail the testcafe check, even if the page is working on your machine.
+
+#### For example, don't put the page Id in a video component
+```
+ <Container id='landing-page' fluid textAlign='center' centered stackable>
+            <video autoPlay muted loop id='myVideo'>
+              <source src='/images/traffic.mp4' type="video/mp4"/>
+            </video>
+...
+```
+This code will fail the acceptance test on Github
+
+#### Instead, put it in a component/tag that will be loaded instantly
+```
+<div id='landing-page'>
+          <Container fluid textAlign='center' centered stackable>
+            <video autoPlay muted loop id='myVideo'>
+              <source src='/images/traffic.mp4' type="video/mp4"/>
+            </video>
+...
+```
+
+### TEST-ACCEPTANCE-04: Each form has an acceptance test.
 
 If a page has a form, there is an associated acceptance test to ensure that it behaves correctly.
 
