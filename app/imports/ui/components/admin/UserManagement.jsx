@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Card, Button, Table, Loader } from 'semantic-ui-react';
+import { Grid, Card, Button, Table, Loader, Input } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
@@ -21,18 +21,17 @@ class UserManagement extends React.Component {
                 loading: false,
                 selectedUserId: '',
             },
+            nameFilter: '',
+            emailFilter: '',
         };
 
         this.handleRowSelection = this.handleRowSelection.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
     }
 
-    // componentDidUpdate(prevProps) {
-    //     console.log(this.props, prevProps)
-    //
-    //     if (prevProps.ready != this.props.ready) {
-    //         initUserEntries
-    //     }
-    // }
+    handleInputChange(event, data) {
+        this.setState({ [data.name]: data.value });
+    }
 
     deleteUser(user) {
         UserInfo.collection.remove({ _id: user._id });
@@ -50,18 +49,15 @@ class UserManagement extends React.Component {
     handleRowSelection(index, user) {
         let selectedIndex = index;
 
-        console.log(user);
-
         // Deselect the row if it is clicked again
         if (selectedIndex === this.state.selectedIndex) {
             selectedIndex = null;
         } else {
+            // This is asyncronus, so the return value will be undefined, even though it will be a valid ID later
+            // so render transports inside the callback, i.e. here
             getMeteorId(user.email, (userId) => {
                 if (userId) {
                     setTimeout(() => {
-                        console.log(userId);
-                        // This is asyncronus, so th return value will be undefined, even though it will be a valid ID later
-                        // so render transports inside the callback, i.e. here
                         this.setState({ selectedUserId: userId, loading: false });
                     }, 1000);
                 }
@@ -77,19 +73,36 @@ class UserManagement extends React.Component {
                 <div>
                     <Button onClick={() => this.props.handleViewChange('overview')}>Go Back</Button>
                 </div>
-                {/* <Card fluid> */}
-                {/*    <Card.Content> */}
-                {/*        <h3>Filter Options</h3> */}
-                {/*    </Card.Content> */}
-                {/*    <Card.Content> */}
-                {/*        Name Search */}
-                {/*        <Input/> */}
-                {/*        Email Search */}
-                {/*        <Input/> */}
-                {/*        <Button>Clear All</Button> */}
-                {/*        <Button>Filter</Button> */}
-                {/*    </Card.Content> */}
-                {/* </Card> */}
+                 <Card fluid>
+                    <Card.Content>
+                        <h3>Filter Options</h3>
+                    </Card.Content>
+                    <Card.Content>
+                        <Grid>
+                            <Grid.Row columns={'equal'}>
+                                <Grid.Column>
+                                    Name Filter <br/>
+                                    <Input
+                                        fluid
+                                        name={'nameFilter'}
+                                        onChange={(event, data) => {
+                                          this.handleInputChange(event, data);
+                                        }}/>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    Email Filter <br/>
+                                    <Input
+                                        fluid
+                                        name={'emailFilter'}
+                                        onChange={(event, data) => {
+                                            this.handleInputChange(event, data);
+                                        }}/>
+                                </Grid.Column>
+                            </Grid.Row>
+
+                        </Grid>
+                    </Card.Content>
+                 </Card>
                 <Card className={'user-management'} fluid>
                     <Card.Content>
                         <Grid>
@@ -102,7 +115,15 @@ class UserManagement extends React.Component {
                                 <Grid.Column>Action</Grid.Column>
                             </Grid.Row>
                             {
-                                this.props.userList.sort((a, b) => {
+                                this.props.userList
+                                    .filter((user) => {
+                                        if ((this.state.nameFilter.length < 1 && this.state.emailFilter < 1) ||
+                                            (user.email.includes(this.state.emailFilter) && user.name.includes(this.state.nameFilter))) {
+                                            return true;
+                                        }
+                                        return false;
+                                    })
+                                    .sort((a, b) => {
                                     if (a[this.state.sortColumn.name] < b[this.state.sortColumn.name]) {
                                         return this.state.sortColumn.isDescending ? -1 : 1;
                                     }
