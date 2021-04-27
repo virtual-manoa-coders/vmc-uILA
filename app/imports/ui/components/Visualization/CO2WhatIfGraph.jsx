@@ -36,9 +36,7 @@ const GHGProducedNoFilter = (data, timeStart, timeEnd, type) => {
   const timeNow = timeEnd || Date.now();
   const start = timeStart || 0;
   const unfilteredLength = data.length;
-  const afterDateJustCar = data.filter(doc => {
-    return doc.date > start && doc.date < timeNow && doc.transport === UserTransportationTypeEnum.Car;
-  });
+  const afterDateJustCar = data.filter(doc => doc.date > start && doc.date < timeNow && doc.transport === UserTransportationTypeEnum.Car);
   if (afterDateJustCar.length === 0) {
     return 0;
   }
