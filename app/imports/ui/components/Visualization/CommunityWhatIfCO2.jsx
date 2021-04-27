@@ -68,7 +68,7 @@ const CommunityWhatIfCO2 = ({ transportData, fontStyle }) => {
         <Grid.Column verticalAligh='middle'>
           <Header as={'h1'} style={{ fontSize: '30px', fontFamily: fontStyle.fontFamily }}>See our impact as we change</Header>
           <p style={{ fontSize: '22px', fontFamily: fontStyle.fontFamily }}>The state of Hawai&apos;i plans to increase the adoption of electric vehicles in our community.
-            You can see how the impact of EV adoption would affect last month&apos;s travel here.</p>
+            You can see how the impact of EV adoption would affect last month&apos;s GHG produced here.</p>
         </Grid.Column>
         <Grid.Column>
           <Segment>
