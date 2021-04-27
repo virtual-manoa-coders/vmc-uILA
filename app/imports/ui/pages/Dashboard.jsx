@@ -21,7 +21,8 @@ class Dashboard extends React.Component {
   }
 
   renderPage() {
-    const userInfo = this.props.userInfo;
+    const userInfo = this.props.userInfo
+        .filter(user => user.email === this.props.currentUser.username)[0];
     const userCar = this.props.userVehicles.filter(car => car._id === userInfo.carID)[0];
 
     const panes = [
@@ -34,7 +35,7 @@ class Dashboard extends React.Component {
       {
         menuItem: 'View/Edit Trips',
         render: () => <Tab.Pane attached={false}>
-         <ListTransportEntries/>
+          <ListTransportEntries/>
         </Tab.Pane>,
       },
       {
@@ -115,7 +116,7 @@ class Dashboard extends React.Component {
           <Grid.Row columns={2} height='equal' width='equal'>
             <Grid.Column>
               <Segment>
-              <Tab fluid style={{ overflow: 'auto', height: 450 }} menu={{ secondary: true, pointing: true }} panes={panes}/>
+                <Tab fluid style={{ overflow: 'auto', height: 450 }} menu={{ secondary: true, pointing: true }} panes={panes}/>
               </Segment>
             </Grid.Column>
           </Grid.Row>
@@ -135,10 +136,11 @@ class Dashboard extends React.Component {
 
 /** Require an array of Stuff documents in the props. */
 Dashboard.propTypes = {
-  userInfo: PropTypes.object.isRequired,
+  userInfo: PropTypes.any.isRequired,
   userTransportation: PropTypes.array.isRequired,
   userVehicles: PropTypes.array.isRequired,
   entries: PropTypes.array.isRequired,
+  currentUser: PropTypes.object.isRequired,
   ready: PropTypes.bool.isRequired,
 };
 
@@ -148,11 +150,17 @@ export default withTracker(() => {
   const sub1 = Meteor.subscribe(UserInfo.userPublicationName);
   const sub2 = Meteor.subscribe(UserTransportation.userPublicationName);
   const sub3 = Meteor.subscribe(UserVehicles.userPublicationName);
+
+  // Meteor.user() can be async, this is a quick fix; pulled all UserInfo, should change before final
+  let currentUser = null;
+  currentUser = Meteor.user();
+
   return {
-    userInfo: UserInfo.collection.findOne({ email: Meteor.user().username }),
+    userInfo: UserInfo.collection.find({}).fetch(),
     userVehicles: UserVehicles.collection.find({}).fetch(),
     userTransportation: UserTransportation.collection.find({}).fetch(),
     entries: UserTransportation.collection.find({}, { sort: { date: -1 } }).fetch(),
-    ready: sub1.ready() && sub2.ready() && sub3.ready(),
+    currentUser: currentUser,
+    ready: sub1.ready() && sub2.ready() && sub3.ready() && currentUser != null,
   };
 })(Dashboard);
