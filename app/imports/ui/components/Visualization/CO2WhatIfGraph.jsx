@@ -57,6 +57,9 @@ const GHGProducedNoFilter = (data, timeStart, timeEnd, type) => {
   return result;
 };
 
+/**
+ * Like Data Points from CO2Graph.jsx, but use an unfiltered GHGProduced to calculate each points
+ */
 const DataPointsNoFilter = (data, dateType, numberOfDataPoints, calType, date) => {
   const result = [];
   const time = moment(date.toDate()); // moment objects are passed by reference

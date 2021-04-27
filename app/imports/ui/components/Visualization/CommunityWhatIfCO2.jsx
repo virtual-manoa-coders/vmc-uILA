@@ -7,7 +7,11 @@ import { UserTransportationTypeEnum } from '../../../api/userData/UserTransporta
 import CO2WhatIfGraph from './CO2WhatIfGraph';
 import { cloneArray, FilterOutTransportType } from './Functions';
 
-// there might be a way to do this lazily, without returning new array
+/**
+ * Clone the transport data array, and filter for car transport within the past month
+ * @param data {transport[]}
+ * @returns Copied-by-value, filtered clone of the transport data
+ */
 const copyTransportInMonth = (data) => {
   const dataClone = cloneArray(data); // Has to copy by value
   const filterArray = cloneArray(UserTransportationTypeEnum).Array.filter(type => type !== UserTransportationTypeEnum.Car);
@@ -16,7 +20,13 @@ const copyTransportInMonth = (data) => {
   return FilterOutTransportType(dataClone, filterArray); // using multiple filter Transport type cuz another filter to be 0
 };
 
-// set the EV from start inclusive to end inclusive
+/**
+ * Change transport type from start inclusive to end inclusive index of array
+ * @param transportArray {[]}
+ * @param type {UserTransportationTypeEnum}
+ * @param start index
+ * @param end index
+ */
 const setTransportType = (transportArray, type, start, end) => {
   for (let i = start; i < end; i++) {
     // eslint-disable-next-line no-param-reassign
@@ -24,10 +34,14 @@ const setTransportType = (transportArray, type, start, end) => {
   }
 };
 
-const percentOf = (total, percent) => {
-  return Math.floor((percent / 100) * total);
-};
+/**
+ * @param total {Number}
+ * @param percent {Number} percentage in decimal, whole number (percent%)
+ * @returns {number} percent / total
+ */
+const percentOf = (total, percent) => Math.floor((percent / 100) * total);
 
+// Change the starting percent of the whole graph here
 const startingPercent = 55;
 
 const CommunityWhatIfCO2 = ({ transportData, fontStyle }) => {
