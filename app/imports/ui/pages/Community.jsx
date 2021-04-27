@@ -89,7 +89,7 @@ class Community extends React.Component {
             <Grid.Column>
               <Section
                   background='/images/traffic.jpg'
-                  childMargin='5vh'>
+                  childMargin='8vh'>
                 <Grid stackable container>
                   <Grid.Row>
                     <Grid.Column verticalAlign='middle'>
@@ -124,7 +124,9 @@ class Community extends React.Component {
           <Divider horizontal/>
           <Grid.Row>
             <Grid.Column>
-              <CommunityWhatIfCO2 fontStyle={textStyle} transportData={data} />
+              <Section childMargin='10vh'>
+                <CommunityWhatIfCO2 fontStyle={textStyle} transportData={data} />
+              </Section>
             </Grid.Column>
           </Grid.Row>
           <Divider horizontal/>
