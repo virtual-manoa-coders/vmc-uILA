@@ -10,11 +10,11 @@ import { UserTransportation } from '../../api/userData/UserTransportation';
 import TransportationMethodPieChart from '../components/Visualization/TransportMethodPieChart';
 import ComparisonChart from '../components/Visualization/ComparisonChart';
 import Section from '../components/Section';
+import SectionRepeatable from '../components/SectionRepeatable';
 import { SectionHeader } from '../components/Visualization/SectionHeader';
 import CO2GraphWithTimeRange from '../components/Visualization/CO2GraphWithTimeRange';
 import CO2Table from '../components/Visualization/CO2Table';
 import {
-  CO2CalculationTimespan,
   userTransportDataFilter,
   moneySavedCalculator,
   CO2CalculationTypeEnum,
@@ -35,9 +35,9 @@ class Community extends React.Component {
             <Grid.Column>
               <Section
                   background='/images/honolulu.jpg'
-                  topMargin='-60px'
+                  topMargin='6px'
                   childMargin='5vh'>
-                <Grid id='community' container verticalAlign='middle'>
+                <Grid id='community' container stackable verticalAlign='middle'>
                   <Grid.Row>
                     <Grid.Column className='community-text' width={5} verticalAlign='right'>
                       <Grid.Row>
@@ -55,12 +55,6 @@ class Community extends React.Component {
                   </Grid.Row>
                 </Grid>
               </Section>
-            </Grid.Column>
-          </Grid.Row>
-          <Divider horizontal/>
-          <Grid.Row>
-            <Grid.Column>
-              <CommunityWhatIfCO2 transportData={data} />
             </Grid.Column>
           </Grid.Row>
           <Divider horizontal/>
@@ -96,7 +90,7 @@ class Community extends React.Component {
               <Section
                   background='/images/traffic.jpg'
                   childMargin='5vh'>
-                <Grid container>
+                <Grid stackable container>
                   <Grid.Row>
                     <Grid.Column verticalAlign='middle'>
                       <SectionHeader inverted textStyle={textStyle}>
@@ -130,6 +124,12 @@ class Community extends React.Component {
           <Divider horizontal/>
           <Grid.Row>
             <Grid.Column>
+              <CommunityWhatIfCO2 fontStyle={textStyle} transportData={data} />
+            </Grid.Column>
+          </Grid.Row>
+          <Divider horizontal/>
+          <Grid.Row>
+            <Grid.Column>
               <SectionHeader textStyle={textStyle} container>
                 Some of Your Personal Metric
               </SectionHeader>
@@ -138,9 +138,6 @@ class Community extends React.Component {
 
           <Grid.Row>
             <Grid.Column>
-              {
-                // TODO: Change this into GHG produced
-              }
               <ComparisonChart
                   icon={'cloud'}
                   metricName={'GHG Made'}
