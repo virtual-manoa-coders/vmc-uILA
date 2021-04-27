@@ -6,6 +6,8 @@ import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import { UserVehicles } from '../../../api/userVehicles/UserVehicles';
+import { AllUserVehicles } from '../../../api/userVehicles/AllUserVehicles';
+import { adminGrabAllVehicles } from '../../../startup/both/Methods';
 
 /** A simple static component to render some text for the landing page. */
 class VehicleManagement extends React.Component {
@@ -14,6 +16,7 @@ class VehicleManagement extends React.Component {
         this.state = {
             // state will be added later
         };
+        console.log(props);
     }
 
     deleteUser(vehicle) {
@@ -83,9 +86,30 @@ VehicleManagement.propTypes = {
 };
 
 /** withTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker */
-const VehicleManagementContainer = withTracker(() => ({
-    currentUser: Meteor.user() ? Meteor.user().username : '',
-}))(VehicleManagement);
+const VehicleManagementContainer = withTracker(() => {
+    const sub1 = Meteor.subscribe(UserVehicles.adminPublicationName);
+    const sub2 = Meteor.subscribe(AllUserVehicles.adminPublicationName);
+
+    console.log(UserVehicles.collection.find({}).fetch());
+    console.log(AllUserVehicles.collection.find({}).fetch());
+
+    Meteor.call(adminGrabAllVehicles, {}, (err, res) => {
+        if (err) {
+            console.log('Error: ', err.message);
+        } else {
+            console.log(res);
+            // callback(res);
+            return res;
+        }
+        return undefined;
+    });
+
+    return {
+        currentUser: Meteor.user() ? Meteor.user().username : '',
+        vehicleList: adminGrabAllVehicles,
+        ready: sub1.ready(),
+    };
+})(VehicleManagement);
 
 /** Enable ReactRouter for this component. https://reacttraining.com/react-router/web/api/withRouter */
 export default withRouter(VehicleManagementContainer);
