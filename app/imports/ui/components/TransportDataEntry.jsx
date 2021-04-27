@@ -8,8 +8,10 @@ import SimpleSchema from 'simpl-schema';
 import { withTracker } from 'meteor/react-meteor-data';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { _ } from 'meteor/underscore';
 import { UserTransportation } from '../../api/userData/UserTransportation';
 import { UserInfo } from '../../api/userData/UserInfo';
+import { UserVehicles } from '../../api/userVehicles/UserVehicles';
 
 /*
 TODO:
@@ -26,6 +28,7 @@ const formSchema = new SimpleSchema({
   },
   date: Date,
   miles: Number,
+  vehicle: String,
 });
 
 const bridge = new SimpleSchema2Bridge(formSchema);
@@ -33,11 +36,17 @@ const bridge = new SimpleSchema2Bridge(formSchema);
 /** Renders the Page for adding a document. */
 class TransportDataEntry extends React.Component {
 
+  // handleChange = selectedOption => {
+  //   // eslint-disable-next-line no-console
+  //   this.setState({ selectedOption }, () => console.log('Option selected:', selectedOption));
+  // };
+
   /** On log your commute submit, insert the data into UserTransportation. */
   submit(data, formRef) {
     const { date, transport, miles } = data;
     const userID = Meteor.user()._id;
     const mpg = this.props.carMPG;
+
     UserTransportation.collection.insert({
           transport,
           date,
@@ -56,6 +65,18 @@ class TransportDataEntry extends React.Component {
   }
 
   transportationLog() {
+    const user = Meteor.user().username;
+    const userVehicles = _.where(UserVehicles.collection.find().fetch(), { owner: user });
+    console.log(userVehicles);
+
+    const options = this.props.userVehicles.map(( vehicle, index) => {
+      return {
+        label: vehicle.carName,
+        value: vehicle,
+        key: index,
+      };
+    });
+
     let fRef = null;
     return (
         <Grid centered>
@@ -70,6 +91,9 @@ class TransportDataEntry extends React.Component {
                            min={new Date(2017, 1, 1)}
                 />
                 <SelectField name='transport'/>
+                <SelectField name='vehicle'
+                             options={options}
+                />
                 <NumField name='miles' decimal={false}/>
                 <SubmitField value='Submit'/>
                 <ErrorsField/>
@@ -93,15 +117,22 @@ class TransportDataEntry extends React.Component {
 /** Require an array of userInfo documents in the props. */
 TransportDataEntry.propTypes = {
   userInfo: PropTypes.array.isRequired,
+  userVehicles: PropTypes.array.isRequired,
   carMPG: PropTypes.number.isRequired,
   ready: PropTypes.bool.isRequired,
 };
 
 export default withTracker(() => {
-  // Get access to userInfo documents.
-  const subscription = Meteor.subscribe(UserInfo.userPublicationName);
+  // Get access to documents.
+  const sub1 = Meteor.subscribe(UserInfo.userPublicationName);
+  const sub2 = Meteor.subscribe(UserVehicles.userPublicationName);
+  // const user = Meteor.user().username;
+
   return {
     userInfo: UserInfo.collection.find({}).fetch(),
-    ready: subscription.ready(),
+    // userVehicles: _.where(UserVehicles.collection.find().fetch(), { owner: user }),
+    userVehicles: UserVehicles.collection.find().fetch(),
+    ready: sub1.ready() && sub2.ready(),
   };
+
 })(TransportDataEntry);

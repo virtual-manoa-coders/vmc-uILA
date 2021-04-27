@@ -23,6 +23,14 @@ Meteor.publish(UserVehicles.userPublicationName, function () {
     return UserVehicles.collection.find();
 });
 
+// Meteor.publish(UserVehicles.userPublicationName, function () {
+//   if (this.userId) {
+//     const username = Meteor.users.findOne(this.userId).username;
+//     return UserVehicles.collection.find({ owner: username });
+//   }
+//   return this.ready();
+// });
+
 Meteor.publish(UserInfoVehicles.userPublicationName, function () {
   if (this.userId) {
     return UserInfoVehicles.collection.find();
