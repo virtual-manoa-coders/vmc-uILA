@@ -1,15 +1,16 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
 import { Container, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
 import { Accounts } from 'meteor/accounts-base';
 import { UserInfo } from '../../api/userData/UserInfo';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
-import { Roles } from 'meteor/alanning:roles';
 
-function addProfile({ name, email, image, carMake, carModel, carYear, carMPG, CO2Reduced, VMTReduced, fuelSaved }) {
+function addProfile({ name, email, image, carModel, carYear }) {
   const createdAt = new Date();
-  const carID = UserVehicles.collection.find( ).fetch().filter(car => car.carModel === carModel && car.carYear === carYear)[0]._id;
+  const carID = this.props.userVehicles.filter(car => car.carMake === carModel && car.carYear === carYear)[0]._id;
   console.log(carID);
   if (carID) {
     console.log(` Defining profile: ${email} with car: ${carYear} ${carModel} carID: ${carID}`);
@@ -45,9 +46,10 @@ class Signup extends React.Component {
     if (password !== confirmPassword) {
       this.setState({ error: 'Passwords do not match, try again' });
     } else {
-      Accounts.createUser({ email, username: email, password, profile: {carMake, carYear}}, (err) => {
+      Accounts.createUser({ email: email, username: email, password: password }, (err) => {
         if (err) {
           this.setState({ error: err.reason });
+          console.log(err.reason);
         } else {
           this.setState({ error: '', redirectToReferer: true });
           // add the UserDatabase code here
@@ -59,7 +61,8 @@ class Signup extends React.Component {
           //   userID,
           //   informationEntered,
           // }));
-          UserInfo.collection.insert({_id: Meteor.userId(), email :email,  });
+
+          addProfile({ name: 'CHANGE PLOX', email: email, carMake: carMake, carYear: carYear });
         }
       });
     }
@@ -116,8 +119,8 @@ class Signup extends React.Component {
                       fluid
                       label='Car Make'
                       name='carMake'
-                      options={UserVehicles.cmAllowedValues.map(function(currentValue, index, array){
-                          return {key:index, text: currentValue, value: currentValue};
+                      options={UserVehicles.cmAllowedValues.map(function (currentValue, index) {
+                          return { key: index, text: currentValue, value: currentValue };
                         })
                       }
                       placeholder='Car Make'
@@ -128,8 +131,8 @@ class Signup extends React.Component {
                       fluid
                       label='Car Year'
                       name='carYear'
-                      options={UserVehicles.cyAllowedValues.map(function(currentValue, index, array){
-                        return {key:index, text:currentValue, value:currentValue};
+                      options={UserVehicles.cyAllowedValues.map(function (currentValue, index) {
+                        return { key: index, text: currentValue, value: currentValue };
                       })
                     }
                     placeholder='Car Year'
@@ -157,9 +160,18 @@ class Signup extends React.Component {
   }
 }
 
-/** Ensure that the React Router location object is available in case we need to redirect. */
+/** Require an array of Stuff documents in the props. */
 Signup.propTypes = {
   location: PropTypes.object,
+  userVehicles: PropTypes.array.isRequired,
 };
 
-export default Signup;
+/** withTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker */
+export default withTracker(() => {
+  // Get access to UserInfo documents.
+  const sub3 = Meteor.subscribe(UserVehicles.userPublicationName);
+  return {
+    userVehicles: UserVehicles.collection.find({}).fetch(),
+    ready: sub3.ready(),
+  };
+})(Signup);

@@ -63,7 +63,7 @@ const formSchema = new SimpleSchema({
       'Toyota',
       'Volkswagen',
       'Volvo',
-    ]
+    ],
   },
   carModel: { type: String, label: 'Car model', optional: true },
   carYear: {

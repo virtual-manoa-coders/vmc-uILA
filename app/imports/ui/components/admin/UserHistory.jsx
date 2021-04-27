@@ -1,5 +1,4 @@
 import React from 'react';
-import { Grid, Card, Button, Input, Table } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
@@ -19,8 +18,6 @@ class UserHistory extends React.Component {
                 isDescending: true,
             },
         };
-        console.log(this.props.userList);
-
         this.handleRowSelection = this.handleRowSelection.bind(this);
     }
 

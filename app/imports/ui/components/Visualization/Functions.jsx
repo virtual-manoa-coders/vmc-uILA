@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { UserTransportationTypeEnum } from '../../../api/userData/UserTransportation-Utilities';
+import { adminFindMeteorID } from '../../../startup/both/Methods';
 
 /*
  * A little note on making a standalone function:
@@ -39,8 +40,8 @@ export const userCO2Aggregate = (data) => {
 export const userTransportDataFilter = (data) =>
   // TODO: This uses UserInfo id, no meteor id
   // Perhaps add meteoruserid to transport
-   data.filter(doc => doc.userID === Meteor.userId())
-;
+    // eslint-disable-next-line implicit-arrow-linebreak
+  data.filter(doc => doc.userID === Meteor.userId());
 
 /**
  * Calculate fuelsaved and add it to each document and this should be good for both one user and all users
@@ -70,6 +71,7 @@ export const aggregateIndividualFuelSaved = (data) => {
 
     if (existing.length) { // if the item is already in the result
       const existingIndex = result.indexOf(existing[0]);
+      // eslint-disable-next-line operator-assignment
       result[existingIndex].fuelSaved = result[existingIndex].fuelSaved + doc.fuelSaved;
     } else { // if the item isn't in the result list, just push it to the list
       result.push(doc);
@@ -86,7 +88,7 @@ export const CO2CalculationTypeEnum = {
 
 /**
  * Calculate the number of CO2 reduced either from one user or the averaged of the community
- * @param data {[]} fetched userTransport collection; i.e. data = this.props.userTransportation
+ * @param data {UserTransportation[]} fetched userTransport collection; i.e. data = this.props.userTransportation
  * @param timeStart {Date} earliest time of the time range
  * @param timeEnd {Date} latest time of the time range
  * @param type {UserTransportationTypeEnum} types are: user (for one user) or average (the community average)
@@ -120,10 +122,10 @@ export const CO2CalculationTimespan = (data, timeStart, timeEnd, type) => {
 
 /**
  * Filter out a transport type within a time range
- * @param data raw data from UserTransportation
+ * @param data {UserTransportation[]} raw data from UserTransportation
  * @param exclude {string []} array of transportation types
- * @param timeStart earliest time in the time range
- * @param timeEnd latest time in the time range
+ * @param timeStart {Date} earliest time in the time range
+ * @param timeEnd {Date} latest time in the time range
  * @returns {*} an array of filtered data
  */
 export const FilterOutTransportType = (data, exclude, timeStart, timeEnd) => {
@@ -140,6 +142,15 @@ export const FilterOutTransportType = (data, exclude, timeStart, timeEnd) => {
   return array;
 };
 
+/**
+ * Returned the GHG produced after removing telecommute, walk, bike, carpool, and bus. Other transport method will be
+ * used in the calculation.
+ * @param data {UserTransportation[]} raw data from UserTransportation.
+ * @param timeStart {Date} earliest time in the time range.
+ * @param timeEnd {Date} latest time in the time range.
+ * @param type {UserTransportationTypeEnum} types are: user (for one user) or average (the community average)
+ * @returns {number} GHG produced in that time span
+ */
 export const GHGProduced = (data, timeStart, timeEnd, type) => {
   const timeNow = timeEnd || Date.now();
   const start = timeStart || 0;
@@ -272,7 +283,27 @@ export const travelPatternsFunction = (data, timeSpan) => {
   });
   return dataArray;
 };
+
 /**
  * Clone an array by value. WARNING: Any JS object will turn into string representations; very computationally expensive!
  */
 export const cloneArray = (array) => JSON.parse(JSON.stringify(array));
+
+/**
+ * Asks the server for the user's Meteor ID, and perform operations using callback.
+ * This is asyncronus, so always use the userId in the callback.
+ * @param userEmail is the target user's email (is actually the DB's username key on the server-side).
+ * @param callback function to be called when the userID is returned from server.
+ * @returns user's Meteor ID, but async. undefined if can't find user. Warning: use only with await mode or async functions.
+ */
+export const getMeteorId = (userEmail, callback) => {
+  Meteor.call(adminFindMeteorID, { email: userEmail }, (err, res) => {
+    if (err) {
+      console.log('Error: ', err.message);
+    } else {
+      callback(res);
+      return res;
+    }
+    return undefined;
+  });
+};

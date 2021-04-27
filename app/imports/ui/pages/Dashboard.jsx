@@ -21,8 +21,7 @@ class Dashboard extends React.Component {
   }
 
   renderPage() {
-    const email = Meteor.user().username;
-    const userInfo = UserInfo.collection.findOne({ email });
+    const userInfo = this.props.userInfo;
     const userCar = this.props.userVehicles.filter(car => car._id === userInfo.carID)[0];
 
     const panes = [
@@ -136,7 +135,7 @@ class Dashboard extends React.Component {
 
 /** Require an array of Stuff documents in the props. */
 Dashboard.propTypes = {
-  userInfo: PropTypes.array,
+  userInfo: PropTypes.object.isRequired,
   userTransportation: PropTypes.array.isRequired,
   userVehicles: PropTypes.array.isRequired,
   entries: PropTypes.array.isRequired,
@@ -150,7 +149,7 @@ export default withTracker(() => {
   const sub2 = Meteor.subscribe(UserTransportation.userPublicationName);
   const sub3 = Meteor.subscribe(UserVehicles.userPublicationName);
   return {
-    userInfo: UserInfo.collection.find({}).fetch(),
+    userInfo: UserInfo.collection.findOne({ email: Meteor.user().username }),
     userVehicles: UserVehicles.collection.find({}).fetch(),
     userTransportation: UserTransportation.collection.find({}).fetch(),
     entries: UserTransportation.collection.find({}, { sort: { date: -1 } }).fetch(),

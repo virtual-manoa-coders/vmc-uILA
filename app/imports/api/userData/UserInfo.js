@@ -2,6 +2,7 @@ import { Mongo } from 'meteor/mongo';
 import SimpleSchema from 'simpl-schema';
 import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
+import { Roles } from 'meteor/alanning:roles';
 
 /** This collection contains the user's vehicle data */
 class UserInfoCollection {
@@ -43,32 +44,61 @@ class UserInfoCollection {
       return undefined;
     }
     return this.collection.find()
-        .fetch().map(user => {
-          return {
+        .fetch().map(user => ({
             userID: user._id,
             name: user.name,
             email: user.email,
-          };
-        }).slice(0, max);
+          })).slice(0, max);
+  }
+
+  /**
+   * Internal helper function to simplify definition of the assertValidRoleForMethod method.
+   * @param userId The userID.
+   * @param roles An array of roles.
+   * @throws { Meteor.Error } If userId is not defined or user is not in the specified roles.
+   * @returns True if no error is thrown.
+   * @ignore
+   */
+  _assertRole(userId, roles) {
+    if (!userId) {
+      throw new Meteor.Error('unauthorized', 'You must be logged in.', '', Error().stack);
+    } else if (!Roles.userIsInRole(userId, roles)) {
+      throw new Meteor.Error('unauthorized', `You must be one of the following roles: ${roles}`, '', Error().stack);
+    }
+    return true;
+  }
+
+  /**
+   * Default implementation of assertValidRoleForMethod. Asserts that userId is logged in as an Admin or Advisor.
+   * This is used in the define, update, and removeIt Meteor methods associated with each class.
+   * @param userId The userId of the logged in user. Can be null or undefined
+   * @throws { Meteor.Error } If there is no logged in user, or the user is not an Admin or Advisor.
+   */
+  assertValidRoleForMethod(userId) {
+    this._assertRole(userId, ['admin']);
   }
 
   /**
    * A stricter form of findOne, in that it throws an exception if the entity isn't found in the collection.
+   * Server-side only!
    * @param email UserInfo's email
    * @returns String The user's Meteor id
    * @throws { Meteor.Error } If the document cannot be found.
    */
   findMeteorID(email) {
-    // For this project, the username is the email
-    const doc = Meteor.users.findOne({ username: email })._id;
+    if (Meteor.isClient) {
+      throw new Error('Calling findMeteorID in Client');
+    }
+
+    const doc = Meteor.users.findOne({ username: email });
     if (!doc) {
       if (typeof email !== 'string') {
-        throw new Meteor.Error(`${JSON.stringify(email)} is not a defined ${this._type}`, '', Error().stack);
+        throw new Meteor.Error(`Email: '${JSON.stringify(email)}' isn't a string`, '', Error().stack);
       } else {
-        throw new Meteor.Error(`${email} is not a defined ${this._type}`, '', Error().stack);
+        throw new Meteor.Error(`${email} is undefined; can't be found in the database`, '', Error().stack);
       }
     }
-    return doc;
+    return doc._id;
   }
 }
 

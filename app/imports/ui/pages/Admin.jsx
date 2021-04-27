@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import UserManagement from '../components/admin/UserManagement';
 import VehicleManagement from '../components/admin/VehicleManagement';
 import { UserInfo } from '../../api/userData/UserInfo';
-import { UserTransportation } from '../../api/userData/UserTransportation';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
 
 /** A simple static component to render some text for the landing page. */

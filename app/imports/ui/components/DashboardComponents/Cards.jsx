@@ -1,51 +1,37 @@
 import React from 'react';
-import { makeStyles } from '@materia-ui/core.styles';
-import Card from '@material-ui/core/Card'
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import cx from 'classnames';
-import Functions from './Functions.jsx';
-import { GridColumn, Grid } from 'semantic-ui-react';
+import Card from '@material-ui/core/Card';
+import { Grid } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 /**
  * A class of cards that will be used to display information on the dashboard.
- * This is a general overview of the cards that will be displayed. Each individual card will have its own data that extends from this class. 
- */
+ * This is a general overview of the cards that will be displayed. Each individual card will have its own data that extends from this class. */
 class Cards extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
-  /** Styling components **/
+  /** Styling components */
   render() {
-    let {
-        ghgReduced,
-        vmtReduced,
-        gasSaved,
-        telecommute,
-        bikedToWork
+    const {
+        GHGReduced,
+        VMTReduced,
+        GasSaved,
+        Telecommute,
+        BikedToWork,
     } = this.props;
 
     const cardStyle = {
-      display: 'flex';
-      min-width: 'auto';
-      width: '24rem';
-      height: '14rem';
-      font-family: 'Roboto';
-      padding: '1cm';
+      display: 'flex',
+      'min-width': 'auto',
+      width: '24rem',
+      height: '14rem',
+      'font-family': 'Roboto',
+      padding: '1cm',
     };
 
-    return(
+    return (
         <div style={cardStyle}>
-          <!-- Pretty sure this is an error, need to change the stackable content-->
-        <Grid stackable={equal}>
+        <Grid stackable>
           <Grid.Row>
             <div style={cardStyle}>
-              <!-- This will be the amount of Green Houses Gases Reduced by the user-->
-              <!-- Need to add the meta data that will pull from the GHG Reduced-->
               <Card
                 header={GHGReduced}
                 description={[
@@ -54,7 +40,6 @@ class Cards extends React.Component {
                 />
             </div>
             <div style={cardStyle}>
-              <!-- This is the amount of vehicles miles traveled by the user -->
               <Card
                 header={VMTReduced}
                 description={[
@@ -63,7 +48,6 @@ class Cards extends React.Component {
                 />
             </div>
             <div style={cardStyle}>
-              <!-- This is the amount of gas saved by the user-->
               <Card
                 header={GasSaved}
                 description={[
@@ -75,7 +59,7 @@ class Cards extends React.Component {
               <Card
                 header={Telecommute}
                 description={[
-                    'These are the days you chose to stay at home and teleworked'
+                    'These are the days you chose to stay at home and teleworked',
                 ].join('')}
                 />
             </div>
@@ -95,8 +79,12 @@ class Cards extends React.Component {
 }
 
 Cards.propTypes = {
-  userData: PropTypes.string;
-
+  userData: PropTypes.string,
+  GHGReduced: PropTypes.string,
+  VMTReduced: PropTypes.string,
+  Telecommute: PropTypes.string,
+  GasSaved: PropTypes.string,
+  BikedToWork: PropTypes.string,
 };
 
 export default Cards;
