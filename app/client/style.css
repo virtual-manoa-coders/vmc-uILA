@@ -369,3 +369,8 @@ footer {
 #list-vehicles {
   padding: 10px;
 }
+
+.Landing-Text {
+    padding-top: 100px;
+    padding-bottom:  1px;
+}
