@@ -128,96 +128,105 @@ class Community extends React.Component {
             </Grid.Column>
           </Grid.Row>
           <Divider horizontal/>
-          <Grid.Row>
-            <Grid.Column>
-              <SectionHeader textStyle={textStyle} container>
-                Some of Your Personal Metric
-              </SectionHeader>
-            </Grid.Column>
-          </Grid.Row>
 
           <Grid.Row>
             <Grid.Column>
-              <ComparisonChart
-                  icon={'cloud'}
-                  metricName={'GHG Made'}
-                  userData={GHGProduced(data, moment().subtract(1, 'w'), null, CO2CalculationTypeEnum.user)}
-                  communityData={GHGProduced(data, moment().subtract(1, 'w'), null, CO2CalculationTypeEnum.average)}
-                  userTransportation={ this.props.userTransportation }
-                  textStyle={textStyle}
-                  metric={'pounds'}
-                  invertArrowColor
-                  container
-              >
-                <Grid columns={2} container>
-                  <Grid.Column>
-                    <Grid.Row>
-                      <Image height="80%" width="80%" src="images/car_exhaust.jpg" centered/>
-                    </Grid.Row>
-                  </Grid.Column>
-                  <Grid.Column>
-                    <Grid.Row>
-                      <Header textAlign='left' textStyle={textStyle} as={'h3'}>
-                        A greenhouse gas (sometimes abbreviated GHG) is a gas that absorbs and emits radiant energy
-                        within the thermal infrared range, causing the greenhouse effect. This gas is one of your main
-                        contribution to climate change.
-                      </Header>
-                      <Header> The lower you produce, the better.</Header>
-                    </Grid.Row>
-                    <Grid.Row>
-                      <Divider/>
-                    </Grid.Row>
-                    <Grid.Row>
-                        <Header as={'a'} href={'https://www.epa.gov/ghgemissions/overview-greenhouse-gases'}
-                                style={textStyle} color='blue'>Learn more</Header>
-                    </Grid.Row>
-                  </Grid.Column>
+              <SectionRepeatable
+                  background='/images/pattern.jpg'>
+                <Grid>
+                  <Grid.Row>
+                    <Grid.Column>
+                      <SectionHeader textStyle={textStyle} container>
+                        Some of Your Personal Metric
+                      </SectionHeader>
+                    </Grid.Column>
+                  </Grid.Row>
+
+                  <Grid.Row>
+                    <Grid.Column>
+                      <ComparisonChart
+                          icon={'cloud'}
+                          metricName={'GHG Made'}
+                          userData={GHGProduced(data, moment().subtract(1, 'w'), null, CO2CalculationTypeEnum.user)}
+                          communityData={GHGProduced(data, moment().subtract(1, 'w'), null, CO2CalculationTypeEnum.average)}
+                          userTransportation={ this.props.userTransportation }
+                          textStyle={textStyle}
+                          metric={'pounds'}
+                          invertArrowColor
+                          container
+                      >
+                        <Grid columns={2} container>
+                          <Grid.Column>
+                            <Grid.Row>
+                              <Image height="80%" width="80%" src="images/car_exhaust.jpg" centered/>
+                            </Grid.Row>
+                          </Grid.Column>
+                          <Grid.Column>
+                            <Grid.Row>
+                              <Header textAlign='left' textStyle={textStyle} as={'h3'}>
+                                A greenhouse gas (sometimes abbreviated GHG) is a gas that absorbs and emits radiant energy
+                                within the thermal infrared range, causing the greenhouse effect. This gas is one of your main
+                                contribution to climate change.
+                              </Header>
+                              <Header> The lower you produce, the better.</Header>
+                            </Grid.Row>
+                            <Grid.Row>
+                              <Divider/>
+                            </Grid.Row>
+                            <Grid.Row>
+                              <Header as={'a'} href={'https://www.epa.gov/ghgemissions/overview-greenhouse-gases'}
+                                      style={textStyle} color='blue'>Learn more</Header>
+                            </Grid.Row>
+                          </Grid.Column>
+                        </Grid>
+                      </ComparisonChart>
+                    </Grid.Column>
+                  </Grid.Row>
+
+                  <Grid.Row>
+                    <Grid.Column>
+                      <ComparisonChart
+                          icon={'money bill alternate'}
+                          metricName={'$ SAVED'}
+                          userData={moneySavedCalculator(data, moment().subtract(1, 'w'), CO2CalculationTypeEnum.user)}
+                          communityData={moneySavedCalculator(data, moment().subtract(1, 'w'), CO2CalculationTypeEnum.average)}
+                          userTransportation={ this.props.userTransportation }
+                          textStyle={textStyle}
+                          metric={'dollars'}
+                          container
+                      >
+                        <Grid columns={2} container>
+                          <Grid.Column>
+                            <Grid.Row>
+                              <Image height="80%" width="80%" src="images/gas_pump.jpg" centered/>
+                            </Grid.Row>
+                          </Grid.Column>
+                          <Grid.Column>
+                            <Grid.Row>
+                              <Header textAlign='left' textStyle={textStyle} as={'h3'}>
+                                An electric car will save you $632 per year on average over its gas-powered counterpart.
+                                Generally, it costs $1,117 per year to run a new gas-powered vehicle, and only $485 per
+                                year to run a new electric one.
+                              </Header>
+                              <Header> The higher you save, the better.</Header>
+                            </Grid.Row>
+                            <Grid.Row>
+                              <Divider/>
+                            </Grid.Row>
+                            <Grid.Row>
+                              <Header as={'a'} href={'https://www.capitalone.com/bank/money-management/life-events/do-electric-cars-save-money/'}
+                                      style={textStyle} color='blue'>Learn more</Header>
+                            </Grid.Row>
+                          </Grid.Column>
+                        </Grid>
+                      </ComparisonChart>
+                    </Grid.Column>
+                  </Grid.Row>
                 </Grid>
-              </ComparisonChart>
+                <Divider horizontal/>
+              </SectionRepeatable>
             </Grid.Column>
           </Grid.Row>
-
-          <Grid.Row>
-            <Grid.Column>
-              <ComparisonChart
-                  icon={'money bill alternate'}
-                  metricName={'$ SAVED'}
-                  userData={moneySavedCalculator(data, moment().subtract(1, 'w'), CO2CalculationTypeEnum.user)}
-                  communityData={moneySavedCalculator(data, moment().subtract(1, 'w'), CO2CalculationTypeEnum.average)}
-                  userTransportation={ this.props.userTransportation }
-                  textStyle={textStyle}
-                  metric={'dollars'}
-                  container
-              >
-                <Grid columns={2} container>
-                  <Grid.Column>
-                    <Grid.Row>
-                      <Image height="80%" width="80%" src="images/gas_pump.jpg" centered/>
-                    </Grid.Row>
-                  </Grid.Column>
-                  <Grid.Column>
-                    <Grid.Row>
-                      <Header textAlign='left' textStyle={textStyle} as={'h3'}>
-                        An electric car will save you $632 per year on average over its gas-powered counterpart.
-                        Generally, it costs $1,117 per year to run a new gas-powered vehicle, and only $485 per
-                        year to run a new electric one.
-                      </Header>
-                      <Header> The higher you save, the better.</Header>
-                    </Grid.Row>
-                    <Grid.Row>
-                      <Divider/>
-                    </Grid.Row>
-                    <Grid.Row>
-                      <Header as={'a'} href={'https://www.capitalone.com/bank/money-management/life-events/do-electric-cars-save-money/'}
-                              style={textStyle} color='blue'>Learn more</Header>
-                    </Grid.Row>
-                  </Grid.Column>
-                </Grid>
-              </ComparisonChart>
-            </Grid.Column>
-          </Grid.Row>
-
-          <Divider hidden/>
 
         </Grid>
     );
