@@ -14,13 +14,29 @@ class VehicleManagement extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // state will be added later
+            vehicleList: [],
         };
-        console.log(props);
+
+        this.grabVehicles = this.grabVehicles.bind(this);
     }
 
-    deleteUser(vehicle) {
-        UserVehicles.collection.remove({ _id: vehicle._id });
+    componentDidMount() {
+        this.grabVehicles();
+    }
+
+    grabVehicles() {
+        Meteor.call(adminGrabAllVehicles, {}, (err, res) => {
+            if (err) {
+                console.log('Error: ', err.message);
+            } else {
+                this.setState({ vehicleList: res });
+            }
+            return undefined;
+        });
+    }
+
+    deleteVehicle(vehicle) {
+        UserVehicles.collection.remove({ _id: vehicle._id }, this.grabVehicles);
     }
 
     render() {
@@ -35,37 +51,38 @@ class VehicleManagement extends React.Component {
                             <Grid.Row columns={'equal'}>
                                 <Grid.Column>Make</Grid.Column>
                                 <Grid.Column>Model</Grid.Column>
+                                <Grid.Column>Year</Grid.Column>
                                 <Grid.Column>Price</Grid.Column>
                                 <Grid.Column>MPG</Grid.Column>
                                 {/* <Grid.Column>Fuel Saved</Grid.Column> */}
                                 <Grid.Column>Action</Grid.Column>
                             </Grid.Row>
                             {
-                                this.props.vehicleList.map((user, index) => (
+                                this.state.vehicleList.map((vehicle, index) => (
                                     <Grid.Row columns={'equal'} key={index}>
                                         <Grid.Column>
-                                            {user.name}
+                                            {vehicle.carMake}
                                         </Grid.Column>
                                         <Grid.Column>
-                                            {user.email}
+                                            {vehicle.carModel}
                                         </Grid.Column>
                                         <Grid.Column>
-                                            {user.CO2Reduced}
+                                            {vehicle.carYear}
                                         </Grid.Column>
                                         <Grid.Column>
-                                            {user.VMTReduced}
+                                            {vehicle.carPrice}
                                         </Grid.Column>
                                         <Grid.Column>
-                                            {user.fuelSaved}
+                                            {vehicle.carMPG}
                                         </Grid.Column>
-                                        <Grid.Column onClick={() => this.deleteUser(user)}>
+                                        <Grid.Column onClick={() => this.deleteVehicle(vehicle)}>
                                             <Button color={'red'}>Delete Vehicle</Button>
                                         </Grid.Column>
                                     </Grid.Row>
                                 ))
                             }
                             {
-                                this.props.vehicleList.length < 1 &&
+                                this.state.vehicleList.length < 1 &&
                                 <Grid.Row>
                                     <div className={'auto-margin'}>No vehicles exist</div>
                                 </Grid.Row>
@@ -81,32 +98,17 @@ class VehicleManagement extends React.Component {
 /** Declare the types of all properties. */
 VehicleManagement.propTypes = {
     currentUser: PropTypes.string,
-    vehicleList: PropTypes.array.isRequired,
     handleViewChange: PropTypes.func.isRequired,
 };
 
 /** withTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker */
 const VehicleManagementContainer = withTracker(() => {
     const sub1 = Meteor.subscribe(UserVehicles.adminPublicationName);
-    const sub2 = Meteor.subscribe(AllUserVehicles.adminPublicationName);
 
     console.log(UserVehicles.collection.find({}).fetch());
-    console.log(AllUserVehicles.collection.find({}).fetch());
-
-    Meteor.call(adminGrabAllVehicles, {}, (err, res) => {
-        if (err) {
-            console.log('Error: ', err.message);
-        } else {
-            console.log(res);
-            // callback(res);
-            return res;
-        }
-        return undefined;
-    });
 
     return {
         currentUser: Meteor.user() ? Meteor.user().username : '',
-        vehicleList: adminGrabAllVehicles,
         ready: sub1.ready(),
     };
 })(VehicleManagement);
