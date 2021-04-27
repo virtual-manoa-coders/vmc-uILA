@@ -4,7 +4,7 @@ import { UserTransportation } from '../../api/userData/UserTransportation';
 import { UserInformation } from '../../api/userData/UserInformation';
 import { UserInfo } from '../../api/userData/UserInfo';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
-import { AllUserVehicles } from '../../api/userVehicles/AllUserVehicles';
+import { UserInfoVehicles } from '../../api/userVehicles/UserInfoVehicles';
 
 Meteor.publish(UserInfo.userPublicationName, () => UserInfo.collection.find());
 
@@ -23,9 +23,9 @@ Meteor.publish(UserVehicles.userPublicationName, function () {
     return UserVehicles.collection.find();
 });
 
-Meteor.publish(AllUserVehicles.userPublicationName, function () {
+Meteor.publish(UserInfoVehicles.userPublicationName, function () {
   if (this.userId) {
-    return AllUserVehicles.collection.find();
+    return UserInfoVehicles.collection.find();
   }
   return this.ready();
 });

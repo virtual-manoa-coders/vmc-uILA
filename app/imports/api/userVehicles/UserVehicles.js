@@ -28,6 +28,7 @@ class UserVehiclesCollection {
       carMPG: Number,
       // Price of car
       carPrice: Number,
+      owner: String,
     });
     this.collection.attachSchema(this.schema);
     this.userPublicationName = `${this.name}.publication.user`;

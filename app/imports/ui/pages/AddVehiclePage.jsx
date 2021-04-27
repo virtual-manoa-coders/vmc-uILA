@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
-import { AllUserVehicles } from '../../api/userVehicles/AllUserVehicles';
+import { UserInfoVehicles } from '../../api/userVehicles/UserInfoVehicles';
 
 /** Create a schema to specify the structure of the data to appear in the form. */
 const formSchema = new SimpleSchema({
@@ -128,9 +128,9 @@ AddVehiclePage.propTypes = {
 
 export default withTracker(() => {
   const sub1 = Meteor.subscribe(UserVehicles.userPublicationName);
-  const sub2 = Meteor.subscribe(AllUserVehicles.userPublicationName);
+  const sub2 = Meteor.subscribe(UserInfoVehicles.userPublicationName);
   return {
-    AllUserVehicles: AllUserVehicles.collection.find({}).fetch,
+    AllUserVehicles: UserInfoVehicles.collection.find({}).fetch,
     ready: sub1.ready() && sub2.ready(),
   };
 })(AddVehiclePage);
