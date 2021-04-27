@@ -5,9 +5,8 @@ import moment from 'moment';
 import {
   aggregateIndividualFuelSaved,
   calculateFuelSavedForAllUsers,
-  GHGProduced,
   CO2CalculationTypeEnum,
-  FilterOutTransportType, GHGperGallon, userCO2Aggregate, userTransportDataFilter, cloneArray
+  GHGperGallon,
 } from './Functions';
 import { UserTransportationTypeEnum } from '../../../api/userData/UserTransportation-Utilities';
 
@@ -50,7 +49,8 @@ const GHGProducedNoFilter = (data, timeStart, timeEnd, type) => {
     const aggregateFuelSaved = aggregateIndividualFuelSaved(fuelSavedVar);
     const combinedFuelSaved = aggregateFuelSaved.map(doc => doc.fuelSaved).reduce((accumulator, currentValue) => accumulator + currentValue);
     const averageFuelSaved = combinedFuelSaved / unfilteredLength;
-    const averageCO2Reduced = (averageFuelSaved * GHGperGallon).toFixed(2);
+    // for some reason this returns GHGproduced / 100, so * 100 to get the right result
+    const averageCO2Reduced = (averageFuelSaved * GHGperGallon * 100).toFixed(2);
 
     result = averageCO2Reduced;
   }
