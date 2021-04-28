@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Header, Loader, Segment, Button } from 'semantic-ui-react';
+import { Grid, Header, Loader, Segment, Button, Dropdown } from 'semantic-ui-react';
 import { AutoForm, ErrorsField, NumField, SelectField, SubmitField, DateField } from 'uniforms-semantic';
 import swal from 'sweetalert';
 import { Meteor } from 'meteor/meteor';
@@ -35,6 +35,7 @@ const bridge = new SimpleSchema2Bridge(formSchema);
 
 /** Renders the Page for adding a document. */
 class TransportDataEntry extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -42,30 +43,34 @@ class TransportDataEntry extends React.Component {
     };
     this.vehicle = React.createRef();
     this.submit = this.submit.bind(this);
-    // this.handleClick = this.handleClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    // this.onChange = this.onChange.bind(this);
   }
 
-  // handleChange(event) {
-  //   const vehicle = this.props.userVehicles.find(v => v.carName === event.vehicle.carName);
-  //   this.setState({ vehicle: vehicle });
+  // handleChange = (e, data) => {
+  //   console.log(data.value);
+  //   this.setState({ selected: data.value });
   // }
 
-  // handleClick() {
-  //   this.setState({ isSelected: true });
+  handleChange(value) {
+    this.setState({ vehicle: value });
+    console.log('value: ', value);
+  }
+
+  // handleChange(e) {
+  //   this.setState({ vehicle: e.target.value });
+  //   const vehicle = this.vehicle.current.value;
+  //   console.log('Vehicle changed to: ', vehicle);
   // }
 
-   handleChange = (e) => {
-      const selectedVehicle = e.value;
-      this.setState({ selectedVehicle });
-    }
+  // handleChange = (field) => (value) => this.setState({ [field]: value })
 
   /** On log your commute submit, insert the data into UserTransportation. */
   submit(data, formRef) {
     const { date, transport, miles } = data;
     const userID = Meteor.user()._id;
-    const mpg = this.props.carMPG;
+    const user = Meteor.user().username;
+    const userVehicles = _.where(UserVehicles.collection.find().fetch(), { owner: user });
+    const mpg = userVehicles.carMPG;
 
     UserTransportation.collection.insert({
           transport,
@@ -83,27 +88,22 @@ class TransportDataEntry extends React.Component {
           }
         });
   }
-  //
-  // onVehicleChange(event) {
-  //   this.setState({ vehicle: event.target.value });
-  //   const vehicle = this.vehicle.current.value;
-  //   console.log('Vehicle changed to: ' + vehicle);
-  // }
 
   transportationLog() {
+    // const { vehicle } = this.state;
     const user = Meteor.user().username;
     const userVehicles = _.where(UserVehicles.collection.find().fetch(), { owner: user });
     console.log(userVehicles);
-    const vehicleMPG = _.pluck(userVehicles.carMPG);
-    console.log(vehicleMPG);
+    const vehicleMPGs = _.pluck(userVehicles, 'carMPG');
+    console.log(vehicleMPGs);
 
     const options = this.props.userVehicles.map((vehicle, index) => ({
-        label: vehicle.carName,
-        value: vehicle.carName,
-        key: index,
+      key: index,
+      label: vehicle.carName,
+      value: vehicle.carName,
+      mpg: vehicle.carMPG,
       }));
-
-    // const { selectedVehicle, options } = this.state;
+    console.log(options);
 
     let fRef = null;
     return (
@@ -116,6 +116,7 @@ class TransportDataEntry extends React.Component {
                       onSubmit={data => this.submit(data, fRef)}
                       onChange={(key, value) => {
                         console.log(key, value);
+
                       }}
             >
               <Segment>
@@ -126,10 +127,10 @@ class TransportDataEntry extends React.Component {
                 />
                 <SelectField name='transport'/>
                 <SelectField name='vehicle'
-                             value={this.state.vehicle}
-                             onClick={this.handleChange}
                              options={options}
-                             placeholder='Select car'
+                             value={this.vehicle.value}
+                             onChange={this.handleChange}
+                             placeholder='Select vehicle'
                 />
                 <NumField name='miles' decimal={false}/>
                 <SubmitField value='Submit'/>
@@ -156,6 +157,7 @@ TransportDataEntry.propTypes = {
   userInfo: PropTypes.array.isRequired,
   userVehicles: PropTypes.array.isRequired,
   carMPG: PropTypes.number.isRequired,
+  // onChange: PropTypes.isRequired,
   ready: PropTypes.bool.isRequired,
 };
 
