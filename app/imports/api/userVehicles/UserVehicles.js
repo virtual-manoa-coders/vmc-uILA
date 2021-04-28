@@ -2,6 +2,8 @@ import { Mongo } from 'meteor/mongo';
 import SimpleSchema from 'simpl-schema';
 // eslint-disable-next-line no-unused-vars
 import { Tracker } from 'meteor/tracker';
+import { Meteor } from 'meteor/meteor';
+import { Roles } from 'meteor/alanning:roles';
 
 class UserVehiclesCollection {
   constructor() {
@@ -105,6 +107,23 @@ class UserVehiclesCollection {
     return this.collection.find({})
         .fetch();
   }
+
+  /**
+   * Internal helper function to simplify definition of the assertValidRoleForMethod method.
+   * @param userId The userID.
+   * @param roles An array of roles.
+   * @throws { Meteor.Error } If userId is not defined or user is not in the specified roles.
+   * @returns True if no error is thrown.
+   * @ignore
+   */
+  checkIsAdmin(userId) {
+      if (!userId) {
+          throw new Meteor.Error('unauthorized', 'You must be logged in.', '', Error().stack);
+      } else if (!Roles.userIsInRole(userId, ['admin'])) {
+          throw new Meteor.Error('unauthorized', `You must be one of the following roles: ${['admin']}`, '', Error().stack);
+      }
+      return true;
+    }
 
   carMakeToIndex(carMake) {
     return this.cmAllowedValues.findIndex(make => make === carMake);

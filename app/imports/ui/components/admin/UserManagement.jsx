@@ -1,11 +1,11 @@
 import React from 'react';
-import { Grid, Card, Button, Table } from 'semantic-ui-react';
+import { Grid, Card, Button, Table, Loader, Input } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import { UserInfo } from '../../../api/userData/UserInfo';
-import ListTransportEntry from '../ListTransportEntry';
+import UserHistory from '../../components/admin/UserHistory';
 import { UserTransportation } from '../../../api/userData/UserTransportation';
 import { getMeteorId } from '../Visualization/Functions';
 
@@ -18,19 +18,20 @@ class UserManagement extends React.Component {
             sortColumn: {
                 name: 'createdAt',
                 isDescending: true,
+                loading: false,
+                selectedUserId: '',
             },
+            nameFilter: '',
+            emailFilter: '',
         };
 
         this.handleRowSelection = this.handleRowSelection.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
     }
 
-    // componentDidUpdate(prevProps) {
-    //     console.log(this.props, prevProps)
-    //
-    //     if (prevProps.ready != this.props.ready) {
-    //         initUserEntries
-    //     }
-    // }
+    handleInputChange(event, data) {
+        this.setState({ [data.name]: data.value });
+    }
 
     deleteUser(user) {
         UserInfo.collection.remove({ _id: user._id });
@@ -45,46 +46,67 @@ class UserManagement extends React.Component {
         this.setState({ sortColumn });
     }
 
-    handleRowSelection(index) {
+    handleRowSelection(index, user) {
         let selectedIndex = index;
 
         // Deselect the row if it is clicked again
         if (selectedIndex === this.state.selectedIndex) {
             selectedIndex = null;
+        } else {
+            // This is asyncronus, so the return value will be undefined, even though it will be a valid ID later
+            // so render transports inside the callback, i.e. here
+            getMeteorId(user.email, (userId) => {
+                if (userId) {
+                    setTimeout(() => {
+                        this.setState({ selectedUserId: userId, loading: false });
+                    }, 1000);
+                }
+            });
         }
 
-        this.setState({ selectedIndex });
+        this.setState({ selectedIndex, loading: true });
     }
 
     render() {
-      getMeteorId('user1@foo.com', (userId) => {
-        if (userId) {
-          // This is asyncronus, so th return value will be undefined, even though it will be a valid ID later
-          // so render transports inside the callback, i.e. here
-        }
-      });
         return (
             <div>
                 <div>
                     <Button onClick={() => this.props.handleViewChange('overview')}>Go Back</Button>
                 </div>
-                {/* <Card fluid> */}
-                {/*    <Card.Content> */}
-                {/*        <h3>Filter Options</h3> */}
-                {/*    </Card.Content> */}
-                {/*    <Card.Content> */}
-                {/*        Name Search */}
-                {/*        <Input/> */}
-                {/*        Email Search */}
-                {/*        <Input/> */}
-                {/*        <Button>Clear All</Button> */}
-                {/*        <Button>Filter</Button> */}
-                {/*    </Card.Content> */}
-                {/* </Card> */}
-                <Card className={'user-management'} fluid>
+                 <Card fluid>
+                    <Card.Content>
+                        <h3>Filter Options</h3>
+                    </Card.Content>
                     <Card.Content>
                         <Grid>
                             <Grid.Row columns={'equal'}>
+                                <Grid.Column>
+                                    Name Filter <br/>
+                                    <Input
+                                        fluid
+                                        name={'nameFilter'}
+                                        onChange={(event, data) => {
+                                          this.handleInputChange(event, data);
+                                        }}/>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    Email Filter <br/>
+                                    <Input
+                                        fluid
+                                        name={'emailFilter'}
+                                        onChange={(event, data) => {
+                                            this.handleInputChange(event, data);
+                                        }}/>
+                                </Grid.Column>
+                            </Grid.Row>
+
+                        </Grid>
+                    </Card.Content>
+                 </Card>
+                <Card className={'user-management'} fluid>
+                    <Card.Content>
+                        <Grid>
+                            <Grid.Row columns={'equal'} className={'admin-table-header'}>
                                 <Grid.Column onClick={() => this.sort('name')}>Name</Grid.Column>
                                 <Grid.Column onClick={() => this.sort('email')}>Email</Grid.Column>
                                 <Grid.Column onClick={() => this.sort('CO2Reduced')}>CO2 Reduced</Grid.Column>
@@ -93,7 +115,15 @@ class UserManagement extends React.Component {
                                 <Grid.Column>Action</Grid.Column>
                             </Grid.Row>
                             {
-                                this.props.userList.sort((a, b) => {
+                                this.props.userList
+                                .filter((user) => {
+                                    if ((this.state.nameFilter.length < 1 && this.state.emailFilter < 1) ||
+                                        (user.email.includes(this.state.emailFilter) && user.name.includes(this.state.nameFilter))) {
+                                        return true;
+                                    }
+                                    return false;
+                                })
+                                .sort((a, b) => {
                                     if (a[this.state.sortColumn.name] < b[this.state.sortColumn.name]) {
                                         return this.state.sortColumn.isDescending ? -1 : 1;
                                     }
@@ -108,7 +138,7 @@ class UserManagement extends React.Component {
                                       <Grid.Row key={index} style={{ paddingBottom: 0 }}>
                                         <Grid columns={'equal'}
                                               className={`admin-table-row ${this.state.selectedIndex === index ? 'active-index' : ''}`}
-                                              onClick={() => this.handleRowSelection(index)}>
+                                              onClick={() => this.handleRowSelection(index, user)}>
                                           <Grid.Row>
                                             <Grid.Column>
                                               {user.name}
@@ -131,7 +161,9 @@ class UserManagement extends React.Component {
                                           </Grid.Row>
                                         </Grid>
                                         {
-                                          this.state.selectedIndex === index &&
+                                          this.state.selectedIndex === index && (this.state.loading ?
+                                          <Grid.Row style={{ padding: '1em' }}><Loader active inline={'centered'}>Fetching user&apos;s travel history</Loader></Grid.Row>
+                                          :
                                           <Grid.Row className={'admin-travel-history'}>
                                             <Table celled basic={'very'}>
                                               <Table.Header>
@@ -144,13 +176,11 @@ class UserManagement extends React.Component {
                                               </Table.Header>
                                               <Table.Body>
                                                 {
-                                                  this.props.entries.map((entry) => (<ListTransportEntry key={entry._id}
-                                                                                           entry={entry} admin
-                                                                                           UserTransportation={UserTransportation}/>))
+                                                  <UserHistory selectedUserId={this.state.selectedUserId}/>
                                                 }
                                               </Table.Body>
                                             </Table>
-                                          </Grid.Row>
+                                          </Grid.Row>)
                                         }
                                       </Grid.Row>
                                   ))
