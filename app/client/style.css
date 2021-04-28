@@ -328,6 +328,14 @@ footer {
     cursor: pointer;
 }
 
+.admin-table-header .column:hover {
+    cursor: pointer;
+}
+
+.admin-table-header .column:last-child:hover {
+    cursor: default;
+}
+
 /* Admin Page CSS ends */
 
 .comparator-text {

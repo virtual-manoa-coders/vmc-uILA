@@ -1,12 +1,10 @@
 import React from 'react';
-// eslint-disable-next-line no-unused-vars
-import { Grid, Button, Icon, Container, Card } from 'semantic-ui-react';
+import { Grid, Button, Card, Icon } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import { UserVehicles } from '../../../api/userVehicles/UserVehicles';
-import { AllUserVehicles } from '../../../api/userVehicles/AllUserVehicles';
 import { adminGrabAllVehicles } from '../../../startup/both/Methods';
 
 /** A simple static component to render some text for the landing page. */
@@ -15,9 +13,14 @@ class VehicleManagement extends React.Component {
         super(props);
         this.state = {
             vehicleList: [],
+            sortColumn: {
+                name: '',
+                isDescending: true,
+            },
         };
 
         this.grabVehicles = this.grabVehicles.bind(this);
+        this.sort = this.sort.bind(this);
     }
 
     componentDidMount() {
@@ -29,6 +32,7 @@ class VehicleManagement extends React.Component {
             if (err) {
                 console.log('Error: ', err.message);
             } else {
+                console.log(res);
                 this.setState({ vehicleList: res });
             }
             return undefined;
@@ -37,6 +41,15 @@ class VehicleManagement extends React.Component {
 
     deleteVehicle(vehicle) {
         UserVehicles.collection.remove({ _id: vehicle._id }, this.grabVehicles);
+    }
+
+    sort(name) {
+        const sortColumn = {
+            name: name,
+            isDescending: this.state.sortColumn.name !== name ? true : !this.state.sortColumn.isDescending,
+        };
+
+        this.setState({ sortColumn });
     }
 
     render() {
@@ -48,17 +61,43 @@ class VehicleManagement extends React.Component {
                 <Card className={'user-management'} fluid>
                     <Card.Content>
                         <Grid>
-                            <Grid.Row columns={'equal'}>
-                                <Grid.Column>Make</Grid.Column>
-                                <Grid.Column>Model</Grid.Column>
-                                <Grid.Column>Year</Grid.Column>
-                                <Grid.Column>Price</Grid.Column>
-                                <Grid.Column>MPG</Grid.Column>
-                                {/* <Grid.Column>Fuel Saved</Grid.Column> */}
+                            <Grid.Row columns={'equal'} className={'admin-table-header'}>
+                                <Grid.Column onClick={() => this.sort('carMake')}>
+                                    Make
+                                    {this.state.sortColumn.name === 'carMake' && <Icon name={this.state.sortColumn.isDescending ? 'caret down' : 'caret up'}/>}
+                                </Grid.Column>
+                                <Grid.Column onClick={() => this.sort('carModel')}>
+                                    Model
+                                    {this.state.sortColumn.name === 'carModel' && <Icon name={this.state.sortColumn.isDescending ? 'caret down' : 'caret up'}/>}
+                                </Grid.Column>
+                                <Grid.Column onClick={() => this.sort('carYear')}>
+                                    Year
+                                    {this.state.sortColumn.name === 'carYear' && <Icon name={this.state.sortColumn.isDescending ? 'caret down' : 'caret up'}/>}
+                                </Grid.Column>
+                                <Grid.Column onClick={() => this.sort('carPrice')}>
+                                    Price
+                                    {this.state.sortColumn.name === 'carPrice' && <Icon name={this.state.sortColumn.isDescending ? 'caret down' : 'caret up'}/>}
+                                </Grid.Column>
+                                <Grid.Column onClick={() => this.sort('carMPG')}>
+                                    MPG
+                                    {this.state.sortColumn.name === 'carMPG' && <Icon name={this.state.sortColumn.isDescending ? 'caret down' : 'caret up'}/>}
+                                </Grid.Column>
                                 <Grid.Column>Action</Grid.Column>
                             </Grid.Row>
                             {
-                                this.state.vehicleList.map((vehicle, index) => (
+                                this.state.vehicleList
+                                .sort((a, b) => {
+                                    if (a[this.state.sortColumn.name] < b[this.state.sortColumn.name]) {
+                                        return this.state.sortColumn.isDescending ? -1 : 1;
+                                    }
+
+                                    if (a[this.state.sortColumn.name] > b[this.state.sortColumn.name]) {
+                                        return this.state.sortColumn.isDescending ? 1 : -1;
+                                    }
+
+                                    return 0;
+                                })
+                                .map((vehicle, index) => (
                                     <Grid.Row columns={'equal'} key={index}>
                                         <Grid.Column>
                                             {vehicle.carMake}
@@ -104,8 +143,6 @@ VehicleManagement.propTypes = {
 /** withTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker */
 const VehicleManagementContainer = withTracker(() => {
     const sub1 = Meteor.subscribe(UserVehicles.adminPublicationName);
-
-    console.log(UserVehicles.collection.find({}).fetch());
 
     return {
         currentUser: Meteor.user() ? Meteor.user().username : '',

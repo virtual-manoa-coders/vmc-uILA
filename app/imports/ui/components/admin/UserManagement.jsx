@@ -106,7 +106,7 @@ class UserManagement extends React.Component {
                 <Card className={'user-management'} fluid>
                     <Card.Content>
                         <Grid>
-                            <Grid.Row columns={'equal'}>
+                            <Grid.Row columns={'equal'} className={'admin-table-header'}>
                                 <Grid.Column onClick={() => this.sort('name')}>Name</Grid.Column>
                                 <Grid.Column onClick={() => this.sort('email')}>Email</Grid.Column>
                                 <Grid.Column onClick={() => this.sort('CO2Reduced')}>CO2 Reduced</Grid.Column>
@@ -116,14 +116,14 @@ class UserManagement extends React.Component {
                             </Grid.Row>
                             {
                                 this.props.userList
-                                    .filter((user) => {
-                                        if ((this.state.nameFilter.length < 1 && this.state.emailFilter < 1) ||
-                                            (user.email.includes(this.state.emailFilter) && user.name.includes(this.state.nameFilter))) {
-                                            return true;
-                                        }
-                                        return false;
-                                    })
-                                    .sort((a, b) => {
+                                .filter((user) => {
+                                    if ((this.state.nameFilter.length < 1 && this.state.emailFilter < 1) ||
+                                        (user.email.includes(this.state.emailFilter) && user.name.includes(this.state.nameFilter))) {
+                                        return true;
+                                    }
+                                    return false;
+                                })
+                                .sort((a, b) => {
                                     if (a[this.state.sortColumn.name] < b[this.state.sortColumn.name]) {
                                         return this.state.sortColumn.isDescending ? -1 : 1;
                                     }

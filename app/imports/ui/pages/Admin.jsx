@@ -1,6 +1,5 @@
 import React from 'react';
-// eslint-disable-next-line no-unused-vars
-import { Grid, Button, Icon, Container } from 'semantic-ui-react';
+import { Grid, Button, Container } from 'semantic-ui-react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
