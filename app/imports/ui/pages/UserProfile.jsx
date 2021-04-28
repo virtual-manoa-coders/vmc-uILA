@@ -15,6 +15,7 @@ import TravelPatterns from '../components/Visualization/TravelPatterns';
 import TransportDataEntry from '../components/TransportDataEntry';
 import ListUserVehicles from '../components/ListUserVehicles';
 import ListTransportEntries from '../components/ListTransportEntries';
+import Section from "../components/Section";
 
 /** Create a schema to specify the structure of the data to appear in the form. */
 const formSchema = new SimpleSchema({

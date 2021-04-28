@@ -10,6 +10,7 @@ body, html, .table {
 	background-color: transparent!important;
 	box-shadow: none;
 	border-bottom: none !important;
+    padding-bottom: 50px;
 	height: 80px;
 	display: flex;
 	position: sticky;
@@ -366,4 +367,10 @@ footer {
 
 #list-vehicles {
   padding: 10px;
+}
+
+.dashboard-page {
+    padding-top: 100px;
+    align-items: center;
+    justify-items: center;
 }
