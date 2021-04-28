@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Grid, Header, Loader, Segment, Button } from 'semantic-ui-react';
 import { AutoForm, ErrorsField, NumField, SelectField, SubmitField, DateField } from 'uniforms-semantic';
 import swal from 'sweetalert';
@@ -83,17 +83,19 @@ class TransportDataEntry extends React.Component {
           }
         });
   }
-
-  onVehicleChange(event) {
-    this.setState({ vehicle: event.target.value });
-    const vehicle = this.vehicle.current.value;
-    console.log('Vehicle changed to: ' + vehicle);
-  }
+  //
+  // onVehicleChange(event) {
+  //   this.setState({ vehicle: event.target.value });
+  //   const vehicle = this.vehicle.current.value;
+  //   console.log('Vehicle changed to: ' + vehicle);
+  // }
 
   transportationLog() {
     const user = Meteor.user().username;
     const userVehicles = _.where(UserVehicles.collection.find().fetch(), { owner: user });
     console.log(userVehicles);
+    const vehicleMPG = _.pluck(userVehicles.carMPG);
+    console.log(vehicleMPG);
 
     const options = this.props.userVehicles.map((vehicle, index) => ({
         label: vehicle.carName,
@@ -125,8 +127,9 @@ class TransportDataEntry extends React.Component {
                 <SelectField name='transport'/>
                 <SelectField name='vehicle'
                              value={this.state.vehicle}
-                             // onSelect={this.handleChange}
+                             onClick={this.handleChange}
                              options={options}
+                             placeholder='Select car'
                 />
                 <NumField name='miles' decimal={false}/>
                 <SubmitField value='Submit'/>
