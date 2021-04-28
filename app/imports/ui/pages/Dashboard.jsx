@@ -19,6 +19,7 @@ class Dashboard extends React.Component {
   render() {
     return (this.props.ready) ? this.renderPage() : <Loader active>Getting data</Loader>;
   }
+
   renderPage() {
     const userInfo = this.props.userInfo
         .filter(user => user.email === this.props.currentUser.username)[0];
