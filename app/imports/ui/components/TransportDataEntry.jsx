@@ -35,11 +35,31 @@ const bridge = new SimpleSchema2Bridge(formSchema);
 
 /** Renders the Page for adding a document. */
 class TransportDataEntry extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      vehicle: '',
+    };
+    this.vehicle = React.createRef();
+    this.submit = this.submit.bind(this);
+    // this.handleClick = this.handleClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    // this.onChange = this.onChange.bind(this);
+  }
 
-  // handleChange = selectedOption => {
-  //   // eslint-disable-next-line no-console
-  //   this.setState({ selectedOption }, () => console.log('Option selected:', selectedOption));
-  // };
+  // handleChange(event) {
+  //   const vehicle = this.props.userVehicles.find(v => v.carName === event.vehicle.carName);
+  //   this.setState({ vehicle: vehicle });
+  // }
+
+  // handleClick() {
+  //   this.setState({ isSelected: true });
+  // }
+
+   handleChange = (e) => {
+      const selectedVehicle = e.value;
+      this.setState({ selectedVehicle });
+    }
 
   /** On log your commute submit, insert the data into UserTransportation. */
   submit(data, formRef) {
@@ -64,18 +84,24 @@ class TransportDataEntry extends React.Component {
         });
   }
 
+  onVehicleChange(event) {
+    this.setState({ vehicle: event.target.value });
+    const vehicle = this.vehicle.current.value;
+    console.log('Vehicle changed to: ' + vehicle);
+  }
+
   transportationLog() {
     const user = Meteor.user().username;
     const userVehicles = _.where(UserVehicles.collection.find().fetch(), { owner: user });
     console.log(userVehicles);
 
-    const options = this.props.userVehicles.map(( vehicle, index) => {
-      return {
+    const options = this.props.userVehicles.map((vehicle, index) => ({
         label: vehicle.carName,
-        value: vehicle,
+        value: vehicle.carName,
         key: index,
-      };
-    });
+      }));
+
+    // const { selectedVehicle, options } = this.state;
 
     let fRef = null;
     return (
@@ -83,7 +109,13 @@ class TransportDataEntry extends React.Component {
           <Grid.Column>
             <AutoForm ref={ref => {
               fRef = ref;
-            }} schema={bridge} onSubmit={data => this.submit(data, fRef)}>
+            }}
+                      schema={bridge}
+                      onSubmit={data => this.submit(data, fRef)}
+                      onChange={(key, value) => {
+                        console.log(key, value);
+                      }}
+            >
               <Segment>
               <Header style={{ color: '#2292b3' }} textAlign='center' as='h3'>Log a Trip</Header>
                 <DateField name='date'
@@ -92,6 +124,8 @@ class TransportDataEntry extends React.Component {
                 />
                 <SelectField name='transport'/>
                 <SelectField name='vehicle'
+                             value={this.state.vehicle}
+                             // onSelect={this.handleChange}
                              options={options}
                 />
                 <NumField name='miles' decimal={false}/>
@@ -126,12 +160,12 @@ export default withTracker(() => {
   // Get access to documents.
   const sub1 = Meteor.subscribe(UserInfo.userPublicationName);
   const sub2 = Meteor.subscribe(UserVehicles.userPublicationName);
-  // const user = Meteor.user().username;
+  const user = Meteor.user().username;
 
   return {
     userInfo: UserInfo.collection.find({}).fetch(),
-    // userVehicles: _.where(UserVehicles.collection.find().fetch(), { owner: user }),
-    userVehicles: UserVehicles.collection.find().fetch(),
+    userVehicles: _.where(UserVehicles.collection.find().fetch(), { owner: user }),
+    // userVehicles: UserVehicles.collection.find().fetch(),
     ready: sub1.ready() && sub2.ready(),
   };
 
