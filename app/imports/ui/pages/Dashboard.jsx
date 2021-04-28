@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 // eslint-disable-next-line no-unused-vars
@@ -16,12 +15,10 @@ import ListUserVehicles from '../components/ListUserVehicles';
 import Section from '../components/Section';
 
 class Dashboard extends React.Component {
-
   /** If the subscription(s) have been received, render the page, otherwise show a loading icon. */
   render() {
     return (this.props.ready) ? this.renderPage() : <Loader active>Getting data</Loader>;
   }
-
   renderPage() {
     const userInfo = this.props.userInfo
         .filter(user => user.email === this.props.currentUser.username)[0];
