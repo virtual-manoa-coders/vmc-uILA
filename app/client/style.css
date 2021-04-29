@@ -367,3 +367,11 @@ footer {
 #list-vehicles {
   padding: 10px;
 }
+
+#transport-select {
+    display: none;
+}
+
+#transport-select.show {
+    display: block;
+}

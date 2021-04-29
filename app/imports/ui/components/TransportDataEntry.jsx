@@ -36,34 +36,43 @@ const bridge = new SimpleSchema2Bridge(formSchema);
 /** Renders the Page for adding a document. */
 class TransportDataEntry extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      vehicle: { mpg: 0 },
-    };
-    this.vehicle = React.createRef();
-    this.submit = this.submit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  // handleChange = (e, data) => {
-  //   console.log(data.value);
-  //   this.setState({ selected: data.value });
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     vehicle: { mpg: 0 },
+  //   };
+  //   this.vehicle = React.createRef();
+  //   this.submit = this.submit.bind(this);
+  //   this.handleChange = this.handleChange.bind(this);
   // }
 
-  handleChange(value, mpg) {
-    this.setState({ vehicle: value, mpg: mpg });
-    console.log('value: ', value);
-    console.log('mpg: ', mpg);
+  state = {
+    selectedVehicle: null,
+    transport: '',
+  };
+
+  displayWhenSelected = (transport, value, selectedVehicle) => {
+    const selectedIndex = transport.selectedIndex;
+    const isSelected = transport[selectedIndex].value === value;
+    selectedVehicle.classList[isSelected ? 'add' : 'remove']('show');
+  };
+
+  handleChange = selectedVehicle => {
+    this.setState({ selectedVehicle }, () =>
+        console.log('Vehicle selected: ', selectedVehicle));
   }
 
-  // handleChange(e) {
-  //   this.setState({ vehicle: e.target.value });
-  //   const vehicle = this.vehicle.current.value;
-  //   console.log('Vehicle changed to: ', vehicle);
+  // handleTransportChange = selectedTransport => {
+  //   this.setState({ selectedTransport }, () =>
+  //       this.displayWhenSelected(this.state.selectedTranport, 'Car', this.state.selectedVehicle);
+  //       console.log('Transport selected: ', selectedTransport));
   // }
 
-  // handleChange = (field) => (value) => this.setState({ [field]: value })
+  // transport.addEventListener('change', (e) => displayWhenSelected(transport,'Car', selectedVehicle))
+
+  // transport.addEventListener('change',  displayWhenSelected(transport, 'Car', selectedVehicle));
+
+  transport.addEventListener('change', (e) => displayWhenSelected(transport,'Car', selectedVehicle));
 
   /** On log your commute submit, insert the data into UserTransportation. */
   submit(data, formRef) {
@@ -91,19 +100,20 @@ class TransportDataEntry extends React.Component {
   }
 
   transportationLog() {
+    const { selectedVehicle, transport } = this.state;
     const user = Meteor.user().username;
     const userVehicles = _.where(UserVehicles.collection.find().fetch(), { owner: user });
-    console.log(userVehicles);
+    // console.log(userVehicles);
     const vehicleMPGs = _.pluck(userVehicles, 'carMPG');
-    console.log(vehicleMPGs);
+    // console.log(vehicleMPGs);
 
-    const options = this.props.userVehicles.map((vehicle, index) => ({
-      key: index,
+    const options = this.props.userVehicles.map((vehicle) => ({
+      key: vehicle._id,
       label: vehicle.carName,
       value: vehicle.carName,
-      mpg: vehicle.carMPG,
-      }));
-    console.log(options);
+      vehicle: vehicle,
+    }));
+    // console.log(options);
 
     let fRef = null;
     return (
@@ -114,28 +124,33 @@ class TransportDataEntry extends React.Component {
             }}
                       schema={bridge}
                       onSubmit={data => this.submit(data, fRef)}
-                      onChange={(key, value) => {
-                        console.log(key, value);
-
-                      }}
+                // onChange={(key, value) => {
+                //   console.log(key, value);
+                //
+                // }}
             >
               <Segment>
-              <Header style={{ color: '#2292b3' }} textAlign='center' as='h3'>Log a Trip</Header>
+                <Header style={{ color: '#2292b3' }} textAlign='center' as='h3'>Log a Trip</Header>
                 <DateField name='date'
                            max={new Date()}
                            min={new Date(2017, 1, 1)}
                 />
-                <SelectField name='transport'/>
+                <SelectField name='transport'
+                             value={transport}
+                             onChange={handle}
+                />
                 <SelectField name='vehicle'
+                             id='transport-select'
                              options={options}
-                             value={this.state.vehicle.value}
+                             value={selectedVehicle}
                              onChange={this.handleChange}
                              placeholder='Select vehicle'
                 />
                 <NumField name='miles' decimal={false}/>
                 <SubmitField value='Submit'/>
                 <ErrorsField/>
-                <Button id='view-trips' as={NavLink} activeClassName="active" exact to="/list-transport-entries" key='list-transport-entries'> View/Edit Your Trips
+                <Button id='view-trips' as={NavLink} activeClassName="active" exact to="/list-transport-entries"
+                        key='list-transport-entries'> View/Edit Your Trips
                 </Button>
               </Segment>
             </AutoForm>
