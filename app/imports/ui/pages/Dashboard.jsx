@@ -16,16 +16,42 @@ import Section from '../components/Section';
 import { UserInfoMethods } from '../../startup/both/Methods';
 
 class Dashboard extends React.Component {
-  /** If the subscription(s) have been received, render the page, otherwise show a loading icon. */
-  render() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      userStatisticCards: null,
+    };
+
+    this.getUserStatistic = this.getUserStatistic.bind(this);
+  }
+
+  componentDidMount() {
+    this.getUserStatistic();
+  }
+
+  getUserStatistic() {
     Meteor.call(UserInfoMethods.getDashboardStatistics, {}, (err, res) => {
       if (err) {
         console.log('Error: ', err.message);
       } else {
-        console.log(res);
+        console.log();
+        this.setState({ userStatisticCards: res });
       }
+      return undefined;
     });
-    return (this.props.ready) ? this.renderPage() : <Loader active>Getting data</Loader>;
+  }
+
+  displayStatisticField(field) {
+    if (!this.state.userStatisticCards) {
+      return 'Error';
+    }
+
+    return this.state.userStatisticCards[field];
+  }
+
+  /** this.state.userStatisticCards can be removed, it is guarded against slow speed in renderPage */
+  render() {
+    return (this.props.ready && this.state.userStatisticCards) ? this.renderPage() : <Loader active>Getting data</Loader>;
   }
 
   renderPage() {
@@ -73,57 +99,72 @@ class Dashboard extends React.Component {
               <h1></h1>
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row>
-            <Grid.Column verticalAlign='middle'>
-              <Card>
-                <Card.Content>
-                  <Icon name='big arrow circle down'/><br/>
-                  <Card.Meta>GHG Reduced</Card.Meta>
-                  <Card.Description>205,721 lbs</Card.Description>
-                </Card.Content>
-              </Card>
-            </Grid.Column>
-            <Divider hidden/>
-            <Grid.Column verticalAlign='middle'>
-              <Card>
-                <Card.Content>
-                  <Icon name='big taxi'/><br/>
-                  <Card.Meta>VMT Reduced</Card.Meta>
-                  <Card.Description>231,547 miles</Card.Description>
-                </Card.Content>
-              </Card>
-            </Grid.Column>
-            <Divider hidden/>
-            <Grid.Column verticalAlign='middle'>
-              <Card>
-                <Card.Content>
-                  <Icon name='big road'/><br/>
-                  <Card.Meta>Gas Saved</Card.Meta>
-                  <Card.Description>10,500 gallons</Card.Description>
-                </Card.Content>
-              </Card>
-            </Grid.Column>
-            <Divider hidden/>
-            <Grid.Column verticalAlign='middle'>
-              <Card>
-                <Card.Content>
-                  <Icon name='big home'/><br/>
-                  <Card.Meta>Telecommute</Card.Meta>
-                  <Card.Description>32 days</Card.Description>
-                </Card.Content>
-              </Card>
-            </Grid.Column>
-            <Divider hidden/>
-            <Grid.Column verticalAlign='middle'>
-              <Card>
-                <Card.Content>
-                  <Icon name='big bicycle'/><br/>
-                  <Card.Meta>Biked To Work</Card.Meta>
-                  <Card.Description>3 days</Card.Description>
-                </Card.Content>
-              </Card>
-            </Grid.Column>
-          </Grid.Row>
+            {
+              this.state.userStatisticCards !== null ?
+                  (
+                      <Grid.Row>
+                        <Grid.Column verticalAlign='middle'>
+                          <Card>
+                            <Card.Content>
+                              <Icon name='big arrow circle down'/><br/>
+                              <Card.Meta>GHG Reduced</Card.Meta>
+                              <Card.Description>{this.displayStatisticField('CO2Reduced').toLocaleString()} lbs</Card.Description>
+                            </Card.Content>
+                          </Card>
+                        </Grid.Column>
+                        <Divider hidden/>
+                        <Grid.Column verticalAlign='middle'>
+                          <Card>
+                            <Card.Content>
+                              <Icon name='big taxi'/><br/>
+                              <Card.Meta>VMT Reduced</Card.Meta>
+                              <Card.Description>{this.displayStatisticField('VMTReduced').toLocaleString()} miles</Card.Description>
+                            </Card.Content>
+                          </Card>
+                        </Grid.Column>
+                        <Divider hidden/>
+                        <Grid.Column verticalAlign='middle'>
+                          <Card>
+                            <Card.Content>
+                              <Icon name='big road'/><br/>
+                              <Card.Meta>Gas Saved</Card.Meta>
+                              <Card.Description>{this.displayStatisticField('fuelSaved').toLocaleString()} gallons</Card.Description>
+                            </Card.Content>
+                          </Card>
+                        </Grid.Column>
+                        <Divider hidden/>
+                        <Grid.Column verticalAlign='middle'>
+                          <Card>
+                            <Card.Content>
+                              <Icon name='big home'/><br/>
+                              <Card.Meta>Telecommute</Card.Meta>
+                              <Card.Description>{this.displayStatisticField('telecommuteDays').toLocaleString()} days</Card.Description>
+                            </Card.Content>
+                          </Card>
+                        </Grid.Column>
+                        <Divider hidden/>
+                        <Grid.Column verticalAlign='middle'>
+                          <Card>
+                            <Card.Content>
+                              <Icon name='big bicycle'/><br/>
+                              <Card.Meta>Biked To Work</Card.Meta>
+                              <Card.Description>{this.displayStatisticField('bikeDays').toLocaleString()} days</Card.Description>
+                            </Card.Content>
+                          </Card>
+                        </Grid.Column>
+                      </Grid.Row>
+                  )
+                :
+                  <Grid.Row>
+                    <Grid.Column>
+                      <Card>
+                        <Card.Content>
+                          <Header> Loading Personal Statistics ... </Header>
+                        </Card.Content>
+                      </Card>
+                    </Grid.Column>
+                  </Grid.Row>
+            }
           <Grid.Row columns={2} height='equal' width='equal'>
             <Grid.Column>
               <Segment>
