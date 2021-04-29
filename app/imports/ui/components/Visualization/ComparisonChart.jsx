@@ -61,7 +61,7 @@ const ValueDifference = ({ userData, communityData, textStyle, metric, inverted 
   }
 
   return (
-      <Grid textAlign='right' columns={2}>
+      <Grid stackable textAlign='right' columns={2}>
         <Grid.Column floated='right'>
           <Grid.Row>
             <Header as='h1' textAlign='right' floated='right' style={textStyle} color={color}>

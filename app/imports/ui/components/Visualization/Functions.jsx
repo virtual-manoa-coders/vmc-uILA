@@ -285,6 +285,11 @@ export const travelPatternsFunction = (data, timeSpan) => {
 };
 
 /**
+ * Clone an array by value. WARNING: Any JS object will turn into string representations; very computationally expensive!
+ */
+export const cloneArray = (array) => JSON.parse(JSON.stringify(array));
+
+/**
  * Asks the server for the user's Meteor ID, and perform operations using callback.
  * This is asyncronus, so always use the userId in the callback.
  * @param userEmail is the target user's email (is actually the DB's username key on the server-side).

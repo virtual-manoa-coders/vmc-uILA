@@ -11,16 +11,17 @@ import TransportDataEntry from '../components/TransportDataEntry';
 import ListTransportEntries from '../components/ListTransportEntries';
 import AddVehicle from '../components/AddVehicle';
 import ListUserVehicles from '../components/ListUserVehicles';
+import Section from '../components/Section';
 
 class Dashboard extends React.Component {
-
   /** If the subscription(s) have been received, render the page, otherwise show a loading icon. */
   render() {
     return (this.props.ready) ? this.renderPage() : <Loader active>Getting data</Loader>;
   }
 
   renderPage() {
-    const userInfo = this.props.userInfo;
+    const userInfo = this.props.userInfo
+        .filter(user => user.email === this.props.currentUser.username)[0];
     const userCar = this.props.userVehicles.filter(car => car._id === userInfo.carID)[0];
 
     const panes = [
@@ -33,7 +34,7 @@ class Dashboard extends React.Component {
       {
         menuItem: 'View/Edit Trips',
         render: () => <Tab.Pane attached={false}>
-         <ListTransportEntries/>
+          <ListTransportEntries/>
         </Tab.Pane>,
       },
       {
@@ -51,7 +52,11 @@ class Dashboard extends React.Component {
     ];
 
     return (
-        <Grid id='dashboard-page' padded verticalAlign='middle' container
+        <Section
+            background='/images/dashboardpic.jpg'
+        >
+        <Container padded verticalAlign='middle'>
+        <Grid id='dashboard' padded container
               textAlign='center' columns='equal'>
           <Grid.Row>
             <Grid.Column>
@@ -59,7 +64,6 @@ class Dashboard extends React.Component {
               <h1></h1>
             </Grid.Column>
           </Grid.Row>
-
           <Grid.Row>
             <Grid.Column verticalAlign='middle'>
               <Card>
@@ -114,7 +118,7 @@ class Dashboard extends React.Component {
           <Grid.Row columns={2} height='equal' width='equal'>
             <Grid.Column>
               <Segment>
-              <Tab fluid style={{ overflow: 'auto', height: 450 }} menu={{ secondary: true, pointing: true }} panes={panes}/>
+                <Tab fluid style={{ overflow: 'auto', height: 450 }} menu={{ secondary: true, pointing: true }} panes={panes}/>
               </Segment>
             </Grid.Column>
           </Grid.Row>
@@ -127,17 +131,19 @@ class Dashboard extends React.Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-
+        </Container>
+        </Section>
     );
   }
 }
 
 /** Require an array of Stuff documents in the props. */
 Dashboard.propTypes = {
-  userInfo: PropTypes.object.isRequired,
+  userInfo: PropTypes.any.isRequired,
   userTransportation: PropTypes.array.isRequired,
   userVehicles: PropTypes.array.isRequired,
   entries: PropTypes.array.isRequired,
+  currentUser: PropTypes.object.isRequired,
   ready: PropTypes.bool.isRequired,
 };
 
@@ -147,11 +153,17 @@ export default withTracker(() => {
   const sub1 = Meteor.subscribe(UserInfo.userPublicationName);
   const sub2 = Meteor.subscribe(UserTransportation.userPublicationName);
   const sub3 = Meteor.subscribe(UserVehicles.userPublicationName);
+
+  // Meteor.user() can be async, this is a quick fix; pulled all UserInfo, should change before final
+  let currentUser = null;
+  currentUser = Meteor.user();
+
   return {
-    userInfo: UserInfo.collection.findOne({ email: Meteor.user().username }),
+    userInfo: UserInfo.collection.find({}).fetch(),
     userVehicles: UserVehicles.collection.find({}).fetch(),
     userTransportation: UserTransportation.collection.find({}).fetch(),
     entries: UserTransportation.collection.find({}, { sort: { date: -1 } }).fetch(),
-    ready: sub1.ready() && sub2.ready() && sub3.ready(),
+    currentUser: currentUser,
+    ready: sub1.ready() && sub2.ready() && sub3.ready() && currentUser != null,
   };
 })(Dashboard);

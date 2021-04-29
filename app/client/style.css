@@ -10,6 +10,7 @@ body, html, .table {
 	background-color: transparent!important;
 	box-shadow: none;
 	border-bottom: none !important;
+    padding-bottom: 50px;
 	height: 80px;
 	display: flex;
 	position: sticky;
@@ -328,6 +329,14 @@ footer {
     cursor: pointer;
 }
 
+.admin-table-header .column:hover {
+    cursor: pointer;
+}
+
+.admin-table-header .column:last-child:hover {
+    cursor: default;
+}
+
 /* Admin Page CSS ends */
 
 #comparator-page {
@@ -377,6 +386,8 @@ footer {
     font-family: 'Merriweather', sans-serif;
 }
 
-#footer-text {
-
+.dashboard-page {
+    padding-top: 100px;
+    align-items: center;
+    justify-items: center;
 }

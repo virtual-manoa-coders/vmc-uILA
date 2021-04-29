@@ -10,6 +10,9 @@ const credentials = {
   image: ' https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png',
 };
 
+// This date will be the the last day the weekly data will be generated for
+const latestDate = new Date(2021, 4, 5);
+
 // Due to limitations of non ES6, this is has the be the exact same as defined in UserTransportationCollection.jsx
 const UserTransportationTypeEnum = {
   Telecommute: 'Telecommute',
@@ -137,12 +140,12 @@ function generateExtraTransport(currentDate, user) {
 
 /** Add transport logs; every week days for 3 months, and two extra logs in every month */
 function generateTransport(user) {
-  const now = moment();
+  const now = moment(latestDate);
   for (let i = 12; i >= 1; i--) {
     generateTransportsForWeek(now.toDate(), user);
     now.subtract(1, 'week').endOf('week');
   }
-  const lenow = moment();
+  const lenow = moment(latestDate);
   for (let i = 3; i >= 1; i--) {
     generateExtraTransport(lenow.toDate(), user);
     lenow.subtract(1, 'month');
