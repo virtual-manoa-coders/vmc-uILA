@@ -51,7 +51,12 @@ class Dashboard extends React.Component {
 
   /** this.state.userStatisticCards can be removed, it is guarded against slow speed in renderPage */
   render() {
-    return (this.props.ready && this.state.userStatisticCards) ? this.renderPage() : <Loader active>Getting data</Loader>;
+    return (
+        <div id='dashboard-page'>
+          {(this.props.ready && this.state.userStatisticCards) ? this.renderPage() :
+              <Loader active>Getting data</Loader>}
+        </div>
+        );
   }
 
   renderPage() {
