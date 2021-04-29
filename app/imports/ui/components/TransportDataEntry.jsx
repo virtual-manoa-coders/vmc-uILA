@@ -39,7 +39,7 @@ class TransportDataEntry extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      vehicle: '',
+      vehicle: { mpg: 0 },
     };
     this.vehicle = React.createRef();
     this.submit = this.submit.bind(this);
@@ -51,9 +51,10 @@ class TransportDataEntry extends React.Component {
   //   this.setState({ selected: data.value });
   // }
 
-  handleChange(value) {
-    this.setState({ vehicle: value });
+  handleChange(value, mpg) {
+    this.setState({ vehicle: value, mpg: mpg });
     console.log('value: ', value);
+    console.log('mpg: ', mpg);
   }
 
   // handleChange(e) {
@@ -90,7 +91,6 @@ class TransportDataEntry extends React.Component {
   }
 
   transportationLog() {
-    // const { vehicle } = this.state;
     const user = Meteor.user().username;
     const userVehicles = _.where(UserVehicles.collection.find().fetch(), { owner: user });
     console.log(userVehicles);
@@ -128,7 +128,7 @@ class TransportDataEntry extends React.Component {
                 <SelectField name='transport'/>
                 <SelectField name='vehicle'
                              options={options}
-                             value={this.vehicle.value}
+                             value={this.state.vehicle.value}
                              onChange={this.handleChange}
                              placeholder='Select vehicle'
                 />

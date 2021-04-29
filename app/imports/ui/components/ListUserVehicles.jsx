@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Button, Container, Header, Loader, Modal, Card, Grid } from 'semantic-ui-react';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
+import { _ } from 'meteor/underscore';
 import ListUserVehicle from '../components/ListUserVehicle';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
 import AddVehicle from '../components/AddVehicle';
@@ -68,8 +69,9 @@ ListUserVehicles.propTypes = {
 /** withTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker */
 export default withTracker(() => {
   const subscription = Meteor.subscribe(UserVehicles.userPublicationName);
+  const user = Meteor.user().username;
   return {
-    entries: UserVehicles.collection.find({}, { sort: { date: -1 } }).fetch(),
+    entries: _.where(UserVehicles.collection.find({}, { sort: { date: -1 } }).fetch(), { owner: user }),
     ready: subscription.ready(),
   };
 })(ListUserVehicles);
