@@ -1,6 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import { UserInfo } from '../../api/userData/UserInfo';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
+import { UserTransportation } from '../../api/userData/UserTransportation';
+import { UserTransportationTypeEnum } from '../../api/userData/UserTransportation-Utilities';
 
 const adminFindMeteorID = 'UserInfo.adminFindMeteorID';
 const adminGrabAllVehicles = 'UserVehicles.adminGrabAllVehicles';
@@ -42,6 +44,8 @@ Meteor.methods({
         CO2Reduced: CO2Reduced,
         VMTReduced: VMTReduced,
         fuelSaved: fuelSaved,
+        telecommuteDays: UserTransportation.getTransportDayCount(this.userId, UserTransportationTypeEnum.Telecommute),
+        bikeDays: UserTransportation.getTransportDayCount(this.userId, UserTransportationTypeEnum.Bike),
       };
     }
 
