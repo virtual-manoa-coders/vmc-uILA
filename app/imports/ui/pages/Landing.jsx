@@ -4,6 +4,7 @@ import { NavLink, withRouter } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
+import CarComparator from './CarComparator';
 import GhgCalculator from '../components/GhgCalculator';
 
 /** A simple static component to render some text for the landing page. */
@@ -106,6 +107,9 @@ class Landing extends React.Component {
               </Grid>
             </div>
           </Grid>
+          <div id='car-comparator'>
+            <CarComparator/>
+          </div>
           <div>
             <Grid className='description-section' textAlign='left' container>
               <Grid.Row className='description-header'>
