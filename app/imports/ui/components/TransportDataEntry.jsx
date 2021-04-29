@@ -109,8 +109,8 @@ class TransportDataEntry extends React.Component {
 
     const options = this.props.userVehicles.map((vehicle) => ({
       key: vehicle._id,
-      label: vehicle.carName,
-      value: vehicle.carName,
+      label: vehicle.carModel + vehicle.carYear,
+      value: vehicle.carModel + vehicle.carYear,
       vehicle: vehicle,
     }));
     // console.log(options);
