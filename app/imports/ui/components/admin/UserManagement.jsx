@@ -19,7 +19,10 @@ class UserManagement extends React.Component {
                 name: 'createdAt',
                 isDescending: true,
                 loading: false,
-                selectedUserId: '',
+            },
+            subSortColumn: {
+                name: 'createdAt',
+                isDescending: true,
             },
             collapseFilter: false,
             nameFilter: '',
@@ -42,13 +45,17 @@ class UserManagement extends React.Component {
         UserInfo.collection.remove({ _id: user._id });
     }
 
-    sort(name) {
+    sort(name, isSub) {
         const sortColumn = {
             name: name,
             isDescending: this.state.sortColumn.name !== name ? true : !this.state.sortColumn.isDescending,
         };
-
-        this.setState({ sortColumn });
+        if (isSub) {
+            sortColumn.isDescending = this.state.subSortColumn.name !== name ? true : !this.state.subSortColumn.isDescending;
+            this.setState({ subSortColumn: sortColumn });
+        } else {
+            this.setState({ sortColumn, selectedIndex: null });
+        }
     }
 
     handleRowSelection(index, user) {
@@ -178,15 +185,15 @@ class UserManagement extends React.Component {
                                             <Table celled basic={'very'}>
                                               <Table.Header>
                                                 <Table.Row>
-                                                  <Table.HeaderCell>Date</Table.HeaderCell>
-                                                  <Table.HeaderCell>Transport</Table.HeaderCell>
-                                                  <Table.HeaderCell>Miles</Table.HeaderCell>
+                                                  <Table.HeaderCell onClick={() => this.sort('date', true)}>Date</Table.HeaderCell>
+                                                  <Table.HeaderCell onClick={() => this.sort('transport', true)}>Transport</Table.HeaderCell>
+                                                  <Table.HeaderCell onClick={() => this.sort('miles', true)}>Miles</Table.HeaderCell>
                                                   <Table.HeaderCell>Delete</Table.HeaderCell>
                                                 </Table.Row>
                                               </Table.Header>
                                               <Table.Body>
                                                 {
-                                                  <UserHistory selectedUserId={this.state.selectedUserId}/>
+                                                  <UserHistory subSortColumn={this.state.subSortColumn} selectedUserId={this.state.selectedUserId}/>
                                                 }
                                               </Table.Body>
                                             </Table>
