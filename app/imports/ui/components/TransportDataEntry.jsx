@@ -25,10 +25,11 @@ const formSchema = new SimpleSchema({
     type: String,
     allowedValues: ['Telecommute', 'Walk', 'Bike', 'Carpool', 'Bus', 'Car'],
     defaultValue: 'Telecommute',
+    optional: true,
   },
   date: Date,
   miles: Number,
-  vehicle: String,
+  vehicle: { type: String, optional: true },
 });
 
 const bridge = new SimpleSchema2Bridge(formSchema);

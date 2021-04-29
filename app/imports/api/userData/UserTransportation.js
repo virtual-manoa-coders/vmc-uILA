@@ -25,10 +25,11 @@ class UserTransportationCollection {
       transport: {
         type: String,
         allowedValues: UserTransportationTypeEnum.Array,
+        optional: true,
       },
       date: Date,
       miles: Number,
-      mpg: Number,
+      mpg: { type: Number, optional: true },
       userID: String,
     }, { tracker: Tracker });
     // Attach the schema to the collection, so all attempts to insert a document are checked against schema.
