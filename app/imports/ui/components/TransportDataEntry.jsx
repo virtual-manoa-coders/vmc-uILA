@@ -62,17 +62,17 @@ class TransportDataEntry extends React.Component {
         console.log('Vehicle selected: ', selectedVehicle));
   }
 
-  // handleTransportChange = selectedTransport => {
-  //   this.setState({ selectedTransport }, () =>
-  //       this.displayWhenSelected(this.state.selectedTranport, 'Car', this.state.selectedVehicle);
-  //       console.log('Transport selected: ', selectedTransport));
-  // }
+  handleTransportChange = (transport) => {
+    if (transport === 'Car') {
+      this.handleChange();
+    }
+    this.setState({ transport, show: true }, () =>
+        console.log('Transport selected: ', transport));
+  }
 
   // transport.addEventListener('change', (e) => displayWhenSelected(transport,'Car', selectedVehicle))
 
   // transport.addEventListener('change',  displayWhenSelected(transport, 'Car', selectedVehicle));
-
-  transport.addEventListener('change', (e) => displayWhenSelected(transport,'Car', selectedVehicle));
 
   /** On log your commute submit, insert the data into UserTransportation. */
   submit(data, formRef) {
@@ -137,15 +137,16 @@ class TransportDataEntry extends React.Component {
                 />
                 <SelectField name='transport'
                              value={transport}
-                             onChange={handle}
+                             onChange={this.handleTransportChange}
                 />
+                {this.state.show && (
                 <SelectField name='vehicle'
-                             id='transport-select'
                              options={options}
                              value={selectedVehicle}
                              onChange={this.handleChange}
                              placeholder='Select vehicle'
                 />
+                )}
                 <NumField name='miles' decimal={false}/>
                 <SubmitField value='Submit'/>
                 <ErrorsField/>
