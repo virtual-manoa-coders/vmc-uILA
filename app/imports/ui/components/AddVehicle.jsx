@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
-import { AllUserVehicles } from '../../api/userVehicles/AllUserVehicles';
+import { UserInfoVehicles } from '../../api/userVehicles/UserInfoVehicles';
 
 /** Create a schema to specify the structure of the data to appear in the form. */
 const formSchema = new SimpleSchema({
@@ -84,9 +84,9 @@ class AddVehicle extends React.Component {
   /** On submit, insert the data. */
   submit(data, formRef) {
     const { carName, carMake, carModel, carYear, carMPG, carPrice } = data;
-    const userID = Meteor.user()._id;
+    const owner = Meteor.user().username;
 
-    UserVehicles.collection.insert({ userID, carName, carMake, carModel, carYear, carMPG, carPrice },
+    UserVehicles.collection.insert({ owner, carName, carMake, carModel, carYear, carMPG, carPrice },
         (error) => {
           if (error) {
             swal('Error', error.message, 'error');
@@ -131,15 +131,15 @@ class AddVehicle extends React.Component {
 }
 
 AddVehicle.propTypes = {
-  AllUserVehicles: PropTypes.array.isRequired,
+  UserInfoVehicles: PropTypes.array.isRequired,
   ready: PropTypes.bool.isRequired,
 };
 
 export default withTracker(() => {
   const sub1 = Meteor.subscribe(UserVehicles.userPublicationName);
-  const sub2 = Meteor.subscribe(AllUserVehicles.userPublicationName);
+  const sub2 = Meteor.subscribe(UserInfoVehicles.userPublicationName);
   return {
-    AllUserVehicles: AllUserVehicles.collection.find({}).fetch,
+    AllUserVehicles: UserInfoVehicles.collection.find({}).fetch,
     ready: sub1.ready() && sub2.ready(),
   };
 })(AddVehicle);

@@ -126,10 +126,7 @@ class UserProfile extends React.Component {
                     <br/>
                     Email: {email}
                   </Card.Meta>
-                  <Card.Description className='profile-card'>Car: {userCar.carYear} {userCar.carMake} {userCar.carModel}
-                    <br/>
-                    Miles per gallon: {userCar.carMPG} miles
-                    <br/>
+                  <Card.Description className='profile-card'>
                     CO2 reduced: {profile.CO2Reduced} pounds
                     <br/>
                     VMT

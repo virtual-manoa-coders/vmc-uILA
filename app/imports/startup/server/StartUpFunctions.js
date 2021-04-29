@@ -12,9 +12,9 @@ import {
 import { UserTransportation } from '../../api/userData/UserTransportation';
 
 /** Add a car to the UserVehicle */
-function addCar({ carName, carMake, carModel, carYear, carMPG, carPrice }) {
+function addCar({ carName, carMake, carModel, carYear, carMPG, carPrice, owner }) {
   console.log(` Defining car: ${carYear} ${carMake} ${carModel}`);
-  UserVehicles.collection.insert({ carName, carMake, carModel, carYear, carMPG, carPrice });
+  UserVehicles.collection.insert({ carName, carMake, carModel, carYear, carMPG, carPrice, owner });
 }
 
 /** Add default vehicles from settings.development.json */
