@@ -65,9 +65,9 @@ class TransportDataEntry extends React.Component {
   handleTransportChange = (transport) => {
     if (transport === 'Car') {
       this.handleChange();
+      this.setState({ transport, show: true }, () =>
+          console.log('Transport selected: ', transport));
     }
-    this.setState({ transport, show: true }, () =>
-        console.log('Transport selected: ', transport));
   }
 
   // transport.addEventListener('change', (e) => displayWhenSelected(transport,'Car', selectedVehicle))
