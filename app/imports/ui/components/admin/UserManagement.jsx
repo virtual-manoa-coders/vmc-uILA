@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Card, Button, Table, Loader, Input } from 'semantic-ui-react';
+import { Grid, Card, Button, Table, Loader, Input, Icon } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
@@ -21,6 +21,7 @@ class UserManagement extends React.Component {
                 loading: false,
                 selectedUserId: '',
             },
+            collapseFilter: false,
             nameFilter: '',
             emailFilter: '',
         };
@@ -31,6 +32,10 @@ class UserManagement extends React.Component {
 
     handleInputChange(event, data) {
         this.setState({ [data.name]: data.value });
+    }
+
+    toggleFilterView() {
+        this.setState({ collapseFilter: !this.state.collapseFilter });
     }
 
     deleteUser(user) {
@@ -74,10 +79,15 @@ class UserManagement extends React.Component {
                     <Button onClick={() => this.props.handleViewChange('overview')}>Go Back</Button>
                 </div>
                  <Card fluid>
-                    <Card.Content>
-                        <h3>Filter Options</h3>
+                    <Card.Content className={'admin-filter-options'}>
+                        <Grid>
+                            <Grid.Row>
+                                <h3>Filter Options</h3>
+                                <Icon onClick={this.toggleFilterView.bind(this)} name={this.state.collapseFilter ? 'plus' : 'minus'}/>
+                            </Grid.Row>
+                        </Grid>
                     </Card.Content>
-                    <Card.Content>
+                    <Card.Content style={this.state.collapseFilter ? { display: 'none' } : {}}>
                         <Grid>
                             <Grid.Row columns={'equal'}>
                                 <Grid.Column>
