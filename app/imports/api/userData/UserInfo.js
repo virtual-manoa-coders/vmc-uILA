@@ -13,6 +13,8 @@ class UserInfoCollection {
   constructor() {
     // The name of this collection.
     this.name = 'UserInfoCollection';
+    // Type of data stored in the collection
+    this._type = 'User Information';
     // Define the Mongo collection.
     this.collection = new Mongo.Collection(this.name);
     // Define the structure of each document in the collection.
@@ -79,7 +81,7 @@ class UserInfoCollection {
   }
 
   /**
-   * A stricter form of findOne, in that it throws an exception if the entity isn't found in the collection.
+   * Find the user's Meteor Id using their email
    * Server-side only!
    * @param email UserInfo's email
    * @returns String The user's Meteor id
@@ -99,6 +101,54 @@ class UserInfoCollection {
       }
     }
     return doc._id;
+  }
+
+  /**
+   * Find the user's UserInfo using their Meteor Id
+   * Server-side only!
+   * @param email UserInfo's email
+   * @returns String The user's Meteor id
+   * @throws { Meteor.Error } If the document cannot be found.
+   */
+  findUserInfoWithMeteorId(userId) {
+    if (Meteor.isClient) {
+      throw new Error('Calling findMeteorID in Client');
+    }
+
+    const userEmail = Meteor.users.findOne({ _id: userId }).username;
+    const doc = this.collection.findOne({ email: userEmail });
+    if (!doc) {
+      if (typeof email !== 'string') {
+        throw new Meteor.Error(`Email: '${JSON.stringify(userId)}' isn't a string`, '', Error().stack);
+      } else {
+        throw new Meteor.Error(`${userId} is undefined; can't be found in the database`, '', Error().stack);
+      }
+    }
+    return doc._id;
+  }
+
+  /**
+   * A stricter form of findOne, in that it throws an exception if the entity isn't found in the collection.
+   * @param { String | Object } name Either the UserInfo's docID, user's Meteor.user() Id, or an object selector, or the 'name' field value.
+   * Note: can use both MeteorId or UserInfoId.
+   * @returns { Object } The document associated with name.
+   * @throws { Meteor.Error } If the document cannot be found.
+   */
+  findDoc(name) {
+    const doc = (
+        this.collection.findOne(name)
+        || this.collection.findOne({ name })
+        || this.collection.findOne({ _id: name })
+        || this.collection.findOne({ username: name })
+        || this.collection.findOne({ _id: this.findUserInfoWithMeteorId(name) }));
+    if (!doc) {
+      if (typeof name !== 'string') {
+        throw new Meteor.Error(`${JSON.stringify(name)} is not a defined ${this._type}`, '', Error().stack);
+      } else {
+        throw new Meteor.Error(`${name} is not a defined ${this._type}`, '', Error().stack);
+      }
+    }
+    return doc;
   }
 }
 

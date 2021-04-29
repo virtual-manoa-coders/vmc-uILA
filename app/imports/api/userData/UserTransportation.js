@@ -98,6 +98,27 @@ class UserTransportationCollection {
         .fetch();
   }
 
+  /**
+   * Find the length of a transport array in terms of days total
+   * @param {transportArray[]}
+   * @returns {Number} Days of transport array
+   * @private
+   */
+  _findDays(transportArray) {
+    return transportArray.map(transport => transport.date)
+        .map(date => date.toDateString()).filter((x, i, a) => a.indexOf(x) === i).length;
+  }
+
+  /**
+   * Get the number of days a transport has been used in total for a user.
+   * @param {MeteorUserId} meteorUserId
+   * @param {String} transportType UserTransportationTypeEnum
+   * @returns {Number} The number of days that a transport has been used
+   */
+  getTransportDayCount(meteorUserId, transportType) {
+    const test = this.collection.find({ userID: meteorUserId }).fetch().filter(transport => transport.transport === transportType);
+    return this._findDays(test);
+  }
 }
 
 export const UserTransportation = new UserTransportationCollection();
