@@ -1,6 +1,6 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { Grid, Icon, Divider, Segment, Header, Loader, Tab, Card } from 'semantic-ui-react';
+import { Grid, Icon, Divider, Segment, Header, Loader, Tab, Card, Container } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { withTracker } from 'meteor/react-meteor-data';
 import TransportPieChartWithDates from '../components/Visualization/TransportPieChartWithDates';
