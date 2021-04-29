@@ -13,20 +13,28 @@ class UserHistory extends React.Component {
         super(props);
         this.state = {
             selectedIndex: null,
-            sortColumn: {
-                name: 'createdAt',
-                isDescending: true,
-            },
         };
     }
 
     render() {
         return (
-            this.props.entries.map((entry) => (
-                    <ListTransportEntry key={entry._id}
-                                        entry={entry} admin
-                                        UserTransportation={UserTransportation} />
-                ))
+            this.props.entries
+            .sort((a, b) => {
+                if (a[this.props.subSortColumn.name] < b[this.props.subSortColumn.name]) {
+                    return this.props.subSortColumn.isDescending ? -1 : 1;
+                }
+
+                if (a[this.props.subSortColumn.name] > b[this.props.subSortColumn.name]) {
+                    return this.props.subSortColumn.isDescending ? 1 : -1;
+                }
+
+                return 0;
+            })
+            .map((entry) => (
+                <ListTransportEntry key={entry._id}
+                                    entry={entry} admin
+                                    UserTransportation={UserTransportation} />
+            ))
         );
     }
 }
@@ -34,6 +42,7 @@ class UserHistory extends React.Component {
 UserHistory.propTypes = {
     currentUser: PropTypes.string,
     entries: PropTypes.array.isRequired,
+    subSortColumn: PropTypes.object,
 };
 
 const UserHistoryContainer = withTracker((props) => {

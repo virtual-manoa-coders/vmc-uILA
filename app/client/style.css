@@ -337,6 +337,19 @@ footer {
     cursor: default;
 }
 
+.admin-filter-options .ui.grid {
+    margin-left: 0!important;
+    margin-right: 0!important;
+}
+
+.admin-filter-options .row {
+    padding-bottom: 0!important;
+}
+
+.admin-filter-options i {
+    margin-left: auto!important;
+}
+
 /* Admin Page CSS ends */
 
 #comparator-page {

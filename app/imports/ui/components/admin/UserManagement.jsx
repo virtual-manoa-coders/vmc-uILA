@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Card, Button, Table, Loader, Input } from 'semantic-ui-react';
+import { Grid, Card, Button, Table, Loader, Input, Icon } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
@@ -19,8 +19,12 @@ class UserManagement extends React.Component {
                 name: 'createdAt',
                 isDescending: true,
                 loading: false,
-                selectedUserId: '',
             },
+            subSortColumn: {
+                name: 'createdAt',
+                isDescending: true,
+            },
+            collapseFilter: false,
             nameFilter: '',
             emailFilter: '',
         };
@@ -33,17 +37,25 @@ class UserManagement extends React.Component {
         this.setState({ [data.name]: data.value });
     }
 
+    toggleFilterView() {
+        this.setState({ collapseFilter: !this.state.collapseFilter });
+    }
+
     deleteUser(user) {
         UserInfo.collection.remove({ _id: user._id });
     }
 
-    sort(name) {
+    sort(name, isSub) {
         const sortColumn = {
             name: name,
             isDescending: this.state.sortColumn.name !== name ? true : !this.state.sortColumn.isDescending,
         };
-
-        this.setState({ sortColumn });
+        if (isSub) {
+            sortColumn.isDescending = this.state.subSortColumn.name !== name ? true : !this.state.subSortColumn.isDescending;
+            this.setState({ subSortColumn: sortColumn });
+        } else {
+            this.setState({ sortColumn, selectedIndex: null });
+        }
     }
 
     handleRowSelection(index, user) {
@@ -74,10 +86,15 @@ class UserManagement extends React.Component {
                     <Button onClick={() => this.props.handleViewChange('overview')}>Go Back</Button>
                 </div>
                  <Card fluid>
-                    <Card.Content>
-                        <h3>Filter Options</h3>
+                    <Card.Content className={'admin-filter-options'}>
+                        <Grid>
+                            <Grid.Row>
+                                <h3>Filter Options</h3>
+                                <Icon onClick={this.toggleFilterView.bind(this)} name={this.state.collapseFilter ? 'plus' : 'minus'}/>
+                            </Grid.Row>
+                        </Grid>
                     </Card.Content>
-                    <Card.Content>
+                    <Card.Content style={this.state.collapseFilter ? { display: 'none' } : {}}>
                         <Grid>
                             <Grid.Row columns={'equal'}>
                                 <Grid.Column>
@@ -168,15 +185,15 @@ class UserManagement extends React.Component {
                                             <Table celled basic={'very'}>
                                               <Table.Header>
                                                 <Table.Row>
-                                                  <Table.HeaderCell>Date</Table.HeaderCell>
-                                                  <Table.HeaderCell>Transport</Table.HeaderCell>
-                                                  <Table.HeaderCell>Miles</Table.HeaderCell>
+                                                  <Table.HeaderCell onClick={() => this.sort('date', true)}>Date</Table.HeaderCell>
+                                                  <Table.HeaderCell onClick={() => this.sort('transport', true)}>Transport</Table.HeaderCell>
+                                                  <Table.HeaderCell onClick={() => this.sort('miles', true)}>Miles</Table.HeaderCell>
                                                   <Table.HeaderCell>Delete</Table.HeaderCell>
                                                 </Table.Row>
                                               </Table.Header>
                                               <Table.Body>
                                                 {
-                                                  <UserHistory selectedUserId={this.state.selectedUserId}/>
+                                                  <UserHistory subSortColumn={this.state.subSortColumn} selectedUserId={this.state.selectedUserId}/>
                                                 }
                                               </Table.Body>
                                             </Table>

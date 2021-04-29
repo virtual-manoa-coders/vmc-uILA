@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Button, Card, Icon } from 'semantic-ui-react';
+import { Grid, Button, Card, Icon, Input } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
@@ -17,14 +17,29 @@ class VehicleManagement extends React.Component {
                 name: '',
                 isDescending: true,
             },
+            collapseFilter: false,
+            makeFilter: '',
+            modelFilter: '',
+            yearFilter: '',
+            priceFilter: '',
+            mpgFilter: '',
         };
 
         this.grabVehicles = this.grabVehicles.bind(this);
         this.sort = this.sort.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
     }
 
     componentDidMount() {
         this.grabVehicles();
+    }
+
+    handleInputChange(event, data) {
+        this.setState({ [data.name]: data.value });
+    }
+
+    toggleFilterView() {
+        this.setState({ collapseFilter: !this.state.collapseFilter });
     }
 
     grabVehicles() {
@@ -32,7 +47,6 @@ class VehicleManagement extends React.Component {
             if (err) {
                 console.log('Error: ', err.message);
             } else {
-                console.log(res);
                 this.setState({ vehicleList: res });
             }
             return undefined;
@@ -58,6 +72,73 @@ class VehicleManagement extends React.Component {
                 <div>
                     <Button onClick={() => this.props.handleViewChange('overview')}>Go Back</Button>
                 </div>
+                <Card fluid>
+                    <Card.Content className={'admin-filter-options'}>
+                        <Grid>
+                            <Grid.Row>
+                                <h3>Filter Options</h3>
+                                <Icon onClick={this.toggleFilterView.bind(this)} name={this.state.collapseFilter ? 'plus' : 'minus'}/>
+                            </Grid.Row>
+                        </Grid>
+                    </Card.Content>
+                    <Card.Content style={this.state.collapseFilter ? { display: 'none' } : {}}>
+                        <Grid>
+                            <Grid.Row columns={'equal'}>
+                                <Grid.Column>
+                                    Make Filter <br/>
+                                    <Input
+                                        fluid
+                                        name={'makeFilter'}
+                                        onChange={(event, data) => {
+                                            this.handleInputChange(event, data);
+                                        }}/>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    Model Filter <br/>
+                                    <Input
+                                        fluid
+                                        name={'modelFilter'}
+                                        onChange={(event, data) => {
+                                            this.handleInputChange(event, data);
+                                        }}/>
+                                </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row columns={'equal'}>
+                                <Grid.Column>
+                                    Year Filter <br/>
+                                    <Input
+                                        fluid
+                                        name={'yearFilter'}
+                                        onChange={(event, data) => {
+                                            this.handleInputChange(event, data);
+                                        }}/>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    Price Filter <br/>
+                                    <Input
+                                        fluid
+                                        name={'priceFilter'}
+                                        onChange={(event, data) => {
+                                            this.handleInputChange(event, data);
+                                        }}/>
+                                </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row columns={'equal'}>
+                                <Grid.Column>
+                                    MPG Filter <br/>
+                                    <Input
+                                        fluid
+                                        name={'mpgFilter'}
+                                        onChange={(event, data) => {
+                                            this.handleInputChange(event, data);
+                                        }}/>
+                                </Grid.Column>
+                                <Grid.Column>
+                                </Grid.Column>
+                            </Grid.Row>
+                        </Grid>
+                    </Card.Content>
+                </Card>
                 <Card className={'user-management'} fluid>
                     <Card.Content>
                         <Grid>
@@ -86,6 +167,16 @@ class VehicleManagement extends React.Component {
                             </Grid.Row>
                             {
                                 this.state.vehicleList
+                                .filter((user) => {
+                                    if ((this.state.makeFilter.length < 1 && this.state.modelFilter < 1 &&
+                                         this.state.yearFilter.length < 1 && this.state.priceFilter < 1 && this.state.mpgFilter.length < 1) ||
+                                        (user.carMake.toLowerCase().includes(this.state.makeFilter.toLowerCase()) && user.carModel.toLowerCase().includes(this.state.modelFilter.toLowerCase()) &&
+                                         user.carYear.toLowerCase().includes(this.state.yearFilter.toLowerCase()) && user.carPrice.toString().includes(this.state.priceFilter) &&
+                                         user.carMPG.toString().includes(this.state.mpgFilter))) {
+                                        return true;
+                                    }
+                                    return false;
+                                })
                                 .sort((a, b) => {
                                     if (a[this.state.sortColumn.name] < b[this.state.sortColumn.name]) {
                                         return this.state.sortColumn.isDescending ? -1 : 1;
