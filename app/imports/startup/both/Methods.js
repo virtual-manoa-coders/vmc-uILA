@@ -28,4 +28,25 @@ Meteor.methods({
   },
 });
 
-export { adminFindMeteorID, adminGrabAllVehicles };
+const UserInfoMethods = {
+  getDashboardStatistics: 'UserInfo.getDashboardStatistics',
+};
+
+Meteor.methods({
+  'UserInfo.getDashboardStatistics'() {
+    let stats = null;
+
+    if (Meteor.isServer && this.userId) {
+      const { CO2Reduced, VMTReduced, fuelSaved } = UserInfo.findDoc(this.userId);
+      stats = {
+        CO2Reduced: CO2Reduced,
+        VMTReduced: VMTReduced,
+        fuelSaved: fuelSaved,
+      };
+    }
+
+    return stats;
+  },
+});
+
+export { adminFindMeteorID, adminGrabAllVehicles, UserInfoMethods };

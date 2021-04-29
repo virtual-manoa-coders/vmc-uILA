@@ -13,10 +13,18 @@ import ListTransportEntries from '../components/ListTransportEntries';
 import AddVehicle from '../components/AddVehicle';
 import ListUserVehicles from '../components/ListUserVehicles';
 import Section from '../components/Section';
+import { UserInfoMethods } from '../../startup/both/Methods';
 
 class Dashboard extends React.Component {
   /** If the subscription(s) have been received, render the page, otherwise show a loading icon. */
   render() {
+    Meteor.call(UserInfoMethods.getDashboardStatistics, {}, (err, res) => {
+      if (err) {
+        console.log('Error: ', err.message);
+      } else {
+        console.log(res);
+      }
+    });
     return (this.props.ready) ? this.renderPage() : <Loader active>Getting data</Loader>;
   }
 
