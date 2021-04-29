@@ -19,18 +19,10 @@ export default class CarComparator extends React.Component {
       slidesToShow: 1,
       slidesToScroll: 1,
     };
-    // eslint-disable-next-line no-unused-vars
-    const align = {
-      textAlign: 'center',
-      color: '#2E303E',
-      filter: 'drop-shadow(0px 0px 4px rgba(255, 255, 255, 0.2))',
-      paddingRight: '200px',
-      paddingLeft: '200px',
-    };
 
     return (
         <Container id='comparator-page'>
-          <Header as="h1" textAlign='center'>Gasoline vs Electric/Hybrid</Header>
+          <Header id='car-title' as="h1" textAlign='center'>Gasoline vs Electric/Hybrid</Header>
           <Grid style={gridStyle} textAlign='center' container columns={2} padded='vertically'>
             <Grid.Column floated='left' width='7' >
               <Slider {...settings}>
@@ -66,7 +58,6 @@ export default class CarComparator extends React.Component {
                 </div>
               </Slider>
             </Grid.Column>
-            <div></div>
             <Grid.Column floated='right' width='7'>
               <Slider {...settings}>
                 <div>
@@ -101,22 +92,6 @@ export default class CarComparator extends React.Component {
                 </div>
               </Slider>
             </Grid.Column>
-            {/* <Grid.Column> */}
-            {/*  <div style={align}> */}
-            {/*    <Header inverted as="h3">Electric Vehicle Cost</Header> */}
-            {/*    <p> */}
-
-            {/*    </p> */}
-            {/*    <Header inverted as="h3">Fuel saved</Header> */}
-            {/*    <p> */}
-
-            {/*    </p> */}
-            {/*    <Header inverted as="h3">State Discounts</Header> */}
-            {/*    <p> */}
-
-            {/*    </p> */}
-            {/*  </div> */}
-            {/* </Grid.Column> */}
           </Grid>
         </Container>
     );

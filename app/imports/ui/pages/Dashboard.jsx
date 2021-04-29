@@ -1,7 +1,6 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-// eslint-disable-next-line no-unused-vars
-import { Grid, Icon, Divider, Segment, Header, Loader, Tab, Card, Container, Table } from 'semantic-ui-react';
+import { Grid, Icon, Divider, Segment, Header, Loader, Tab, Card } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { withTracker } from 'meteor/react-meteor-data';
 import TransportPieChartWithDates from '../components/Visualization/TransportPieChartWithDates';

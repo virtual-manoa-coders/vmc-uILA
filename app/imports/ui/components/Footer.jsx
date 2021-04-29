@@ -31,7 +31,7 @@ export default class Footer extends React.Component {
                   <Header as='h4' inverted>
                     Project Malama
                   </Header>
-                  <p>
+                  <p id='footer-text'>
                     We are a student-led group that is focused on using technology to make the world more eco-friendly.
                   </p>
                 </Grid.Column>

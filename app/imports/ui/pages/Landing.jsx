@@ -4,6 +4,7 @@ import { NavLink, withRouter } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
+import CarComparator from './CarComparator';
 import GhgCalculator from '../components/GhgCalculator';
 
 /** A simple static component to render some text for the landing page. */
@@ -150,8 +151,54 @@ class Landing extends React.Component {
                 </Grid.Row>
               </Grid>
             </div>
-          </Container>
-        </div>
+          </Grid>
+          <div id='car-comparator'>
+            <CarComparator/>
+          </div>
+          <div>
+            <Grid className='description-section' textAlign='left' container>
+              <Grid.Row className='description-header'>
+                What does Project Malama offer?
+              </Grid.Row>
+              <Grid.Row>
+                <Grid.Column width={2}>
+                  <Icon name='handshake outline'/>
+                  <br/>
+                  <div>
+                    Connect
+                  </div>
+                </Grid.Column>
+                <Grid.Column width={12}>
+                  Connect with the community and see how you are helping reduce emissions.
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row>
+                <Grid.Column width={2}>
+                  <Icon name='clipboard outline'/>
+                  <br/>
+                  <div>
+                    Track
+                  </div>
+                </Grid.Column>
+                <Grid.Column width={12}>
+                  Log in your distance traveled alongside your method of transportation to track your emissions
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row>
+                <Grid.Column width={2}>
+                  <Icon name='sliders horizontal'/>
+                  <br/>
+                  <div>
+                    Compare
+                  </div>
+                </Grid.Column>
+                <Grid.Column width={12}>
+                  Compare your current emission options to other options
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </div>
+        </Container>
     );
   }
 }
