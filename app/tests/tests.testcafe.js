@@ -49,16 +49,6 @@ test('Test that community works', async (testController) => {
   await signoutPage.isDisplayed(testController);
 });
 
-test('Test that comparator works', async (testController) => {
-  await navBar.gotoSigninPage(testController);
-  await signinPage.signin(testController, credentials.username, credentials.password);
-  await navBar.isLoggedIn(testController, credentials.username);
-  await navBar.gotoComparatorPage(testController, credentials.username);
-  await comparatorPage.isDisplayed(testController);
-  await navBar.logout(testController);
-  await signoutPage.isDisplayed(testController);
-});
-
 test('Test that dashboard works', async (testController) => {
   await navBar.gotoSigninPage(testController);
   await signinPage.signin(testController, credentials.username, credentials.password);
