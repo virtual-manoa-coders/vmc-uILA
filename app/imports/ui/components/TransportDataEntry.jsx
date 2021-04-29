@@ -23,6 +23,7 @@ const formSchema = new SimpleSchema({
   trips: {
     type: String,
     allowedValues: ['Work', 'School', 'Grandmas house'],
+    optional: true,
   },
   transport: {
     type: String,
@@ -31,8 +32,14 @@ const formSchema = new SimpleSchema({
   },
   date: Date,
   miles: Number,
-  saveTrip: Checkbox,
-  nameTrip: String,
+  saveTrip: {
+    type: Checkbox,
+    optional: true,
+  },
+  nameTrip: {
+    type: String,
+    optional: true,
+  },
 });
 
 const bridge = new SimpleSchema2Bridge(formSchema);
