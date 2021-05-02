@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Grid, Header, Loader, Segment, Button, Dropdown } from 'semantic-ui-react';
+import React from 'react';
+import { Grid, Header, Loader, Segment, Button } from 'semantic-ui-react';
 import { AutoForm, ErrorsField, NumField, SelectField, SubmitField, DateField } from 'uniforms-semantic';
 import swal from 'sweetalert';
 import { Meteor } from 'meteor/meteor';
@@ -12,6 +12,7 @@ import { _ } from 'meteor/underscore';
 import { UserTransportation } from '../../api/userData/UserTransportation';
 import { UserInfo } from '../../api/userData/UserInfo';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
+import { UserTransportationTypeEnum } from '../../api/userData/UserTransportation-Utilities';
 
 /*
 TODO:
@@ -19,76 +20,75 @@ TODO:
 - After you're done, take you back to dasboard or community
  */
 
+const getMPG = (selectedVehicle, userVehicles) => {
+  const vehicle = _.where(userVehicles, { carName: selectedVehicle });
+  const mpg = _.pluck(vehicle, 'carMPG');
+  return mpg[0];
+};
+
 /** Create a schema to specify the structure of the data to appear in the logging form. */
 const formSchema = new SimpleSchema({
   transport: {
     type: String,
-    allowedValues: ['Telecommute', 'Walk', 'Bike', 'Carpool', 'Bus', 'Car'],
-    defaultValue: 'Telecommute',
     optional: true,
   },
   date: Date,
   miles: Number,
+  mpg: { type: Number, optional: true },
   vehicle: { type: String, optional: true },
 });
 
 const bridge = new SimpleSchema2Bridge(formSchema);
 
 /** Renders the Page for adding a document. */
-class TransportDataEntry extends React.Component {
+export class TransportDataEntry extends React.Component {
 
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     vehicle: { mpg: 0 },
-  //   };
-  //   this.vehicle = React.createRef();
-  //   this.submit = this.submit.bind(this);
-  //   this.handleChange = this.handleChange.bind(this);
-  // }
-
-  state = {
-    selectedVehicle: null,
-    transport: '',
-  };
-
-  displayWhenSelected = (transport, value, selectedVehicle) => {
-    const selectedIndex = transport.selectedIndex;
-    const isSelected = transport[selectedIndex].value === value;
-    selectedVehicle.classList[isSelected ? 'add' : 'remove']('show');
-  };
-
-  handleChange = selectedVehicle => {
-    this.setState({ selectedVehicle }, () =>
-        console.log('Vehicle selected: ', selectedVehicle));
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedTransport: null,
+      selectedVehicle: null,
+    };
   }
+
+  // state = {
+  //   // selectedTransport: null,
+  //   selectedVehicle: null,
+  // };
+
+  // displayWhenSelected = (transport, value, selectedVehicle) => {
+  //   const selectedIndex = transport.selectedIndex;
+  //   const isSelected = transport[selectedIndex].value === value;
+  //   selectedVehicle.classList[isSelected ? 'add' : 'remove']('show');
+  // };
 
   handleTransportChange = (transport) => {
     if (transport === 'Car') {
-      this.handleChange();
-      this.setState({ transport, show: true }, () =>
-          console.log('Transport selected: ', transport));
+      this.handleVehicleChange();
+      // eslint-disable-next-line no-console
+      this.setState({ selectedTransport: transport, show: true }, () => console.log('Transport selected: ', transport));
+    } else {
+      // eslint-disable-next-line no-console
+      this.setState({ selectedTransport: transport, show: false }, () => console.log('Transport selected: ', transport));
     }
+  };
+
+  handleVehicleChange = selectedVehicle => {
+    this.setState({ selectedVehicle }, () => console.log('Vehicle selected: ', selectedVehicle));
   }
 
-  // transport.addEventListener('change', (e) => displayWhenSelected(transport,'Car', selectedVehicle))
-
-  // transport.addEventListener('change',  displayWhenSelected(transport, 'Car', selectedVehicle));
-
   /** On log your commute submit, insert the data into UserTransportation. */
-  submit(data, formRef) {
-    const { date, transport, miles } = data;
-    const userID = Meteor.user()._id;
-    const user = Meteor.user().username;
-    const userVehicles = _.where(UserVehicles.collection.find().fetch(), { owner: user });
-    const mpg = userVehicles.carMPG;
-
+  handleSubmit(data, formRef) {
+    const userData = {};
+    userData.date = data.date;
+    userData.transport = this.state.selectedTransport;
+    userData.vehicle = this.state.selectedVehicle;
+    userData.miles = data.miles;
+    userData.mpg = getMPG(userData.vehicle, this.props.userVehicles);
+    userData.userID = Meteor.user()._id;
+    console.log(userData);
     UserTransportation.collection.insert({
-          transport,
-          date,
-          miles,
-          mpg,
-          userID,
+      userData,
         },
         (error) => {
           if (error) {
@@ -101,20 +101,27 @@ class TransportDataEntry extends React.Component {
   }
 
   transportationLog() {
-    const { selectedVehicle, transport } = this.state;
-    const user = Meteor.user().username;
-    const userVehicles = _.where(UserVehicles.collection.find().fetch(), { owner: user });
-    // console.log(userVehicles);
-    const vehicleMPGs = _.pluck(userVehicles, 'carMPG');
-    // console.log(vehicleMPGs);
+    const { selectedVehicle } = this.state;
+    const { selectedTransport } = this.state;
 
     const options = this.props.userVehicles.map((vehicle) => ({
       key: vehicle._id,
-      label: vehicle.carModel + vehicle.carYear,
-      value: vehicle.carModel + vehicle.carYear,
+      label: vehicle.carName,
+      value: vehicle.carName,
+      // label: `${vehicle.carModel} ${vehicle.carYear}`,
+      // value: `${vehicle.carModel} ${vehicle.carYear}`,
+      mpg: vehicle.carMPG,
       vehicle: vehicle,
     }));
-    // console.log(options);
+    console.log(options);
+
+    console.log(UserTransportationTypeEnum.Array);
+    const tOptions = UserTransportationTypeEnum.Array.map((transport, index) => ({
+      key: index,
+      label: transport,
+      value: transport,
+    }));
+    console.log(tOptions);
 
     let fRef = null;
     return (
@@ -124,11 +131,7 @@ class TransportDataEntry extends React.Component {
               fRef = ref;
             }}
                       schema={bridge}
-                      onSubmit={data => this.submit(data, fRef)}
-                // onChange={(key, value) => {
-                //   console.log(key, value);
-                //
-                // }}
+                      onSubmit={data => this.handleSubmit(data, fRef)}
             >
               <Segment>
                 <Header style={{ color: '#2292b3' }} textAlign='center' as='h3'>Log a Trip</Header>
@@ -137,20 +140,26 @@ class TransportDataEntry extends React.Component {
                            min={new Date(2017, 1, 1)}
                 />
                 <SelectField name='transport'
-                             value={transport}
+                             options={tOptions}
+                             value={selectedTransport}
                              onChange={this.handleTransportChange}
+                             placeholder='Select transport'
                 />
                 {this.state.show && (
                 <SelectField name='vehicle'
                              options={options}
                              value={selectedVehicle}
-                             onChange={this.handleChange}
+                             onChange={this.handleVehicleChange}
                              placeholder='Select vehicle'
                 />
                 )}
+                <NumField name='mpg'
+                          decimal={false}
+                          hidden={true}
+                />
                 <NumField name='miles' decimal={false}/>
-                <SubmitField value='Submit'/>
                 <ErrorsField/>
+                <SubmitField value='Submit'/>
                 <Button id='view-trips' as={NavLink} activeClassName="active" exact to="/list-transport-entries"
                         key='list-transport-entries'> View/Edit Your Trips
                 </Button>
@@ -173,8 +182,8 @@ class TransportDataEntry extends React.Component {
 TransportDataEntry.propTypes = {
   userInfo: PropTypes.array.isRequired,
   userVehicles: PropTypes.array.isRequired,
+  userTransport: PropTypes.array.isRequired,
   carMPG: PropTypes.number.isRequired,
-  // onChange: PropTypes.isRequired,
   ready: PropTypes.bool.isRequired,
 };
 
@@ -187,7 +196,7 @@ export default withTracker(() => {
   return {
     userInfo: UserInfo.collection.find({}).fetch(),
     userVehicles: _.where(UserVehicles.collection.find().fetch(), { owner: user }),
-    // userVehicles: UserVehicles.collection.find().fetch(),
+    userTransport: _.pluck(UserTransportation.collection.find().fetch(), 'transport'),
     ready: sub1.ready() && sub2.ready(),
   };
 

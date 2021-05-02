@@ -15,12 +15,13 @@ import PropTypes from 'prop-types';
 import SimpleSchema from 'simpl-schema';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import { UserTransportation } from '../../api/userData/UserTransportation';
+import { UserTransportationTypeEnum } from '../../api/userData/UserTransportation-Utilities';
 
 /** Create a schema to specify the structure of the data to appear in the logging form. */
 const formSchema = new SimpleSchema({
   transport: {
     type: String,
-    allowedValues: ['Telecommute', 'Walk', 'Bike', 'Carpool', 'Bus', 'Car'],
+    allowedValues: UserTransportationTypeEnum.Array,
   },
   date: Date,
   miles: Number,
