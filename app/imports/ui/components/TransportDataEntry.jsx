@@ -42,6 +42,9 @@ export class TransportDataEntry extends React.Component {
       selectedTransport: 'Telecommmute',
       selectedVehicle: null,
     };
+    this.handleTransportChange = this.handleTransportChange.bind(this);
+    this.handleVehicleChange = this.handleVehicleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   // state = {
@@ -74,7 +77,7 @@ export class TransportDataEntry extends React.Component {
     userData.mpg = getMPG(userData.vehicle, this.props.userVehicles);
     userData.userID = Meteor.user()._id;
     console.log(userData);
-    UserTransportation.collection.insert({
+    UserTransportation.collection.define({
       userData,
         },
         (error) => {
@@ -91,26 +94,23 @@ export class TransportDataEntry extends React.Component {
     const { selectedVehicle } = this.state;
     const { selectedTransport } = this.state;
 
-    console.log(UserTransportationTypeEnum.Array);
+    // console.log(UserTransportationTypeEnum.Array);
     const transportOptions = UserTransportationTypeEnum.Array.map((transport, index) => ({
       key: index,
       label: transport,
       value: transport,
     }));
-    console.log(transportOptions);
+    // console.log(transportOptions);
 
     const vehicleOptions = this.props.userVehicles.map((vehicle) => ({
       key: vehicle._id,
       label: vehicle.carName || `${vehicle.carYear} ${vehicle.carMake} ${vehicle.carModel}`,
       value: vehicle.carName || `${vehicle.carYear} ${vehicle.carMake} ${vehicle.carModel}`,
-      // value: vehicle,
-      // label: `${vehicle.carModel} ${vehicle.carYear}`,
-      // value: `${vehicle.carModel} ${vehicle.carYear}`,
       mpg: vehicle.carMPG,
       vehicle: vehicle,
     }));
 
-    console.log(vehicleOptions);
+    // console.log(vehicleOptions);
 
     let fRef = null;
     return (
@@ -129,6 +129,7 @@ export class TransportDataEntry extends React.Component {
                            min={new Date(2017, 1, 1)}
                 />
                 <SelectField name='transport'
+                             type='string'
                              options={transportOptions}
                              value={selectedTransport}
                              onChange={this.handleTransportChange}

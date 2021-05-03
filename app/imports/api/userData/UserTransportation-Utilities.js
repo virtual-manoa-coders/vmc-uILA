@@ -32,11 +32,7 @@ export const arrayToString = (selectedVehicle) => {
 export const getMPG = (selectedVehicle, userVehicles) => {
   const vehicleWithName = _.where(userVehicles, { carName: selectedVehicle });
   const vehicleNameArray = arrayToString(selectedVehicle);
-  // console.log(vehicleNameArray);
   const vehicleWithoutName = _.where(userVehicles, { carYear: vehicleNameArray[0], carMake: vehicleNameArray[1], carModel: vehicleNameArray[2] });
-  // console.log(vehicleWithName);
-  // console.log(vehicleWithoutName);
-  console.log(vehicleNameArray[0], vehicleNameArray[1], vehicleNameArray[2]);
   const vehicleName = _.pluck(vehicleWithName, 'carName');
   if (selectedVehicle === vehicleName[0]) {
     const mpg = _.pluck(vehicleWithName, 'carMPG');

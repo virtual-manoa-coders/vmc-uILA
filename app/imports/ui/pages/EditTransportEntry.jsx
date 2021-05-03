@@ -50,8 +50,8 @@ class EditTransportEntry extends React.Component {
 
   /** On successful submit, insert the data. */
   submit(data) {
-    const { date, transport, miles, _id } = data;
-    UserTransportation.collection.update(_id, { $set: { date, transport, miles } }, (error) => {
+    const { date, transport, vehicle, miles, mpg, _id } = data;
+    UserTransportation.collection.update(_id, { $set: { date, transport, vehicle, miles, mpg } }, (error) => {
       if (error) {
         this.setState({ error: error.reason });
       } else {
