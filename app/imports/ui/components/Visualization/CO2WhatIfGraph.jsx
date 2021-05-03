@@ -58,7 +58,7 @@ const GHGProducedNoFilter = (data, timeStart, timeEnd, type) => {
 /**
  * Like Data Points from CO2Graph.jsx, but use an unfiltered GHGProduced to calculate each points
  */
-const DataPointsNoFilter = (data, dateType, numberOfDataPoints, calType, date) => {
+export const DataPointsNoFilter = (data, dateType, numberOfDataPoints, calType, date) => {
   const result = [];
   const time = moment(date.toDate()); // moment objects are passed by reference
 
@@ -85,14 +85,14 @@ const GraphData = (potentialData, currentData, format, dateType, numberOfDataPoi
     labels: DataLabel(format, dateType, numberOfDataPoints, now),
     datasets: [
       {
-        label: 'Last Month\'s GHG Produced',
+        label: 'Last Month\'s GHG Produced (pounds)',
         data: DataPointsNoFilter(currentData, dateType, numberOfDataPoints, CO2CalculationTypeEnum.average, now),
         fill: true,
         backgroundColor: 'rgba(124, 174, 122, 0.2)',
         borderColor: 'rgba(124, 174, 122, 1)',
       },
       {
-        label: 'Last Month\'s Potential GHG Produced',
+        label: 'Last Month\'s Potential GHG Produced (pounds)',
         data: DataPointsNoFilter(potentialData, dateType, numberOfDataPoints, CO2CalculationTypeEnum.average, now),
         fill: true,
         backgroundColor: 'rgba(74, 123, 157, 0.2)',
