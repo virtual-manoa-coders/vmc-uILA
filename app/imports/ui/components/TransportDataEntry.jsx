@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Grid, Header, Loader, Segment, Button, Dropdown } from 'semantic-ui-react';
+import React from 'react';
+import { Grid, Header, Loader, Segment, Button } from 'semantic-ui-react';
 import { AutoForm, ErrorsField, NumField, SelectField, SubmitField, DateField } from 'uniforms-semantic';
 import swal from 'sweetalert';
 import { Meteor } from 'meteor/meteor';
@@ -59,15 +59,13 @@ class TransportDataEntry extends React.Component {
   };
 
   handleChange = selectedVehicle => {
-    this.setState({ selectedVehicle }, () =>
-        console.log('Vehicle selected: ', selectedVehicle));
+    this.setState({ selectedVehicle }, () => console.log('Vehicle selected: ', selectedVehicle));
   }
 
   handleTransportChange = (transport) => {
     if (transport === 'Car') {
       this.handleChange();
-      this.setState({ transport, show: true }, () =>
-          console.log('Transport selected: ', transport));
+      this.setState({ transport, show: true }, () => console.log('Transport selected: ', transport));
     }
   }
 
@@ -105,6 +103,7 @@ class TransportDataEntry extends React.Component {
     const user = Meteor.user().username;
     const userVehicles = _.where(UserVehicles.collection.find().fetch(), { owner: user });
     // console.log(userVehicles);
+    // eslint-disable-next-line no-unused-vars
     const vehicleMPGs = _.pluck(userVehicles, 'carMPG');
     // console.log(vehicleMPGs);
 
