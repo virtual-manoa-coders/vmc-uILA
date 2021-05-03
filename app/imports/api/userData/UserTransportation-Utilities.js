@@ -24,6 +24,12 @@ export const UserTransportationTypeEnumArray = () => {
   return values;
 };
 
+// export const transportNotCar = (selectedTransport, selectedVehicle) => {
+//   if (selectedTransport !== 'Car') {
+//     selectedVehicle =
+//   }
+// }
+
 export const arrayToString = (selectedVehicle) => {
   const vehicleNameArray = selectedVehicle.split(' ');
   return vehicleNameArray;

@@ -1,14 +1,15 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { Button, Container, Header, Loader, Modal, Card } from 'semantic-ui-react';
+import { Button, Container, Header, Loader, Modal, Card, Grid } from 'semantic-ui-react';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
+import { _ } from 'meteor/underscore';
 import ListUserVehicle from '../components/ListUserVehicle';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
 import AddVehicle from '../components/AddVehicle';
 
 /** Renders a table containing all of the Stuff documents. Use <StuffItem> to render each row. */
-class ListUserVehiclesPage extends React.Component {
+class ListUserVehicles extends React.Component {
   state = {
     modalOpen: false,
   };
@@ -25,51 +26,42 @@ class ListUserVehiclesPage extends React.Component {
   /** Render the page once subscriptions have been received. */
   renderPage() {
     return (
-        <Container>
+        <div id='list-vehicles'>
           <Header as="h3" textAlign="center" style={{ color: '#2292b3' }}>Your Vehicles</Header>
-          <Button id='list-user-vehicles' onClick={this.handleOpen}> Add a Vehicle
-          </Button>
-          <Modal
-              open={this.state.modalOpen}
-              onClose={this.handleClose}
-              closeIcon
-          >
-            <Modal.Header>
-              Add a Vehicle
-            </Modal.Header>
-            <Modal.Content>
-              <AddVehicle handleClose={this.handleClose}/>
-            </Modal.Content>
-          </Modal>
-          {/* <Table unstackable celled> */ }
-          {/*  <Table.Header> */}
-          {/*    <Table.Row> */}
-          {/*      <Table.HeaderCell>Car Name</Table.HeaderCell> */}
-          {/*      <Table.HeaderCell>Car Make</Table.HeaderCell> */}
-          {/*      <Table.HeaderCell>Car Model</Table.HeaderCell> */}
-          {/*      <Table.HeaderCell>Car Year</Table.HeaderCell> */}
-          {/*      <Table.HeaderCell>Car MPG</Table.HeaderCell> */}
-          {/*      <Table.HeaderCell>Car Price</Table.HeaderCell> */}
-          {/*      <Table.HeaderCell>Delete</Table.HeaderCell> */}
-          {/*      <Table.HeaderCell className='edit'>Edit</Table.HeaderCell> */}
-          {/*    </Table.Row> */}
-          {/*  </Table.Header> */}
-          {/*  <Table.Body> */}
-          {/*    {this.props.entries.map((entry) => <ListUserVehicle key={entry._id} entry={entry} */}
-          {/*                                                        UserVehicles={UserVehicles}/>)} */}
-          {/*  </Table.Body> */}
-          {/* </Table> */}
-          <Card.Group>
-            {this.props.entries.map((entry) => <ListUserVehicle key={entry._id} entry={entry}
-                                                                UserVehicles={UserVehicles}/>)}
-          </Card.Group>
-        </Container>
+          <Grid>
+            <Grid.Row>
+              <Grid.Column floated='right'>
+                <Button id='list-user-vehicles' onClick={this.handleOpen}> Add a Vehicle
+                </Button>
+                <Modal
+                    open={this.state.modalOpen}
+                    onClose={this.handleClose}
+                    closeIcon
+                >
+                  <Modal.Header>
+                    Add a Vehicle
+                  </Modal.Header>
+                  <Modal.Content>
+                    <AddVehicle handleClose={this.handleClose}/>
+                  </Modal.Content>
+                </Modal>
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row>
+              <Container>
+                <Card.Group centered>
+                  {this.props.entries.map((entry) => <ListUserVehicle key={entry._id} entry={entry}
+                                                                      UserVehicles={UserVehicles}/>)}
+                </Card.Group>
+              </Container>
+            </Grid.Row>
+          </Grid>
+        </div>
     );
   }
 }
 
-/** Require an array of Stuff documents in the props. */
-ListUserVehiclesPage.propTypes = {
+ListUserVehicles.propTypes = {
   entries: PropTypes.array.isRequired,
   ready: PropTypes.bool.isRequired,
 };
@@ -77,8 +69,9 @@ ListUserVehiclesPage.propTypes = {
 /** withTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker */
 export default withTracker(() => {
   const subscription = Meteor.subscribe(UserVehicles.userPublicationName);
+  const user = Meteor.user().username;
   return {
-    entries: UserVehicles.collection.find({}, { sort: { date: -1 } }).fetch(),
+    entries: _.where(UserVehicles.collection.find({}, { sort: { date: -1 } }).fetch(), { owner: user }),
     ready: subscription.ready(),
   };
-})(ListUserVehiclesPage);
+})(ListUserVehicles);
