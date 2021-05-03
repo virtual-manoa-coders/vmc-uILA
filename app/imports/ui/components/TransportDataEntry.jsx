@@ -39,7 +39,7 @@ export class TransportDataEntry extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedTransport: null,
+      selectedTransport: 'Telecommmute',
       selectedVehicle: null,
     };
   }
@@ -92,24 +92,24 @@ export class TransportDataEntry extends React.Component {
     const { selectedTransport } = this.state;
 
     console.log(UserTransportationTypeEnum.Array);
-    const tOptions = UserTransportationTypeEnum.Array.map((transport, index) => ({
+    const transportOptions = UserTransportationTypeEnum.Array.map((transport, index) => ({
       key: index,
       label: transport,
       value: transport,
     }));
-    console.log(tOptions);
+    console.log(transportOptions);
 
-    const options = this.props.userVehicles.map((vehicle) => ({
+    const vehicleOptions = this.props.userVehicles.map((vehicle) => ({
       key: vehicle._id,
-      label: vehicle.carName || `${vehicle.carModel} ${vehicle.carYear}`,
-      value: vehicle.carName || `${vehicle.carModel} ${vehicle.carYear}`,
+      label: vehicle.carName || `${vehicle.carYear} ${vehicle.carMake} ${vehicle.carModel}`,
+      value: vehicle.carName || `${vehicle.carYear} ${vehicle.carMake} ${vehicle.carModel}`,
       // label: `${vehicle.carModel} ${vehicle.carYear}`,
       // value: `${vehicle.carModel} ${vehicle.carYear}`,
       mpg: vehicle.carMPG,
       vehicle: vehicle,
     }));
 
-    console.log(options);
+    console.log(vehicleOptions);
 
     let fRef = null;
     return (
@@ -128,14 +128,14 @@ export class TransportDataEntry extends React.Component {
                            min={new Date(2017, 1, 1)}
                 />
                 <SelectField name='transport'
-                             options={tOptions}
+                             options={transportOptions}
                              value={selectedTransport}
                              onChange={this.handleTransportChange}
                              placeholder='Select transport'
                 />
                 {this.state.show && (
                 <SelectField name='vehicle'
-                             options={options}
+                             options={vehicleOptions}
                              value={selectedVehicle}
                              onChange={this.handleVehicleChange}
                              placeholder='Select vehicle'

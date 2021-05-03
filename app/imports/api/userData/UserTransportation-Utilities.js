@@ -1,3 +1,4 @@
+import { _ } from 'meteor/underscore';
 /**
  * The enumeration object for user transportation types
  * @type {{Walk: string, Array: string[], Bus: string, Carpool: string, Car: string, Bike: string, Telecommute: string}}
@@ -24,9 +25,15 @@ export const UserTransportationTypeEnumArray = () => {
 };
 
 export const getMPG = (selectedVehicle, userVehicles) => {
-  const vehicle = _.where(userVehicles, { carName: selectedVehicle });
-  const mpg = _.pluck(vehicle, 'carMPG');
-  return mpg[0];
+  const vehicleWithName = _.where(userVehicles, { carName: selectedVehicle.carName });
+  const vehicleWithoutName = _.where(userVehicles, { carYear: selectedVehicle.carYear, carMake: selectedVehicle.carMake, carModel: selectedVehicle.carModel });
+  if (selectedVehicle.carName === null) {
+    const mpg = _.pluck(vehicleWithoutName, 'carMPG');
+    return mpg[0];
+  }
+    const mpg = _.pluck(vehicleWithName, 'carMPG');
+    return mpg[0];
+
 };
 
 /**
