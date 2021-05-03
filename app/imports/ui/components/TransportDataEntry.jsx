@@ -53,10 +53,10 @@ export class TransportDataEntry extends React.Component {
     if (transport === 'Car') {
       this.handleVehicleChange();
       // eslint-disable-next-line no-console
-      this.setState({ transport, show: true }, () => console.log('Transport selected: ', (transport)));
+      this.setState({ selectedTransport: transport, show: true }, () => console.log('Transport selected: ', (transport)));
     } else {
       // eslint-disable-next-line no-console
-      this.setState({ transport, show: false }, () => console.log('Transport selected: ', (transport)));
+      this.setState({ selectedTransport: transport, show: false }, () => console.log('Transport selected: ', (transport)));
     }
   };
 
@@ -65,7 +65,7 @@ export class TransportDataEntry extends React.Component {
   }
 
   /** On log your commute submit, insert the data into UserTransportation. */
-  handleSubmit(data, formRef) {
+  handleSubmit = (data, formRef) => {
     const userData = {};
     userData.date = data.date;
     userData.transport = this.state.selectedTransport;
@@ -101,8 +101,8 @@ export class TransportDataEntry extends React.Component {
 
     const options = this.props.userVehicles.map((vehicle) => ({
       key: vehicle._id,
-      label: vehicle.carName,
-      value: vehicle.carName,
+      label: vehicle.carName || `${vehicle.carModel} ${vehicle.carYear}`,
+      value: vehicle.carName || `${vehicle.carModel} ${vehicle.carYear}`,
       // label: `${vehicle.carModel} ${vehicle.carYear}`,
       // value: `${vehicle.carModel} ${vehicle.carYear}`,
       mpg: vehicle.carMPG,

@@ -12,7 +12,7 @@ import { UserInfoVehicles } from '../../api/userVehicles/UserInfoVehicles';
 
 /** Create a schema to specify the structure of the data to appear in the form. */
 const formSchema = new SimpleSchema({
-  carName: { type: String, label: 'Name your car' },
+  carName: { type: String, label: 'Name your car', optional: true },
   carMake: {
     type: String, optional: true,
     allowedValues: [
