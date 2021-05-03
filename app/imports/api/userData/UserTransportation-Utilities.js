@@ -23,6 +23,12 @@ export const UserTransportationTypeEnumArray = () => {
   return values;
 };
 
+export const getMPG = (selectedVehicle, userVehicles) => {
+  const vehicle = _.where(userVehicles, { carName: selectedVehicle });
+  const mpg = _.pluck(vehicle, 'carMPG');
+  return mpg[0];
+};
+
 /**
  * @returns a random transport type of the current types
  */

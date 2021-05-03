@@ -12,7 +12,7 @@ import { _ } from 'meteor/underscore';
 import { UserTransportation } from '../../api/userData/UserTransportation';
 import { UserInfo } from '../../api/userData/UserInfo';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
-import { UserTransportationTypeEnum } from '../../api/userData/UserTransportation-Utilities';
+import { UserTransportationTypeEnum, getMPG } from '../../api/userData/UserTransportation-Utilities';
 
 /*
 TODO:
@@ -20,17 +20,10 @@ TODO:
 - After you're done, take you back to dasboard or community
  */
 
-const getMPG = (selectedVehicle, userVehicles) => {
-  const vehicle = _.where(userVehicles, { carName: selectedVehicle });
-  const mpg = _.pluck(vehicle, 'carMPG');
-  return mpg[0];
-};
-
 /** Create a schema to specify the structure of the data to appear in the logging form. */
 const formSchema = new SimpleSchema({
   transport: {
     type: String,
-    optional: true,
   },
   date: Date,
   miles: Number,
@@ -56,20 +49,14 @@ export class TransportDataEntry extends React.Component {
   //   selectedVehicle: null,
   // };
 
-  // displayWhenSelected = (transport, value, selectedVehicle) => {
-  //   const selectedIndex = transport.selectedIndex;
-  //   const isSelected = transport[selectedIndex].value === value;
-  //   selectedVehicle.classList[isSelected ? 'add' : 'remove']('show');
-  // };
-
   handleTransportChange = (transport) => {
     if (transport === 'Car') {
       this.handleVehicleChange();
       // eslint-disable-next-line no-console
-      this.setState({ selectedTransport: transport, show: true }, () => console.log('Transport selected: ', transport));
+      this.setState({ transport, show: true }, () => console.log('Transport selected: ', (transport)));
     } else {
       // eslint-disable-next-line no-console
-      this.setState({ selectedTransport: transport, show: false }, () => console.log('Transport selected: ', transport));
+      this.setState({ transport, show: false }, () => console.log('Transport selected: ', (transport)));
     }
   };
 
@@ -104,6 +91,14 @@ export class TransportDataEntry extends React.Component {
     const { selectedVehicle } = this.state;
     const { selectedTransport } = this.state;
 
+    console.log(UserTransportationTypeEnum.Array);
+    const tOptions = UserTransportationTypeEnum.Array.map((transport, index) => ({
+      key: index,
+      label: transport,
+      value: transport,
+    }));
+    console.log(tOptions);
+
     const options = this.props.userVehicles.map((vehicle) => ({
       key: vehicle._id,
       label: vehicle.carName,
@@ -113,15 +108,8 @@ export class TransportDataEntry extends React.Component {
       mpg: vehicle.carMPG,
       vehicle: vehicle,
     }));
-    console.log(options);
 
-    console.log(UserTransportationTypeEnum.Array);
-    const tOptions = UserTransportationTypeEnum.Array.map((transport, index) => ({
-      key: index,
-      label: transport,
-      value: transport,
-    }));
-    console.log(tOptions);
+    console.log(options);
 
     let fRef = null;
     return (
@@ -181,8 +169,8 @@ export class TransportDataEntry extends React.Component {
 /** Require an array of userInfo documents in the props. */
 TransportDataEntry.propTypes = {
   userInfo: PropTypes.array.isRequired,
+  // userTransport: PropTypes.array.isRequired,
   userVehicles: PropTypes.array.isRequired,
-  userTransport: PropTypes.array.isRequired,
   carMPG: PropTypes.number.isRequired,
   ready: PropTypes.bool.isRequired,
 };
@@ -195,8 +183,8 @@ export default withTracker(() => {
 
   return {
     userInfo: UserInfo.collection.find({}).fetch(),
+    // userTransport: _.pluck(UserTransportation.collection.find().fetch(), 'allowedValues'),
     userVehicles: _.where(UserVehicles.collection.find().fetch(), { owner: user }),
-    userTransport: _.pluck(UserTransportation.collection.find().fetch(), 'transport'),
     ready: sub1.ready() && sub2.ready(),
   };
 

@@ -25,7 +25,6 @@ class UserTransportationCollection {
       transport: {
         type: String,
         allowedValues: UserTransportationTypeEnum.Array,
-        optional: true,
       },
       date: Date,
       miles: Number,
