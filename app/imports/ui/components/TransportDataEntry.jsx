@@ -60,8 +60,8 @@ export class TransportDataEntry extends React.Component {
     }
   };
 
-  handleVehicleChange = selectedVehicle => {
-    this.setState({ selectedVehicle }, () => console.log('Vehicle selected: ', selectedVehicle));
+  handleVehicleChange = vehicle => {
+    this.setState({ selectedVehicle: vehicle }, () => console.log('Vehicle selected: ', vehicle));
   }
 
   /** On log your commute submit, insert the data into UserTransportation. */
@@ -103,6 +103,7 @@ export class TransportDataEntry extends React.Component {
       key: vehicle._id,
       label: vehicle.carName || `${vehicle.carYear} ${vehicle.carMake} ${vehicle.carModel}`,
       value: vehicle.carName || `${vehicle.carYear} ${vehicle.carMake} ${vehicle.carModel}`,
+      // value: vehicle,
       // label: `${vehicle.carModel} ${vehicle.carYear}`,
       // value: `${vehicle.carModel} ${vehicle.carYear}`,
       mpg: vehicle.carMPG,

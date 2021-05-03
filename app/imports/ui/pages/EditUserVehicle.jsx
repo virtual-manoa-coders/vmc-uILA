@@ -17,7 +17,7 @@ import { UserVehicles } from '../../api/userVehicles/UserVehicles';
 
 /** Create a schema to specify the structure of the data to appear in the logging form. */
 const formSchema = new SimpleSchema({
-  carName: { type: String, label: 'Name your car' },
+  carName: { type: String, label: 'Name your car', optional: true },
   carMake: { type: String, optional: true,
     allowedValues: [
       'Acura',

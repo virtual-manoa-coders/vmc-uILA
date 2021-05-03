@@ -24,14 +24,25 @@ export const UserTransportationTypeEnumArray = () => {
   return values;
 };
 
+export const arrayToString = (selectedVehicle) => {
+  const vehicleNameArray = selectedVehicle.split(' ');
+  return vehicleNameArray;
+};
+
 export const getMPG = (selectedVehicle, userVehicles) => {
-  const vehicleWithName = _.where(userVehicles, { carName: selectedVehicle.carName });
-  const vehicleWithoutName = _.where(userVehicles, { carYear: selectedVehicle.carYear, carMake: selectedVehicle.carMake, carModel: selectedVehicle.carModel });
-  if (selectedVehicle.carName === null) {
-    const mpg = _.pluck(vehicleWithoutName, 'carMPG');
+  const vehicleWithName = _.where(userVehicles, { carName: selectedVehicle });
+  const vehicleNameArray = arrayToString(selectedVehicle);
+  // console.log(vehicleNameArray);
+  const vehicleWithoutName = _.where(userVehicles, { carYear: vehicleNameArray[0], carMake: vehicleNameArray[1], carModel: vehicleNameArray[2] });
+  // console.log(vehicleWithName);
+  // console.log(vehicleWithoutName);
+  console.log(vehicleNameArray[0], vehicleNameArray[1], vehicleNameArray[2]);
+  const vehicleName = _.pluck(vehicleWithName, 'carName');
+  if (selectedVehicle === vehicleName[0]) {
+    const mpg = _.pluck(vehicleWithName, 'carMPG');
     return mpg[0];
   }
-    const mpg = _.pluck(vehicleWithName, 'carMPG');
+    const mpg = _.pluck(vehicleWithoutName, 'carMPG');
     return mpg[0];
 
 };

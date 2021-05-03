@@ -24,7 +24,7 @@ class UserVehiclesCollection {
       // If no car model is chosen, the default parameter
       defaultValue: '...',
     },
-      carModel: String,
+      carModel: { type: String, optional: true },
       carYear: { type: String, optional: true, allowedValues: this.cyAllowedValues },
       // Car miles per gallon
       carMPG: Number,
