@@ -46,6 +46,8 @@
     "testcafe-development": "testcafe chrome tests/*.testcafe.js",
     "testcafe": "testcafe chrome:headless tests/*.testcafe.js -q --app \"meteor npm run start\"",
     "testcafe-github": "testcafe chrome:headless tests/*.testcafe.js -q --app \"meteor npm run start\" --app-init-delay 40000 --retry-test-pages",
-    "generate-data": "node --harmony ./private/GenerateData.mjs"
+    "generate-data": "node --harmony ./private/GenerateData.mjs",
+    "reset": "meteor reset",
+    "presentation" : "npm run reset && npm run generate-data && npm run start"
   }
 }
