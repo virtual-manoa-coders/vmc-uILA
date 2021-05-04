@@ -22,6 +22,7 @@ class UserInfoCollection {
       name: { type: String, optional: true },
       email: { type: String, index: true },
       image: { type: String, optional: true },
+      // carID: { type: Array. optional: true },
       carID: String,
       CO2Reduced: Number,
       VMTReduced: Number,

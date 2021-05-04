@@ -53,7 +53,7 @@ class TransportDataEntry extends React.Component {
 
   handleTransportChange = (transport) => {
     if (transport === 'Car') {
-      // this.handleVehicleChange();
+      this.handleVehicleChange();
       // eslint-disable-next-line no-console
       this.setState({
         selectedTransport: transport,
@@ -64,7 +64,7 @@ class TransportDataEntry extends React.Component {
       this.setState({
         selectedTransport: transport,
         show: false,
-      }, () => console.log('Transport selected: ', this.state.selectedTransport));
+      }, () => console.log('Transport selected: ', transport));
     }
   };
 
@@ -72,6 +72,7 @@ class TransportDataEntry extends React.Component {
     const email = Meteor.user().username;
     const profile = UserInfo.collection.findOne({ email });
     const userCar = this.props.userVehicles.filter(car => car._id === profile.carID)[0];
+    // console.log(car);
     if (vehicle === null) {
       this.setState({ selectedVehicle: userCar }, () => console.log('Vehicle selected: ', this.state.selectedVehicle));
     }
