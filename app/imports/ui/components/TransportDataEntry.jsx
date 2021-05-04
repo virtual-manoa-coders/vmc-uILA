@@ -68,31 +68,18 @@ class TransportDataEntry extends React.Component {
     }
   };
 
-  // handleTransportChange = (transport) => {
-  //   if (transport === 'Car') {
-  //     // this.handleVehicleChange();
-  //     // eslint-disable-next-line no-console
-  //     this.setState({ selectedTransport: transport, show: true }, () => console.log('Transport selected: ', (transport)));
-  //   } else {
-  //     // eslint-disable-next-line no-console
-  //     this.setState({ selectedTransport: transport, show: false }, () => console.log('Transport selected: ', (transport)));
-  //   }
-  // };
-
   handleVehicleChange = (vehicle) => {
+    const email = Meteor.user().username;
+    const profile = UserInfo.collection.findOne({ email });
+    const userCar = this.props.userVehicles.filter(car => car._id === profile.carID)[0];
+    if (vehicle === null) {
+      this.setState({ selectedVehicle: userCar }, () => console.log('Vehicle selected: ', this.state.selectedVehicle));
+    }
     this.setState({ selectedVehicle: vehicle }, () => console.log('Vehicle selected: ', this.state.selectedVehicle));
   }
 
   /** On log your commute submit, insert the data into UserTransportation. */
   handleSubmit = (data, formRef) => {
-    // const userData = {};
-    // userData.date = data.date;
-    // userData.transport = this.state.selectedTransport;
-    // userData.vehicle = this.state.selectedVehicle;
-    // userData.miles = data.miles;
-    // userData.mpg = getMPG(userData.vehicle, this.props.userVehicles);
-    // userData.userID = Meteor.user()._id;
-    // console.log(userData);
     const { date, miles } = data;
     const transport = this.state.selectedTransport;
     const vehicle = this.state.selectedVehicle;
@@ -118,16 +105,12 @@ class TransportDataEntry extends React.Component {
   }
 
   transportationLog = () => {
-    // const { selectedVehicle } = this.state;
-    // const { selectedTransport } = this.state;
 
-    // console.log(UserTransportationTypeEnum.Array);
     const transportOptions = UserTransportationTypeEnum.Array.map((transport) => ({
       key: transport,
       label: transport,
       value: transport,
     }));
-    // console.log(transportOptions);
 
     const vehicleOptions = this.props.userVehicles.map((vehicle) => ({
       key: vehicle._id,
@@ -136,8 +119,6 @@ class TransportDataEntry extends React.Component {
       mpg: vehicle.carMPG,
       vehicle: vehicle,
     }));
-
-    // console.log(vehicleOptions);
 
     let fRef = null;
     const bridge = new SimpleSchema2Bridge(formSchema);
