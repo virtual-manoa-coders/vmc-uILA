@@ -3,9 +3,10 @@ import { Grid, Segment, Header } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
+import moment from 'moment';
 import { UserTransportationTypeEnum } from '../../../api/userData/UserTransportation-Utilities';
-import CO2WhatIfGraph from './CO2WhatIfGraph';
-import { cloneArray, FilterOutTransportType } from './Functions';
+import CO2WhatIfGraph, { DataPointsNoFilter } from './CO2WhatIfGraph';
+import { cloneArray, CO2CalculationTypeEnum, FilterOutTransportType } from './Functions';
 
 /**
  * Clone the transport data array, and filter for car transport within the past month
@@ -34,6 +35,14 @@ const setTransportType = (transportArray, type, start, end) => {
   }
 };
 
+const getPercent = (total, value) => Math.floor((value / total) * 100);
+
+/**
+ * Return the total sum of GHG produced within a 5 week span
+ */
+const SumOfGHGProduced = (data) => DataPointsNoFilter(data, 'weeks', 5,
+      CO2CalculationTypeEnum.average, moment().endOf('weeks')).reduce((acc, curr) => Number(acc) + Number(curr));
+
 /**
  * @param total {Number}
  * @param percent {Number} percentage in decimal, whole number (percent%)
@@ -51,6 +60,8 @@ const CommunityWhatIfCO2 = ({ transportData, fontStyle }) => {
   const [transportFixed, setTransportFixed] = useState(copyTransportInMonth(transportData));
   const [currentEV, setCurrentEV] = useState(0);
   const [sliderValue, setSliderValue] = React.useState(startingPercent);
+  // eslint-disable-next-line no-unused-vars
+  const [transportFixedSumOfGHG, setTransportFixedSumOfGHG] = React.useState(SumOfGHGProduced(transportFixed));
 
   const changeEVPercent = (currentInd, newInd) => {
     if (newInd < 0 || newInd > transport.length) {
@@ -77,10 +88,12 @@ const CommunityWhatIfCO2 = ({ transportData, fontStyle }) => {
     setSliderValue(newValue);
   };
 
+  const potentialSumOfGHGProduced = SumOfGHGProduced(transport);
+
   return (
       <Grid verticalAlign='middle' columns={2} stackable container>
         <Grid.Column verticalAligh='middle'>
-          <Header as={'h1'} style={{ fontSize: '30px', fontFamily: fontStyle.fontFamily }}>See our impact as we change</Header>
+          <Header as={'h1'} style={{ fontSize: '30px', fontFamily: fontStyle.fontFamily }}>See Our Potential Impact</Header>
           <p style={{ fontSize: '22px', fontFamily: fontStyle.fontFamily }}>The state of Hawai&apos;i plans to increase the adoption of electric vehicles in our community.
             You can see how the impact of EV adoption would affect last month&apos;s GHG produced here.</p>
         </Grid.Column>
@@ -100,7 +113,15 @@ const CommunityWhatIfCO2 = ({ transportData, fontStyle }) => {
               </Grid.Row>
               <Grid.Row>
                 <Grid.Column>
-                  <CO2WhatIfGraph potentialData={transport} currentData={transportFixed} format={'MMM DD'} dateType={'weeks'} numberOfDataPoints={5}/>
+                  <CO2WhatIfGraph potentialData={transport} currentData={transportFixed}
+                                  format={'MMM DD'} dateType={'weeks'} numberOfDataPoints={5}/>
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row columns={2}>
+                <Grid.Column>
+                  <Header>{(transportFixedSumOfGHG - potentialSumOfGHGProduced).toFixed(0)} pounds
+                    ({Math.abs(getPercent(transportFixedSumOfGHG, potentialSumOfGHGProduced) - 100)} %) of
+                    last month&apos;s GHG reduced</Header>
                 </Grid.Column>
               </Grid.Row>
             </Grid>
