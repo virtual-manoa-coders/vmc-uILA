@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import { Grid, Loader, Header, Segment } from 'semantic-ui-react';
 import {
   AutoForm,
@@ -12,21 +12,24 @@ import {
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
+import { _ } from 'meteor/underscore';
 import SimpleSchema from 'simpl-schema';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import { UserTransportation } from '../../api/userData/UserTransportation';
+import { UserVehicles } from '../../api/userVehicles/UserVehicles';
+import { UserTransportationTypeEnum, getMPG } from '../../api/userData/UserTransportation-Utilities';
+import { UserInfo } from '../../api/userData/UserInfo';
 
 /** Create a schema to specify the structure of the data to appear in the logging form. */
 const formSchema = new SimpleSchema({
   transport: {
     type: String,
-    allowedValues: ['Telecommute', 'Walk', 'Bike', 'Carpool', 'Bus', 'Car'],
   },
   date: Date,
   miles: Number,
+  mpg: { type: Number, optional: true },
+  vehicle: { type: String, optional: true },
 });
-
-const bridge = new SimpleSchema2Bridge(formSchema);
 
 /** Renders the Page for editing a single document. */
 class EditTransportEntry extends React.Component {
@@ -35,11 +38,17 @@ class EditTransportEntry extends React.Component {
     super(props);
     this.state = {
       date: 0,
-      transport: '',
       miles: 0,
       error: '',
       redirectToReferer: false,
+      selectedTransport: 'Telecommute',
+      selectedVehicle: null,
+      show: false,
     };
+    this.handleTransportChange = this.handleTransportChange.bind(this);
+    this.handleVehicleChange = this.handleVehicleChange.bind(this);
+    this.submit = this.submit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   /** Update the form controls each time the user interacts with them. */
@@ -47,10 +56,44 @@ class EditTransportEntry extends React.Component {
     this.setState({ [name]: value });
   }
 
+  handleTransportChange = (transport) => {
+    if (transport === 'Car') {
+      // eslint-disable-next-line no-console
+      this.setState({
+        selectedTransport: transport,
+        show: true,
+      }, () => console.log('Transport selected: ', (this.state.selectedTransport)));
+    } else {
+      // eslint-disable-next-line no-console
+      this.setState({
+        selectedTransport: transport,
+        show: false,
+      }, () => console.log('Transport selected: ', this.state.selectedTransport));
+    }
+  };
+
+  handleVehicleChange = (vehicle) => {
+    const email = Meteor.user().username;
+    const profile = UserInfo.collection.findOne({ email });
+    const userVehicles = _.where(UserVehicles.collection.find().fetch(), { owner: email });
+    const userCar = userVehicles.filter(car => car._id === profile.carID)[0];
+    if (vehicle === null) {
+      this.setState({ selectedVehicle: userCar }, () => console.log('Vehicle selected: ', this.state.selectedVehicle));
+    }
+    this.setState({ selectedVehicle: vehicle }, () => console.log('Vehicle selected: ', this.state.selectedVehicle));
+  }
+
   /** On successful submit, insert the data. */
-  submit(data) {
-    const { date, transport, miles, _id } = data;
-    UserTransportation.collection.update(_id, { $set: { date, transport, miles } }, (error) => {
+  submit = (data) => {
+    const { date, miles, _id } = data;
+    const user = Meteor.user().username;
+    const userVehicles = _.where(UserVehicles.collection.find().fetch(), { owner: user });
+    const transport = this.state.selectedTransport;
+    const vehicle = this.state.selectedVehicle;
+    const mpg = getMPG(vehicle, userVehicles);
+    console.log(this.props.doc.vehicle);
+
+    UserTransportation.collection.update(_id, { $set: { date, transport, vehicle, miles, mpg } }, (error) => {
       if (error) {
         this.setState({ error: error.reason });
       } else {
@@ -71,6 +114,25 @@ class EditTransportEntry extends React.Component {
 
   /** Render the form. Use Uniforms: https://github.com/vazco/uniforms */
   renderPage() {
+    const user = Meteor.user().username;
+    const userVehicles = _.where(UserVehicles.collection.find().fetch(), { owner: user });
+
+    const transportOptions = UserTransportationTypeEnum.Array.map((transport) => ({
+      key: transport,
+      label: transport,
+      value: transport,
+    }));
+
+    const vehicleOptions = userVehicles.map((vehicle) => ({
+      key: vehicle._id,
+      label: vehicle.carName || `${vehicle.carYear} ${vehicle.carMake} ${vehicle.carModel}`,
+      value: vehicle.carName || `${vehicle.carYear} ${vehicle.carMake} ${vehicle.carModel}`,
+      mpg: vehicle.carMPG,
+      vehicle: vehicle,
+    }));
+
+    const bridge = new SimpleSchema2Bridge(formSchema);
+
     return (
         <Grid id='page-style' container centered style={{ marginTop: '50px' }}>
           <Grid.Column>
@@ -83,10 +145,29 @@ class EditTransportEntry extends React.Component {
                            max={new Date()}
                            min={new Date(2017, 1, 1)}
                 />
-                <SelectField id='transport' name='transport' showInlineError={true}/>
+                <SelectField
+                    id='transport'
+                    name='transport'
+                    type='string'
+                    options={transportOptions}
+                    value={this.state.selectedTransport}
+                    onChange={this.handleTransportChange}
+                    showInlineError={true}
+                    placeholer='Select transport'
+                />
+                {this.state.show && (
+                    <SelectField id='vehicle'
+                                 name='vehicle'
+                                 options={vehicleOptions}
+                                 value={this.state.selectedVehicle}
+                                 onChange={this.handleVehicleChange}
+                                 placeholder='Select vehicle'
+                                 showInlineError={true}
+                    />
+                )}
                 <NumField id='miles' name='miles' showInlineError={true} decimal={false}/>
-                <SubmitField value='Update Entry'/>
                 <ErrorsField/>
+                <SubmitField value='Update Entry'/>
               </Segment>
             </AutoForm>
           </Grid.Column>
@@ -104,12 +185,16 @@ EditTransportEntry.propTypes = {
 };
 
 /** withTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker */
-export default withTracker(({ match }) => {
+const EditTransportEntryContainer = withTracker(({ match }) => {
   const documentId = match.params._id;
-  const subscription = Meteor.subscribe(UserTransportation.userPublicationName);
+  const sub1 = Meteor.subscribe(UserInfo.userPublicationName);
+  const sub2 = Meteor.subscribe(UserTransportation.userPublicationName);
+  const sub3 = Meteor.subscribe(UserVehicles.userPublicationName);
   return {
     doc: UserTransportation.collection.findOne(documentId),
     userTransportation: UserTransportation.collection.find({}).fetch(),
-    ready: subscription.ready(),
+    ready: sub1.ready() && sub2.ready() && sub3.ready(),
   };
 })(EditTransportEntry);
+
+export default withRouter(EditTransportEntryContainer);

@@ -25,7 +25,6 @@ class UserTransportationCollection {
       transport: {
         type: String,
         allowedValues: UserTransportationTypeEnum.Array,
-        optional: true,
       },
       date: Date,
       miles: Number,
@@ -42,17 +41,17 @@ class UserTransportationCollection {
     this.communityPublicationName = `${this.name}.publication.community`;
   }
 
-  define({ transport, date, miles, mpg, userID }) {
-    return this.collection.insert({ transport, date, miles, mpg, userID });
+  define({ transport, vehicle, date, miles, mpg, userID }) {
+    return this.collection.insert({ transport, vehicle, date, miles, mpg, userID });
   }
 
-  update(id, { transport, date, miles, mpg }) {
+  update(id, { transport, vehicle, date, miles, mpg }) {
     const entry = this.entryDoesExist(id);
 
     if (!entry) {
       throw new Meteor.Error('No such record exists');
     } else {
-      return this.collection.update({ _id: id }, { $set: { transport, date, miles, mpg } });
+      return this.collection.update({ _id: id }, { $set: { transport, vehicle, date, miles, mpg } });
     }
   }
 

@@ -6,12 +6,13 @@ import { Meteor } from 'meteor/meteor';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 import { withTracker } from 'meteor/react-meteor-data';
-import { NavLink } from 'react-router-dom';
+import { withRouter, NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { _ } from 'meteor/underscore';
 import { UserTransportation } from '../../api/userData/UserTransportation';
 import { UserInfo } from '../../api/userData/UserInfo';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
+import { UserTransportationTypeEnum, getMPG } from '../../api/userData/UserTransportation-Utilities';
 
 /*
 TODO:
@@ -23,99 +24,105 @@ TODO:
 const formSchema = new SimpleSchema({
   transport: {
     type: String,
-    allowedValues: ['Telecommute', 'Walk', 'Bike', 'Carpool', 'Bus', 'Car'],
-    defaultValue: 'Telecommute',
-    optional: true,
   },
   date: Date,
   miles: Number,
+  mpg: { type: Number, optional: true },
   vehicle: { type: String, optional: true },
 });
-
-const bridge = new SimpleSchema2Bridge(formSchema);
 
 /** Renders the Page for adding a document. */
 class TransportDataEntry extends React.Component {
 
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     vehicle: { mpg: 0 },
-  //   };
-  //   this.vehicle = React.createRef();
-  //   this.submit = this.submit.bind(this);
-  //   this.handleChange = this.handleChange.bind(this);
-  // }
-
-  state = {
-    selectedVehicle: null,
-    transport: '',
-  };
-
-  displayWhenSelected = (transport, value, selectedVehicle) => {
-    const selectedIndex = transport.selectedIndex;
-    const isSelected = transport[selectedIndex].value === value;
-    selectedVehicle.classList[isSelected ? 'add' : 'remove']('show');
-  };
-
-  handleChange = selectedVehicle => {
-    this.setState({ selectedVehicle }, () => console.log('Vehicle selected: ', selectedVehicle));
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedTransport: 'Telecommute',
+      selectedVehicle: null,
+      show: false,
+    };
+    this.handleTransportChange = this.handleTransportChange.bind(this);
+    this.handleVehicleChange = this.handleVehicleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+  // state = {
+  //   // selectedTransport: null,
+  //   selectedVehicle: null,
+  // };
 
   handleTransportChange = (transport) => {
     if (transport === 'Car') {
-      this.handleChange();
-      this.setState({ transport, show: true }, () => console.log('Transport selected: ', transport));
+      this.handleVehicleChange();
+      // eslint-disable-next-line no-console
+      this.setState({
+        selectedTransport: transport,
+        show: true,
+      }, () => console.log('Transport selected: ', (transport)));
+    } else {
+      // eslint-disable-next-line no-console
+      this.setState({
+        selectedTransport: transport,
+        show: false,
+      }, () => console.log('Transport selected: ', transport));
     }
+  };
+
+  handleVehicleChange = (vehicle) => {
+    const email = Meteor.user().username;
+    const profile = UserInfo.collection.findOne({ email });
+    const userCar = this.props.userVehicles.filter(car => car._id === profile.carID)[0];
+    // console.log(car);
+    if (vehicle === null) {
+      this.setState({ selectedVehicle: userCar }, () => console.log('Vehicle selected: ', this.state.selectedVehicle));
+    }
+    this.setState({ selectedVehicle: vehicle }, () => console.log('Vehicle selected: ', this.state.selectedVehicle));
   }
 
-  // transport.addEventListener('change', (e) => displayWhenSelected(transport,'Car', selectedVehicle))
-
-  // transport.addEventListener('change',  displayWhenSelected(transport, 'Car', selectedVehicle));
-
   /** On log your commute submit, insert the data into UserTransportation. */
-  submit(data, formRef) {
-    const { date, transport, miles } = data;
+  handleSubmit = (data, formRef) => {
+    const { date, miles } = data;
+    const transport = this.state.selectedTransport;
+    const vehicle = this.state.selectedVehicle;
+    const mpg = getMPG(vehicle, this.props.userVehicles);
     const userID = Meteor.user()._id;
-    const user = Meteor.user().username;
-    const userVehicles = _.where(UserVehicles.collection.find().fetch(), { owner: user });
-    const mpg = userVehicles.carMPG;
 
-    UserTransportation.collection.insert({
-          transport,
-          date,
-          miles,
-          mpg,
-          userID,
+    UserTransportation.collection.insert({ date, transport, vehicle, mpg, miles, userID,
         },
         (error) => {
           if (error) {
             swal('Error', error.message, 'error');
           } else {
-            swal('Success', 'Log entry added successfully', 'success');
-            formRef.reset();
+            swal('Success', 'Log added successfully', 'success').then(() => formRef.reset());
           }
         });
   }
 
-  transportationLog() {
-    const { selectedVehicle, transport } = this.state;
-    const user = Meteor.user().username;
-    const userVehicles = _.where(UserVehicles.collection.find().fetch(), { owner: user });
-    // console.log(userVehicles);
-    // eslint-disable-next-line no-unused-vars
-    const vehicleMPGs = _.pluck(userVehicles, 'carMPG');
-    // console.log(vehicleMPGs);
+  /** Render the form. Use Uniforms: https://github.com/vazco/uniforms */
+  render() {
+    return (this.props.ready) ?
+        this.transportationLog()
+        : <Loader active>Getting data</Loader>;
+  }
 
-    const options = this.props.userVehicles.map((vehicle) => ({
+  transportationLog = () => {
+
+    const transportOptions = UserTransportationTypeEnum.Array.map((transport) => ({
+      key: transport,
+      label: transport,
+      value: transport,
+    }));
+
+    const vehicleOptions = this.props.userVehicles.map((vehicle) => ({
       key: vehicle._id,
-      label: vehicle.carModel + vehicle.carYear,
-      value: vehicle.carModel + vehicle.carYear,
+      label: vehicle.carName || `${vehicle.carYear} ${vehicle.carMake} ${vehicle.carModel}`,
+      value: vehicle.carName || `${vehicle.carYear} ${vehicle.carMake} ${vehicle.carModel}`,
+      mpg: vehicle.carMPG,
       vehicle: vehicle,
     }));
-    // console.log(options);
 
     let fRef = null;
+    const bridge = new SimpleSchema2Bridge(formSchema);
     return (
         <Grid centered>
           <Grid.Column>
@@ -123,11 +130,7 @@ class TransportDataEntry extends React.Component {
               fRef = ref;
             }}
                       schema={bridge}
-                      onSubmit={data => this.submit(data, fRef)}
-                // onChange={(key, value) => {
-                //   console.log(key, value);
-                //
-                // }}
+                      onSubmit={data => this.handleSubmit(data, fRef)}
             >
               <Segment>
                 <Header style={{ color: '#2292b3' }} textAlign='center' as='h3'>Log a Trip</Header>
@@ -136,20 +139,27 @@ class TransportDataEntry extends React.Component {
                            min={new Date(2017, 1, 1)}
                 />
                 <SelectField name='transport'
-                             value={transport}
+                             type='string'
+                             options={transportOptions}
+                             value={this.state.selectedTransport}
                              onChange={this.handleTransportChange}
+                             placeholder='Select transport'
                 />
                 {this.state.show && (
-                <SelectField name='vehicle'
-                             options={options}
-                             value={selectedVehicle}
-                             onChange={this.handleChange}
-                             placeholder='Select vehicle'
-                />
+                    <SelectField name='vehicle'
+                                 options={vehicleOptions}
+                                 value={this.state.selectedVehicle}
+                                 onChange={this.handleVehicleChange}
+                                 placeholder='Select vehicle'
+                    />
                 )}
+                <NumField name='mpg'
+                          decimal={false}
+                          hidden={true}
+                />
                 <NumField name='miles' decimal={false}/>
-                <SubmitField value='Submit'/>
                 <ErrorsField/>
+                <SubmitField value='Submit'/>
                 <Button id='view-trips' as={NavLink} activeClassName="active" exact to="/list-transport-entries"
                         key='list-transport-entries'> View/Edit Your Trips
                 </Button>
@@ -159,25 +169,18 @@ class TransportDataEntry extends React.Component {
         </Grid>
     );
   }
-
-  /** Render the form. Use Uniforms: https://github.com/vazco/uniforms */
-  render() {
-    return (this.props.ready) ?
-        this.transportationLog()
-        : <Loader active>Getting data</Loader>;
-  }
 }
 
 /** Require an array of userInfo documents in the props. */
 TransportDataEntry.propTypes = {
   userInfo: PropTypes.array.isRequired,
+  // userTransport: PropTypes.array.isRequired,
   userVehicles: PropTypes.array.isRequired,
   carMPG: PropTypes.number.isRequired,
-  // onChange: PropTypes.isRequired,
   ready: PropTypes.bool.isRequired,
 };
 
-export default withTracker(() => {
+const TransportDataEntryContainer = withTracker(() => {
   // Get access to documents.
   const sub1 = Meteor.subscribe(UserInfo.userPublicationName);
   const sub2 = Meteor.subscribe(UserVehicles.userPublicationName);
@@ -185,9 +188,11 @@ export default withTracker(() => {
 
   return {
     userInfo: UserInfo.collection.find({}).fetch(),
+    // userTransport: _.pluck(UserTransportation.collection.find().fetch(), 'allowedValues'),
     userVehicles: _.where(UserVehicles.collection.find().fetch(), { owner: user }),
-    // userVehicles: UserVehicles.collection.find().fetch(),
     ready: sub1.ready() && sub2.ready(),
   };
 
 })(TransportDataEntry);
+
+export default withRouter(TransportDataEntryContainer);

@@ -1,118 +1,186 @@
 import React from 'react';
-import { Grid, Segment, Header } from 'semantic-ui-react';
-import { AutoForm, ErrorsField, SelectField, SubmitField, TextField, NumField } from 'uniforms-semantic';
+import { Grid, Header, Loader, Segment, Button } from 'semantic-ui-react';
+import { AutoForm, ErrorsField, NumField, SelectField, SubmitField, DateField } from 'uniforms-semantic';
 import swal from 'sweetalert';
 import { Meteor } from 'meteor/meteor';
-import { withTracker } from 'meteor/react-meteor-data';
-import PropTypes from 'prop-types';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
+import { withTracker } from 'meteor/react-meteor-data';
+import { withRouter, NavLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { _ } from 'meteor/underscore';
+import { UserTransportation } from '../../api/userData/UserTransportation';
+import { UserInfo } from '../../api/userData/UserInfo';
 import { UserVehicles } from '../../api/userVehicles/UserVehicles';
-import { UserInfoVehicles } from '../../api/userVehicles/UserInfoVehicles';
+import { UserTransportationTypeEnum, getMPG } from '../../api/userData/UserTransportation-Utilities';
 
-/** Create a schema to specify the structure of the data to appear in the form. */
+/*
+TODO:
+- Add page to enter basic info before letting you enter milage
+- After you're done, take you back to dasboard or community
+ */
+
+/** Create a schema to specify the structure of the data to appear in the logging form. */
 const formSchema = new SimpleSchema({
-  carName: { type: String, label: 'Name your car' },
-  carMake: { type: String, optional: true,
-  allowedValues: [
-    'Acura',
-    'Alfa Romeo',
-    'Audi',
-    'BMW',
-    'Bentley',
-    'Buick',
-    'Cadillac',
-    'Chevrolet',
-    'Chrysler',
-    'Dodge',
-    'Fiat',
-    'Ford',
-    'GMC',
-    'Genesis',
-    'Honda',
-    'Hyundai',
-    'Infiniti',
-    'Jaguar',
-    'Jeep',
-    'Kia',
-    'Land Rover',
-    'Lexus',
-    'Lincoln',
-    'Lotus',
-    'Maserati',
-    'Mazda',
-    'Mercedes-Benz',
-    'Mercury',
-    'Mini',
-    'Mitsubishi',
-    'Nikola',
-    'Nissan',
-    'Polestar',
-    'Pontiac',
-    'Porsche',
-    'Ram',
-    'Rivian',
-    'Rolls-Royce',
-    'Saab',
-    'Saturn',
-    'Scion',
-    'Smart',
-    'Suzuki',
-    'Tesla',
-    'Toyota',
-    'Volkswagen',
-    'Volvo',
-  ] },
-  carModel: { type: String, label: 'Car model', optional: true },
-  carYear: {
+  transport: {
     type: String,
-    label: 'Car year',
-    optional: true,
-    allowedValues: ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008',
-      '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'],
   },
-  carMPG: { type: Number, label: 'Car MPG' },
-  carPrice: { type: Number, label: 'Price' },
+  date: Date,
+  miles: Number,
+  mpg: { type: Number, optional: true },
+  vehicle: { type: String, optional: true },
 });
 
-const bridge = new SimpleSchema2Bridge(formSchema);
-
 /** Renders the Page for adding a document. */
-class AddVehiclePage extends React.Component {
-  /** On submit, insert the data. */
-  submit(data, formRef) {
-    const { carName, carMake, carModel, carYear, carMPG, carPrice } = data;
+class TransportDataEntry extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedTransport: 'Telecommute',
+      selectedVehicle: null,
+      show: false,
+    };
+    this.handleTransportChange = this.handleTransportChange.bind(this);
+    this.handleVehicleChange = this.handleVehicleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  // state = {
+  //   // selectedTransport: null,
+  //   selectedVehicle: null,
+  // };
+
+  handleTransportChange = (transport) => {
+    if (transport === 'Car') {
+      // this.handleVehicleChange();
+      // eslint-disable-next-line no-console
+      this.setState({
+        selectedTransport: transport,
+        show: true,
+      }, () => console.log('Transport selected: ', (transport)));
+    } else {
+      // eslint-disable-next-line no-console
+      this.setState({
+        selectedTransport: transport,
+        show: false,
+      }, () => console.log('Transport selected: ', this.state.selectedTransport));
+    }
+  };
+
+  // handleTransportChange = (transport) => {
+  //   if (transport === 'Car') {
+  //     // this.handleVehicleChange();
+  //     // eslint-disable-next-line no-console
+  //     this.setState({ selectedTransport: transport, show: true }, () => console.log('Transport selected: ', (transport)));
+  //   } else {
+  //     // eslint-disable-next-line no-console
+  //     this.setState({ selectedTransport: transport, show: false }, () => console.log('Transport selected: ', (transport)));
+  //   }
+  // };
+
+  handleVehicleChange = (vehicle) => {
+    this.setState({ selectedVehicle: vehicle }, () => console.log('Vehicle selected: ', this.state.selectedVehicle));
+  }
+
+  /** On log your commute submit, insert the data into UserTransportation. */
+  handleSubmit = (data, formRef) => {
+    // const userData = {};
+    // userData.date = data.date;
+    // userData.transport = this.state.selectedTransport;
+    // userData.vehicle = this.state.selectedVehicle;
+    // userData.miles = data.miles;
+    // userData.mpg = getMPG(userData.vehicle, this.props.userVehicles);
+    // userData.userID = Meteor.user()._id;
+    // console.log(userData);
+    const { date, miles } = data;
+    const transport = this.state.selectedTransport;
+    const vehicle = this.state.selectedVehicle;
+    const mpg = getMPG(vehicle, this.props.userVehicles);
     const userID = Meteor.user()._id;
 
-    UserVehicles.collection.insert({ userID, carName, carMake, carModel, carYear, carMPG, carPrice },
+    UserTransportation.collection.insert({ date, transport, vehicle, mpg, miles, userID,
+        },
         (error) => {
           if (error) {
             swal('Error', error.message, 'error');
           } else {
-            swal('Success', 'Vehicle added successfully', 'success');
-            formRef.reset();
+            swal('Success', 'Log added successfully', 'success').then(() => formRef.reset());
           }
         });
   }
 
   /** Render the form. Use Uniforms: https://github.com/vazco/uniforms */
   render() {
+    return (this.props.ready) ?
+        this.transportationLog()
+        : <Loader active>Getting data</Loader>;
+  }
+
+  transportationLog = () => {
+    // const { selectedVehicle } = this.state;
+    // const { selectedTransport } = this.state;
+
+    // console.log(UserTransportationTypeEnum.Array);
+    const transportOptions = UserTransportationTypeEnum.Array.map((transport) => ({
+      key: transport,
+      label: transport,
+      value: transport,
+    }));
+    // console.log(transportOptions);
+
+    const vehicleOptions = this.props.userVehicles.map((vehicle) => ({
+      key: vehicle._id,
+      label: vehicle.carName || `${vehicle.carYear} ${vehicle.carMake} ${vehicle.carModel}`,
+      value: vehicle.carName || `${vehicle.carYear} ${vehicle.carMake} ${vehicle.carModel}`,
+      mpg: vehicle.carMPG,
+      vehicle: vehicle,
+    }));
+
+    // console.log(vehicleOptions);
+
     let fRef = null;
+    const bridge = new SimpleSchema2Bridge(formSchema);
     return (
-        <Grid id='page-style' container centered>
+        <Grid centered>
           <Grid.Column>
-            <Header style={{ color: '#2292b3' }} textAlign='center' as='h3'>Add a Vehicle
-            </Header>
-            <AutoForm ref={ref => { fRef = ref; }} schema={bridge} onSubmit={data => this.submit(data, fRef)} >
+            <AutoForm ref={ref => {
+              fRef = ref;
+            }}
+                      schema={bridge}
+                      onSubmit={data => this.handleSubmit(data, fRef)}
+            >
               <Segment>
-                <TextField id='carName' name='carName' optional='true' showInlineError={true} placeholder='Name your car'/>
-                <SelectField id='carMake' name='carMake' showInlineError={true} placeholder='Car make'/>
-                <TextField id='carModel' name='carModel' showInlineError={true} placeholder='Car model'/>
-                <SelectField id='carYear' name='carYear' showInlineError={true} placeholder='Car year'/>
-                <NumField id='carMPG' name='carMPG' showInlineError={true} placeholder='Average miles per gallon'/>
-                <NumField id='carPrice' name='carPrice' showInlineError={true} placeholder='Car Price'/>
-                <SubmitField value='Submit'/>
+                <Header style={{ color: '#2292b3' }} textAlign='center' as='h3'>Log a Trip</Header>
+                <DateField name='date'
+                           max={new Date()}
+                           min={new Date(2017, 1, 1)}
+                />
+                <SelectField name='transport'
+                             type='string'
+                             options={transportOptions}
+                             value={this.state.selectedTransport}
+                             onChange={this.handleTransportChange}
+                             placeholder='Select transport'
+                />
+                {this.state.show && (
+                    <SelectField name='vehicle'
+                                 options={vehicleOptions}
+                                 value={this.state.selectedVehicle}
+                                 onChange={this.handleVehicleChange}
+                                 placeholder='Select vehicle'
+                    />
+                )}
+                <NumField name='mpg'
+                          decimal={false}
+                          hidden={true}
+                />
+                <NumField name='miles' decimal={false}/>
                 <ErrorsField/>
+                <SubmitField value='Submit'/>
+                <Button id='view-trips' as={NavLink} activeClassName="active" exact to="/list-transport-entries"
+                        key='list-transport-entries'> View/Edit Your Trips
+                </Button>
               </Segment>
             </AutoForm>
           </Grid.Column>
@@ -121,16 +189,28 @@ class AddVehiclePage extends React.Component {
   }
 }
 
-AddVehiclePage.propTypes = {
-  AllUserVehicles: PropTypes.array.isRequired,
+/** Require an array of userInfo documents in the props. */
+TransportDataEntry.propTypes = {
+  userInfo: PropTypes.array.isRequired,
+  // userTransport: PropTypes.array.isRequired,
+  userVehicles: PropTypes.array.isRequired,
+  carMPG: PropTypes.number.isRequired,
   ready: PropTypes.bool.isRequired,
 };
 
-export default withTracker(() => {
-  const sub1 = Meteor.subscribe(UserVehicles.userPublicationName);
-  const sub2 = Meteor.subscribe(UserInfoVehicles.userPublicationName);
+const TransportDataEntryContainer = withTracker(() => {
+  // Get access to documents.
+  const sub1 = Meteor.subscribe(UserInfo.userPublicationName);
+  const sub2 = Meteor.subscribe(UserVehicles.userPublicationName);
+  const user = Meteor.user().username;
+
   return {
-    AllUserVehicles: UserInfoVehicles.collection.find({}).fetch,
+    userInfo: UserInfo.collection.find({}).fetch(),
+    // userTransport: _.pluck(UserTransportation.collection.find().fetch(), 'allowedValues'),
+    userVehicles: _.where(UserVehicles.collection.find().fetch(), { owner: user }),
     ready: sub1.ready() && sub2.ready(),
   };
-})(AddVehiclePage);
+
+})(TransportDataEntry);
+
+export default withRouter(TransportDataEntryContainer);
